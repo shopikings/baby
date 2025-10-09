@@ -22,16 +22,16 @@ function OurStorySection() {
           </div>
 
           <div className="space-y-6">
-            <h2 className="font-rubik text-3xl font-bold text-text-primary sm:text-4xl md:text-5xl lg:text-6xl">
+            <h2 className="font-rubik text-3xl font-bold text-text-primary sm:text-3xl md:text-4xl lg:text-5xl">
               OUR STORY
             </h2>
 
             <div className="space-y-4">
-              <h3 className="font-inter text-lg font-semibold text-text-primary sm:text-xl">
+              <h3 className="font-raleway text-lg font-semibold text-text-primary sm:text-lg">
                 Maison Baby & Kids - Curated Comfort for Tiny Humans.
               </h3>
 
-              <p className="font-inter text-base leading-relaxed text-text-primary/80 sm:text-lg">
+              <p className="font-raleway text-base leading-relaxed text-text-primary sm:text-lg">
                 We believe in providing the best for your little ones. At Maison
                 Baby & Kids, we are dedicated to offering a curated selection of
                 high-quality, safe, and beautifully designed baby and toddler
