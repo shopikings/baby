@@ -2,6 +2,9 @@ import Banner from 'components/Banner'
 import FeaturesSection from 'components/FeaturesSection'
 import Marquee from 'components/Marquee'
 import CategoryGrid from 'components/CategoryGrid'
+import FeaturedBrands from 'components/FeaturedBrands'
+import RecommendationsSlider from 'components/RecommendationsSlider'
+import OurStorySection from 'components/OurStorySection'
 
 function Home() {
   return (
@@ -17,6 +20,9 @@ function Home() {
       </div>
 
       <CategoryGrid />
+      <FeaturedBrands />
+      <RecommendationsSlider />
+      <OurStorySection />
     </div>
   )
 }
