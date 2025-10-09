@@ -46,10 +46,10 @@ function ProductCard({
       </div>
 
       <div className="space-y-2">
-        <h3 className="font-inter text-sm font-medium leading-tight text-text-primary sm:text-base">
+        <h3 className="font-rubik text-sm font-semibold leading-[18px] text-text-primary sm:text-lg sm:leading-[22px]">
           {title}
         </h3>
-        <p className="font-inter text-lg font-semibold text-text-primary sm:text-xl">
+        <p className="font-raleway text-lg font-semibold text-text-primary sm:text-base">
           {price}
         </p>
       </div>
