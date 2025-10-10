@@ -16,6 +16,16 @@ export default {
         inter: ['Inter', 'sans-serif'],
         raleway: ['Raleway', 'sans-serif'],
         rubik: ['Rubik', 'sans-serif']
+      },
+      animation: {
+        scroll: 'scroll 30s linear infinite'
+      },
+      keyframes: {
+        scroll: {
+          '0%': { transform: 'translateX(0%)' },
+          '50%': { transform: 'translateX(-50%)' },
+          '100%': { transform: 'translateX(0%)' }
+        }
       }
     }
   },

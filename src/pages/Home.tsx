@@ -5,10 +5,18 @@ import CategoryGrid from 'components/CategoryGrid'
 import FeaturedBrands from 'components/FeaturedBrands'
 import RecommendationsSlider from 'components/RecommendationsSlider'
 import OurStorySection from 'components/OurStorySection'
+import SvgMarquee from 'components/SvgMarquee'
+import ReviewsSlider from 'components/ReviewsSlider'
+import ShopTheLook from 'components/ShopTheLook'
+import FAQSection from 'components/FAQSection'
+import JoinMovementSlider from 'components/JoinMovementSlider'
+import InfoBanner from 'components/InfoBanner'
+import StickyDiscountTag from 'components/StickyDiscountTag'
 
 function Home() {
   return (
     <div className="bg-white">
+      <StickyDiscountTag />
       <Banner />
       <FeaturesSection />
 
@@ -16,6 +24,8 @@ function Home() {
         <Marquee
           text="New collections just released - Shop now"
           className="font-inter text-lg font-medium text-black"
+          clickableText="Shop now"
+          onClickableClick={() => console.log('Shop now clicked!')}
         />
       </div>
 
@@ -23,6 +33,12 @@ function Home() {
       <FeaturedBrands />
       <RecommendationsSlider />
       <OurStorySection />
+      <SvgMarquee />
+      <ReviewsSlider />
+      <ShopTheLook />
+      <FAQSection />
+      <JoinMovementSlider />
+      <InfoBanner />
     </div>
   )
 }

@@ -5,9 +5,7 @@ function Banner() {
 
   return (
     <div className="relative">
-      <div className="h-5 bg-banner-upper"></div>
-
-      <div className="relative h-[700px] overflow-hidden">
+      <div className="relative h-[700px] overflow-hidden bg-cream">
         <img
           src="/assets/images/home-banner.jpg"
           alt="Kids fashion banner"
@@ -45,7 +43,8 @@ function Banner() {
 
       <div className="flex items-center justify-center bg-banner-lower py-2">
         <p className="font-inter text-xs font-medium text-text-primary">
-          NEW ARRIVALS IN - <span className="underline">Shop Now</span>
+          NEW ARRIVALS IN -{' '}
+          <span className="cursor-pointer underline">Shop Now</span>
         </p>
       </div>
     </div>
