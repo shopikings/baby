@@ -5,6 +5,10 @@ import CategoryGrid from 'components/CategoryGrid'
 import FeaturedBrands from 'components/FeaturedBrands'
 import RecommendationsSlider from 'components/RecommendationsSlider'
 import OurStorySection from 'components/OurStorySection'
+import SvgMarquee from 'components/SvgMarquee'
+import ReviewsSlider from 'components/ReviewsSlider'
+import ShopTheLook from 'components/ShopTheLook'
+import FAQSection from 'components/FAQSection'
 
 function Home() {
   return (
@@ -23,6 +27,10 @@ function Home() {
       <FeaturedBrands />
       <RecommendationsSlider />
       <OurStorySection />
+      <SvgMarquee />
+      <ReviewsSlider />
+      <ShopTheLook />
+      <FAQSection />
     </div>
   )
 }

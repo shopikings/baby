@@ -5,8 +5,6 @@ function Banner() {
 
   return (
     <div className="relative">
-      <div className="h-5 bg-banner-upper"></div>
-
       <div className="relative h-[700px] overflow-hidden">
         <img
           src="/assets/images/home-banner.jpg"
