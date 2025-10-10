@@ -9,6 +9,8 @@ import SvgMarquee from 'components/SvgMarquee'
 import ReviewsSlider from 'components/ReviewsSlider'
 import ShopTheLook from 'components/ShopTheLook'
 import FAQSection from 'components/FAQSection'
+import JoinMovementSlider from 'components/JoinMovementSlider'
+import InfoBanner from 'components/InfoBanner'
 
 function Home() {
   return (
@@ -31,6 +33,8 @@ function Home() {
       <ReviewsSlider />
       <ShopTheLook />
       <FAQSection />
+      <JoinMovementSlider />
+      <InfoBanner />
     </div>
   )
 }

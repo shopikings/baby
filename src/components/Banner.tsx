@@ -5,7 +5,7 @@ function Banner() {
 
   return (
     <div className="relative">
-      <div className="relative h-[700px] overflow-hidden">
+      <div className="relative h-[600px] overflow-hidden bg-cream">
         <img
           src="/assets/images/home-banner.jpg"
           alt="Kids fashion banner"
