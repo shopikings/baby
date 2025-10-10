@@ -11,10 +11,12 @@ import ShopTheLook from 'components/ShopTheLook'
 import FAQSection from 'components/FAQSection'
 import JoinMovementSlider from 'components/JoinMovementSlider'
 import InfoBanner from 'components/InfoBanner'
+import StickyDiscountTag from 'components/StickyDiscountTag'
 
 function Home() {
   return (
     <div className="bg-white">
+      <StickyDiscountTag />
       <Banner />
       <FeaturesSection />
 
