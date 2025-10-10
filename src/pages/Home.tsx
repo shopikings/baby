@@ -22,6 +22,8 @@ function Home() {
         <Marquee
           text="New collections just released - Shop now"
           className="font-inter text-lg font-medium text-black"
+          clickableText="Shop now"
+          onClickableClick={() => console.log('Shop now clicked!')}
         />
       </div>
 

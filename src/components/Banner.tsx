@@ -43,7 +43,8 @@ function Banner() {
 
       <div className="flex items-center justify-center bg-banner-lower py-2">
         <p className="font-inter text-xs font-medium text-text-primary">
-          NEW ARRIVALS IN - <span className="underline">Shop Now</span>
+          NEW ARRIVALS IN -{' '}
+          <span className="cursor-pointer underline">Shop Now</span>
         </p>
       </div>
     </div>

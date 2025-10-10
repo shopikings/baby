@@ -93,12 +93,9 @@ function RecommendationsSlider() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mb-8 flex items-center justify-between sm:mb-12">
           <div>
-            <h2 className="mb-2 font-rubik text-2xl font-normal text-text-primary sm:text-3xl md:text-4xl lg:text-5xl">
-              Our Recommendations
+            <h2 className="mb-2 font-rubik text-2xl font-normal text-text-primary sm:text-3xl md:text-4xl lg:text-4xl">
+              BEST SELLING Collection
             </h2>
-            <p className="font-raleway text-sm text-text-primary sm:text-lg">
-              Shop the styles our customers can&apos;t get enough of.
-            </p>
           </div>
 
           <button className="flex items-center gap-2 font-inter text-xs font-medium uppercase text-button-hover hover:text-button-hover/80 sm:text-base">

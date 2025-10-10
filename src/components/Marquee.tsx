@@ -4,9 +4,17 @@ interface MarqueeProps {
   text: string
   className?: string
   speed?: number
+  clickableText?: string
+  onClickableClick?: () => void
 }
 
-function Marquee({ text, className = '', speed = 50 }: MarqueeProps) {
+function Marquee({
+  text,
+  className = '',
+  speed = 50,
+  clickableText,
+  onClickableClick
+}: MarqueeProps) {
   const containerRef = useRef<HTMLDivElement>(null)
   const textRef = useRef<HTMLDivElement>(null)
   const [translateX, setTranslateX] = useState(0)
@@ -15,13 +23,17 @@ function Marquee({ text, className = '', speed = 50 }: MarqueeProps) {
   const animationRef = useRef<number>()
 
   useEffect(() => {
+    const processedText = clickableText
+      ? text.replace(clickableText, `<CLICKABLE>${clickableText}</CLICKABLE>`)
+      : text
+
     const duplicatedText = Array(8)
-      .fill(text)
+      .fill(processedText)
       .join(
         '\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0'
       )
     setDisplayText(duplicatedText)
-  }, [text])
+  }, [text, clickableText])
 
   useEffect(() => {
     const animate = () => {
@@ -69,7 +81,25 @@ function Marquee({ text, className = '', speed = 50 }: MarqueeProps) {
         className="inline-block font-raleway text-sm font-normal transition-transform duration-75 ease-linear"
         style={{ transform: `translateX(-${translateX}px)` }}
       >
-        {displayText}
+        {clickableText
+          ? displayText.split('<CLICKABLE>').map((part, index) => {
+              if (part.includes('</CLICKABLE>')) {
+                const [clickablePart, rest] = part.split('</CLICKABLE>')
+                return (
+                  <span key={index}>
+                    <button
+                      onClick={onClickableClick}
+                      className="cursor-pointer hover:opacity-80"
+                    >
+                      {clickablePart}
+                    </button>
+                    {rest}
+                  </span>
+                )
+              }
+              return part
+            })
+          : displayText}
       </div>
     </div>
   )
