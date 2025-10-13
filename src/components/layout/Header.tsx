@@ -36,7 +36,7 @@ function Header() {
         <div className="absolute left-1/2 -translate-x-1/2">
           <Link to="/">
             <img
-              src="/assets/icons/logo.svg"
+              src="/assets/images/logo.png"
               alt="Logo"
               className="h-12 w-auto"
             />
