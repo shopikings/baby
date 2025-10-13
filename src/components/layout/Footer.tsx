@@ -5,7 +5,6 @@ function Footer() {
     <footer className="bg-footer-bg font-raleway text-cream">
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 gap-8 md:grid-cols-4">
-          {/* Our Mission */}
           <div>
             <h3 className="mb-4 text-xs font-[500] uppercase">Our Mission</h3>
             <p className="text-base leading-relaxed">
@@ -110,7 +109,6 @@ function Footer() {
           />
         </div>
 
-        {/* Social Icons and Payment Methods */}
         <div className="flex flex-col gap-6 border-t border-cream/30 pt-6 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex flex-col items-center gap-4 sm:flex-row sm:items-center">
             <div className="flex items-center gap-3 sm:gap-4">
@@ -205,7 +203,6 @@ function Footer() {
           </div>
         </div>
 
-        {/* Copyright */}
         <div className="mt-4 text-center text-xs">
           © 2025, All Things Maison Baby & Kids. Powered by Shopify
         </div>
