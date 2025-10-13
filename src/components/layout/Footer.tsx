@@ -111,82 +111,96 @@ function Footer() {
         </div>
 
         {/* Social Icons and Payment Methods */}
-        <div className="flex items-center justify-between border-t border-cream/30 pt-6">
-          <div className="flex items-center gap-4">
-            <a
-              href="https://instagram.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:opacity-80"
-            >
-              <img
-                src="/assets/icons/instagram.svg"
-                alt="Instagram"
-                className="size-6"
-              />
-            </a>
-            <a
-              href="https://facebook.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:opacity-80"
-            >
-              <img
-                src="/assets/icons/facebook.svg"
-                alt="Facebook"
-                className="size-6"
-              />
-            </a>
-            <button className="flex items-center gap-2 overflow-hidden rounded-full bg-[#5433EB] px-4 py-2 text-xs text-white">
+        <div className="flex flex-col gap-6 border-t border-cream/30 pt-6 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex flex-col items-center gap-4 sm:flex-row sm:items-center">
+            <div className="flex items-center gap-3 sm:gap-4">
+              <a
+                href="https://instagram.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="transition-opacity hover:opacity-80"
+              >
+                <img
+                  src="/assets/icons/instagram.svg"
+                  alt="Instagram"
+                  className="size-5 sm:size-6"
+                />
+              </a>
+              <a
+                href="https://facebook.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="transition-opacity hover:opacity-80"
+              >
+                <img
+                  src="/assets/icons/facebook.svg"
+                  alt="Facebook"
+                  className="size-5 sm:size-6"
+                />
+              </a>
+            </div>
+            <button className="flex items-center gap-2 overflow-hidden rounded-full bg-[#5433EB] px-3 py-2 text-xs text-white transition-opacity hover:opacity-90 sm:px-4">
               <img
                 src="/assets/icons/heart.svg"
                 alt="Heart"
-                className="size-4 shrink-0"
+                className="size-3 shrink-0 sm:size-4"
               />
-              <span className="whitespace-nowrap">Follow on</span>
-              <div className="-ml-1 flex h-4 w-10 shrink-0 items-center justify-center overflow-hidden">
+              <span className="whitespace-nowrap text-xs">Follow on</span>
+              <div className="-ml-1 flex h-3 w-8 shrink-0 items-center justify-center overflow-hidden sm:h-4 sm:w-10">
                 <img
                   src="/assets/icons/shop.svg"
                   alt="Shop"
-                  className="h-auto min-w-12 object-contain"
+                  className="h-auto min-w-10 object-contain sm:min-w-12"
                 />
               </div>
             </button>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center justify-center gap-2 sm:justify-end">
             <img
               src="/assets/icons/gPay.svg"
               alt="Google Pay"
-              className="h-6"
+              className="h-5 sm:h-6"
             />
             <img
               src="/assets/icons/discover.png"
               alt="Discover"
-              className="h-6"
+              className="h-5 sm:h-6"
             />
             <img
               src="/assets/icons/amex.svg"
               alt="American Express"
-              className="h-6"
+              className="h-5 sm:h-6"
             />
-            <img src="/assets/icons/shop.svg" alt="Shop Pay" className="h-6" />
-            <img src="/assets/icons/visa.svg" alt="Visa" className="h-6" />
-            <img src="/assets/icons/paypal.svg" alt="PayPal" className="h-6" />
+            <img
+              src="/assets/icons/shop.svg"
+              alt="Shop Pay"
+              className="h-5 sm:h-6"
+            />
+            <img
+              src="/assets/icons/visa.svg"
+              alt="Visa"
+              className="h-5 sm:h-6"
+            />
+            <img
+              src="/assets/icons/paypal.svg"
+              alt="PayPal"
+              className="h-5 sm:h-6"
+            />
             <img
               src="/assets/icons/creditOne.svg"
               alt="Credit Card"
-              className="h-6"
+              className="h-5 sm:h-6"
             />
             <img
               src="/assets/icons/unionPay.svg"
               alt="UnionPay"
-              className="h-6"
+              className="h-5 sm:h-6"
             />
             <img
               src="/assets/icons/creditTwo.svg"
               alt="Credit Card"
-              className="h-6"
+              className="h-5 sm:h-6"
             />
           </div>
         </div>
