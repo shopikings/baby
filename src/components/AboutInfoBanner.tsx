@@ -3,7 +3,7 @@ function AboutInfoBanner() {
     {
       icon: '/assets/icons/shipping-outline.svg',
       title: 'Free Shipping',
-      description: 'on all orders over $50'
+      description: 'on all orders over $70'
     },
     {
       icon: '/assets/icons/tickOutline.svg',
