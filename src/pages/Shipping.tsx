@@ -1,6 +1,9 @@
+import StickyDiscountTag from 'components/StickyDiscountTag'
+
 function Shipping() {
   return (
     <div className="min-h-screen bg-cream py-12 sm:py-16 lg:py-20">
+      <StickyDiscountTag />
       <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
         <div className="mb-12 text-center">
           <h1 className="font-rubik text-3xl font-normal text-text-primary sm:text-4xl lg:text-5xl">

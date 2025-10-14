@@ -4,9 +4,11 @@ import Marquee from '../Marquee'
 import MobileDrawer from '../MobileDrawer'
 import Navigation from '../Navigation'
 import HeaderActions from '../HeaderActions'
+import CartDrawer from '../CartDrawer'
 
 function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const [isCartOpen, setIsCartOpen] = useState(false)
 
   return (
     <>
@@ -50,7 +52,7 @@ function Header() {
             </Link>
           </div>
 
-          <HeaderActions />
+          <HeaderActions onCartClick={() => setIsCartOpen(true)} />
         </div>
       </header>
 
@@ -58,6 +60,8 @@ function Header() {
         isOpen={isMobileMenuOpen}
         onClose={() => setIsMobileMenuOpen(false)}
       />
+
+      <CartDrawer isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
     </>
   )
 }
