@@ -18,12 +18,12 @@ function Footer() {
             <h3 className="mb-4 text-xs font-semibold uppercase">Shop</h3>
             <ul className="space-y-2 text-base">
               <li>
-                <Link to="/shop" className="hover:underline">
+                <Link to="/collection" className="hover:underline">
                   Shop
                 </Link>
               </li>
               <li>
-                <Link to="/brands" className="hover:underline">
+                <Link to="/collection" className="hover:underline">
                   Our Brands
                 </Link>
               </li>

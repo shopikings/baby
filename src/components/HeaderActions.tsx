@@ -1,4 +1,8 @@
-function HeaderActions() {
+interface HeaderActionsProps {
+  onCartClick?: () => void
+}
+
+function HeaderActions({ onCartClick }: HeaderActionsProps) {
   return (
     <div className="flex flex-1 items-center justify-end gap-6">
       <button className="text-gray-900 hover:text-gray-600 transition-colors">
@@ -7,7 +11,10 @@ function HeaderActions() {
       <button className="hidden text-gray-900 hover:text-gray-600 transition-colors lg:block">
         <img src="/assets/icons/profile.svg" alt="Profile" className="size-6" />
       </button>
-      <button className="text-gray-900 hover:text-gray-600 transition-colors">
+      <button
+        onClick={onCartClick}
+        className="text-gray-900 hover:text-gray-600 transition-colors"
+      >
         <img src="/assets/icons/cart.svg" alt="Cart" className="size-6" />
       </button>
     </div>

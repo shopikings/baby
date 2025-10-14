@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
 
 function Banner() {
   const [isHovered, setIsHovered] = useState(false)
@@ -26,8 +27,9 @@ function Banner() {
               Side
             </h1>
 
-            <button
-              className={`rounded-md border-2 px-5 py-2 font-inter text-xs font-medium transition-all duration-300 ${
+            <Link
+              to="/collection"
+              className={`inline-block rounded-md border-2 px-5 py-2 font-inter text-xs font-medium transition-all duration-300 ${
                 isHovered
                   ? 'border-button-hover bg-button-hover text-white'
                   : 'border-white bg-transparent text-white hover:border-button-hover hover:bg-button-hover'
@@ -36,7 +38,7 @@ function Banner() {
               onMouseLeave={() => setIsHovered(false)}
             >
               SHOP ALL
-            </button>
+            </Link>
           </div>
         </div>
       </div>
@@ -44,7 +46,12 @@ function Banner() {
       <div className="flex items-center justify-center bg-banner-lower py-2">
         <p className="font-inter text-xs font-medium text-text-primary">
           NEW ARRIVALS IN -{' '}
-          <span className="cursor-pointer underline">Shop Now</span>
+          <Link
+            to="/collection"
+            className="cursor-pointer underline hover:text-button-hover"
+          >
+            Shop Now
+          </Link>
         </p>
       </div>
     </div>

@@ -1,7 +1,12 @@
 import { useState, useRef } from 'react'
 import ProductCard from './ProductCard'
+import { Link } from 'react-router-dom'
 
-function RecommendationsSlider() {
+interface RecommendationsSliderProps {
+  bgWhite?: boolean
+}
+
+function RecommendationsSlider({ bgWhite }: RecommendationsSliderProps) {
   const [activeCategory, setActiveCategory] = useState('toys')
   const [currentIndex, setCurrentIndex] = useState(0)
   const sliderRef = useRef<HTMLDivElement>(null)
@@ -191,7 +196,11 @@ function RecommendationsSlider() {
   }
 
   return (
-    <section className="bg-cream py-12 sm:py-16 lg:py-20">
+    <section
+      className={` py-12 sm:py-16 lg:py-20 ${
+        bgWhite ? 'bg-white' : 'bg-cream'
+      }`}
+    >
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mb-8 sm:mb-12">
           <div className="flex flex-col gap-4 lg:relative lg:flex-row lg:items-center lg:justify-between lg:gap-0">
@@ -234,15 +243,16 @@ function RecommendationsSlider() {
                 Gifts
               </button>
             </div>
-
-            <button className="flex items-center justify-center gap-2 font-inter text-xs font-medium uppercase text-button-hover hover:text-button-hover/80 sm:text-base lg:justify-start">
-              SHOP ALL
-              <img
-                src="/assets/icons/ArrowLink.svg"
-                alt="Arrow"
-                className="size-3"
-              />
-            </button>
+            <Link to={'/collection'}>
+              <button className="flex items-center justify-center gap-2 font-inter text-xs font-medium uppercase text-button-hover hover:text-button-hover/80 sm:text-base lg:justify-start">
+                SHOP ALL
+                <img
+                  src="/assets/icons/ArrowLink.svg"
+                  alt="Arrow"
+                  className="size-3"
+                />
+              </button>
+            </Link>
           </div>
         </div>
 

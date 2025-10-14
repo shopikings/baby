@@ -1,8 +1,10 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 function CategoryGrid() {
   const [hoveredIndex, setHoveredIndex] = useState(2)
   const [expandedMobileIndex, setExpandedMobileIndex] = useState(-1)
+  const navigate = useNavigate()
 
   const categories = [
     {
@@ -113,7 +115,14 @@ function CategoryGrid() {
                       hoveredIndex === index ? 'md:opacity-100' : 'md:opacity-0'
                     }`}
                   >
-                    <button className="rounded-full bg-button-hover px-3 py-1.5 text-xs font-medium text-white transition-colors hover:bg-button-hover/80 sm:px-4 sm:py-2 sm:text-sm md:px-6 md:py-3 md:text-base">
+                    <button
+                      type="button"
+                      className="rounded-full bg-button-hover px-3 py-1.5 text-xs font-medium text-white transition-colors hover:bg-button-hover/80 sm:px-4 sm:py-2 sm:text-sm md:px-6 md:py-3 md:text-base"
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        navigate('/collection')
+                      }}
+                    >
                       {category.button}
                     </button>
                   </div>

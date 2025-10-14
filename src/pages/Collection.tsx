@@ -9,7 +9,7 @@ function Collection() {
       <StickyDiscountTag />
       <CollectionsGrid />
       <SvgMarquee />
-      <RecommendationsSlider />
+      <RecommendationsSlider bgWhite={true} />
     </div>
   )
 }
