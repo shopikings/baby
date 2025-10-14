@@ -55,7 +55,7 @@ function CollectionsGrid() {
                 />
               </div>
               <div className="mt-4 text-center">
-                <h3 className="font-raleway text-base font-medium text-text-primary/70">
+                <h3 className="font-raleway text-base font-medium text-text-primary">
                   {collection.label}
                 </h3>
               </div>
