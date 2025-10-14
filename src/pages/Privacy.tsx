@@ -1,6 +1,9 @@
+import StickyDiscountTag from 'components/StickyDiscountTag'
+
 function Privacy() {
   return (
     <div className="min-h-screen bg-cream py-12 sm:py-16 lg:py-20">
+      <StickyDiscountTag />
       <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
         <div className="mb-8">
           <h1 className="mb-8 text-center font-rubik text-3xl font-normal text-text-primary sm:text-4xl lg:text-5xl">
