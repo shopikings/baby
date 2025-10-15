@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom'
 import Banner from 'components/Banner'
 import FeaturesSection from 'components/FeaturesSection'
 import Marquee from 'components/Marquee'
@@ -14,6 +15,7 @@ import InfoBanner from 'components/InfoBanner'
 import StickyDiscountTag from 'components/StickyDiscountTag'
 
 function Home() {
+  const navigate = useNavigate()
   return (
     <div className="bg-white">
       <StickyDiscountTag />
@@ -25,7 +27,7 @@ function Home() {
           text="New collections just released - Shop now"
           className="font-inter text-lg font-medium text-black"
           clickableText="Shop now"
-          onClickableClick={() => console.log('Shop now clicked!')}
+          onClickableClick={() => navigate('/shop')}
         />
       </div>
 

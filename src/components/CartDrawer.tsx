@@ -62,6 +62,13 @@ function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
         }`}
       >
         <div className="flex h-full flex-col">
+          {/* Top Banner */}
+          <div className="bg-banner-lower py-2.5 text-center">
+            <p className="font-rubik text-xs font-normal text-black">
+              NEW CUSTOMERS SAVE 10% WITH CODE WELCOME
+            </p>
+          </div>
+
           <div className="flex items-center justify-between border-b border-gray-200 p-4">
             <h2 className="font-rubik text-2xl font-medium text-text-primary">
               CART <span className="text-xs text-text-primary">(1 ITEM)</span>
@@ -87,7 +94,31 @@ function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
           </div>
 
           <div className="flex-1 overflow-y-auto p-4">
-            <div className="mb-6">
+            {/* Empty Cart Message */}
+            <div className="flex h-full flex-col items-center justify-center py-12">
+              <svg
+                className="mb-4 size-16 text-gray-400"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={1.5}
+                  d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"
+                />
+              </svg>
+              <h3 className="mb-2 font-rubik text-lg font-medium text-text-primary">
+                Your cart is empty
+              </h3>
+              <p className="text-center font-raleway text-sm text-gray-600">
+                Add some products to get started
+              </p>
+            </div>
+
+            {/* Product Card - Commented Out */}
+            {/* <div className="mb-6">
               <p className="mb-2 text-center font-raleway text-xs font-medium text-black">
                 SPEND ${remainingForFreeShipping.toFixed(2)} MORE FOR FREE
                 SHIPPING.
@@ -260,7 +291,7 @@ function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                   </div>
                 )}
               </div>
-            </div>
+            </div> */}
           </div>
 
           <div className="border-t border-gray-200 p-4">

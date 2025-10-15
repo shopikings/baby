@@ -18,7 +18,7 @@ function Footer() {
             <h3 className="mb-4 text-xs font-semibold uppercase">Shop</h3>
             <ul className="space-y-2 text-base">
               <li>
-                <Link to="/collection" className="hover:underline">
+                <Link to="/shop" className="hover:underline">
                   Shop
                 </Link>
               </li>
@@ -35,7 +35,6 @@ function Footer() {
             </ul>
           </div>
 
-          {/* Helpful Links */}
           <div>
             <h3 className="mb-4 text-xs font-semibold uppercase">
               Helpful Links
@@ -47,18 +46,8 @@ function Footer() {
                 </Link>
               </li>
               <li>
-                <Link to="/shipping" className="hover:underline">
-                  Shipping Policy
-                </Link>
-              </li>
-              <li>
-                <Link to="/returns" className="hover:underline">
-                  Returns Policy
-                </Link>
-              </li>
-              <li>
-                <Link to="/rewards" className="hover:underline">
-                  Loyalty Rewards
+                <Link to="/terms" className="hover:underline">
+                  Terms and Conditions
                 </Link>
               </li>
               <li>
@@ -67,8 +56,18 @@ function Footer() {
                 </Link>
               </li>
               <li>
-                <Link to="/terms" className="hover:underline">
-                  Terms of Service
+                <Link to="/shipping" className="hover:underline">
+                  Shipping Policy
+                </Link>
+              </li>
+              <li>
+                <Link to="/returns" className="hover:underline">
+                  Refund and Return
+                </Link>
+              </li>
+              <li>
+                <Link to="/wishlist" className="hover:underline">
+                  Wishlist
                 </Link>
               </li>
             </ul>

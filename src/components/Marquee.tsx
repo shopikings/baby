@@ -89,7 +89,7 @@ function Marquee({
                   <span key={index}>
                     <button
                       onClick={onClickableClick}
-                      className="cursor-pointer hover:opacity-80"
+                      className="cursor-pointer underline hover:opacity-80"
                     >
                       {clickablePart}
                     </button>

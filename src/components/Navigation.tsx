@@ -6,16 +6,16 @@ function Navigation() {
   const timeoutRef = useRef<NodeJS.Timeout | null>(null)
 
   const shopItems = [
-    { name: 'New Arrivals', href: '/collection' },
-    { name: 'clothing', href: '/collection' },
-    { name: 'Activities & Toys', href: '/collection' },
-    { name: 'Feeding & Nursing', href: '/collection' },
-    { name: 'Bath Time', href: '/collection' },
-    { name: 'Gear', href: '/collection' },
-    { name: 'Gift', href: '/collection' },
-    { name: 'Maternity', href: '/collection' },
-    { name: 'Nursing Favourite', href: '/collection' },
-    { name: 'Sale', href: '/collection' }
+    { name: 'New Arrivals', href: '/shop' },
+    { name: 'clothing', href: '/shop' },
+    { name: 'Activities & Toys', href: '/shop' },
+    { name: 'Feeding & Nursing', href: '/shop' },
+    { name: 'Bath Time', href: '/shop' },
+    { name: 'Gear', href: '/shop' },
+    { name: 'Gift', href: '/shop' },
+    { name: 'Maternity', href: '/shop' },
+    { name: 'Nursing Favourite', href: '/shop' },
+    { name: 'Sale', href: '/shop' }
   ]
 
   const aboutItems = [
@@ -64,7 +64,7 @@ function Navigation() {
         onMouseLeave={handleMouseLeave}
       >
         <Link
-          to="/collection"
+          to="/shop"
           className="font-inter text-xs font-semibold uppercase text-text-primary transition-colors hover:text-gray-600"
         >
           Shop
@@ -82,7 +82,7 @@ function Navigation() {
                 <Link
                   key={index}
                   to={item.href}
-                  className="block px-4 py-2 font-inter text-sm text-black transition-colors hover:bg-gray-50 hover:text-gray-600"
+                  className="block px-4 py-2 font-inter text-sm uppercase text-black transition-colors hover:bg-gray-50 hover:text-gray-600"
                 >
                   {item.name}
                 </Link>
@@ -116,7 +116,7 @@ function Navigation() {
                 <Link
                   key={index}
                   to={item.href}
-                  className="block px-4 py-2 font-inter text-sm text-black transition-colors hover:bg-gray-50 hover:text-gray-600"
+                  className="block px-4 py-2 font-inter text-sm uppercase text-black transition-colors hover:bg-gray-50 hover:text-gray-600"
                 >
                   {item.name}
                 </Link>
@@ -153,7 +153,7 @@ function Navigation() {
                     to={`/collection?${brand
                       .toLowerCase()
                       .replace(/\s+/g, '-')}`}
-                    className="block px-6 py-2 font-inter text-sm font-medium text-black transition-colors hover:bg-gray-50 hover:text-gray-600"
+                    className="block px-6 py-2  font-inter text-sm font-medium uppercase text-black transition-colors hover:bg-gray-50 hover:text-gray-600"
                   >
                     {brand}
                   </Link>

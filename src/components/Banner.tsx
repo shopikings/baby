@@ -28,7 +28,7 @@ function Banner() {
             </h1>
 
             <Link
-              to="/collection"
+              to="/shop"
               className={`inline-block rounded-md border-2 px-5 py-2 font-inter text-xs font-medium transition-all duration-300 ${
                 isHovered
                   ? 'border-button-hover bg-button-hover text-white'
@@ -47,7 +47,7 @@ function Banner() {
         <p className="font-inter text-xs font-medium text-text-primary">
           NEW ARRIVALS IN -{' '}
           <Link
-            to="/collection"
+            to="/shop"
             className="cursor-pointer underline hover:text-button-hover"
           >
             Shop Now
