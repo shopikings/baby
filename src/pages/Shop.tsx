@@ -156,7 +156,6 @@ function Shop() {
   return (
     <div className="bg-white">
       <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-        {/* Page Title */}
         <div className="mb-6">
           <h1 className="text-center font-rubik text-xl font-bold text-text-primary">
             KIDS AUTUMN TOP PICKS <span className="text-xl">(243)</span>

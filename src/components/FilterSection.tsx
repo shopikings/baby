@@ -275,7 +275,7 @@ function FilterSection({ onFilterChange }: FilterSectionProps) {
             onClick={() => setShowMoreFilters(!showMoreFilters)}
             className="flex items-center gap-2 rounded-md border border-[#949494] bg-white px-4 py-2.5 font-raleway text-sm font-semibold text-black transition-all hover:border-gray-400"
           >
-            <span>MORE</span>
+            <span>{showMoreFilters ? 'Show Less' : 'Show More'}</span>
             <svg
               className="size-4"
               fill="none"
