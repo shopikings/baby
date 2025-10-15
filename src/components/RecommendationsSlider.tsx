@@ -243,7 +243,7 @@ function RecommendationsSlider({ bgWhite }: RecommendationsSliderProps) {
                 Gifts
               </button>
             </div>
-            <Link to={'/collection'}>
+            <Link to={'/shop'}>
               <button className="flex items-center justify-center gap-2 font-inter text-xs font-medium uppercase text-button-hover hover:text-button-hover/80 sm:text-base lg:justify-start">
                 SHOP ALL
                 <img
