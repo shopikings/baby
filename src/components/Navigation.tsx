@@ -153,7 +153,7 @@ function Navigation() {
                     to={`/collection?${brand
                       .toLowerCase()
                       .replace(/\s+/g, '-')}`}
-                    className="block px-6 py-2  font-inter text-sm font-medium uppercase text-black transition-colors hover:bg-gray-50 hover:text-gray-600"
+                    className="block px-6 py-2 font-inter text-sm font-medium uppercase text-black transition-colors hover:bg-gray-50 hover:text-gray-600"
                   >
                     {brand}
                   </Link>
@@ -162,12 +162,12 @@ function Navigation() {
               <div className="w-3/4 p-4">
                 <div className="grid grid-cols-4 gap-4 xl:gap-6">
                   {brandImages.map((item, index) => (
-                    <div key={index} className="group mt-3 cursor-pointer">
+                    <div key={index} className="group cursor-pointer">
                       <div className="overflow-hidden rounded-lg">
                         <img
                           src={item.image}
                           alt={item.title}
-                          className="h-40 w-full object-cover transition-transform duration-300 group-hover:scale-105 xl:h-48"
+                          className="h-40 w-full object-cover transition-transform duration-300 group-hover:scale-105 lg:h-48 xl:h-56 2xl:h-64"
                         />
                       </div>
                       <div className="mt-2 text-center">

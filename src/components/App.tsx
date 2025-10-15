@@ -3,6 +3,7 @@ import Header from 'components/layout/Header'
 import Footer from 'components/layout/Footer'
 import Home from 'pages/Home'
 import Shop from 'pages/Shop'
+import ProductDetail from 'pages/ProductDetail'
 import Contact from 'pages/Contact'
 import About from 'pages/About'
 import Shipping from 'pages/Shipping'
@@ -18,6 +19,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/shop" element={<Shop />} />
+        <Route path="/product/:id" element={<ProductDetail />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/about" element={<About />} />
         <Route path="/shipping" element={<Shipping />} />
