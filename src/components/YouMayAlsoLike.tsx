@@ -100,7 +100,7 @@ function YouMayAlsoLike() {
 
   return (
     <div className="pt-10">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-[90%] px-4 sm:px-6 lg:px-8">
         <div className="mb-6 flex items-center justify-between">
           <h2 className="font-rubik text-2xl font-medium text-text-primary">
             You May Also Like
