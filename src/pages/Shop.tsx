@@ -1,10 +1,22 @@
 import { useState, useEffect } from 'react'
+import { useSearchParams } from 'react-router-dom'
 import FilterSection from 'components/FilterSection'
 import ShopProductCard from 'components/ShopProductCard'
 
 function Shop() {
   const [filters, setFilters] = useState<any>({})
   const [loading, setLoading] = useState(true)
+  const [searchParams] = useSearchParams()
+
+  const category = searchParams.get('category')
+
+  const getHeading = () => {
+    if (!category) return 'Shop All'
+    return category
+      .split('-')
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(' ')
+  }
 
   useEffect(() => {
     setTimeout(() => {
@@ -316,7 +328,7 @@ function Shop() {
       <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
         <div className="mb-6">
           <h1 className="text-center font-rubik text-xl font-bold uppercase text-text-primary">
-            Shop All
+            {getHeading()}
           </h1>
         </div>
 
@@ -326,6 +338,7 @@ function Shop() {
           {products.map((product) => (
             <ShopProductCard
               key={product.id}
+              id={product.id}
               mainImage={product.mainImage}
               variantImages={product.variantImages}
               title={product.title}
