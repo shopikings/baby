@@ -42,36 +42,35 @@ function ProductInfo({
 
   return (
     <div className="bg-cream">
-      <h1 className="font-rubik text-base font-bold text-text-primary">
-        {name}
-      </h1>
-
-      <div className="mt-3 flex items-baseline justify-between">
-        <div className="flex items-baseline gap-3">
-          <span className="font-rubik text-2xl font-bold text-text-primary">
+      <div className="flex items-start justify-between gap-4">
+        <h1 className="flex-1 font-rubik text-base font-bold text-[#2E2E2E]">
+          {name}
+        </h1>
+        <div className="flex flex-col items-end">
+          <span className="font-rubik text-base font-bold text-[#2E2E2E]">
             ${price}
-            {originalPrice && (
-              <span className="ml-2 text-xl"> - ${originalPrice}</span>
-            )}
+            {originalPrice && <span className="ml-2"> - ${originalPrice}</span>}
+          </span>
+        </div>
+      </div>
+
+      <div className="mt-3 flex items-center justify-between">
+        <div className="flex items-center gap-0">
+          {[1, 2, 3, 4, 5].map((star) => (
+            <svg
+              key={star}
+              className="size-5"
+              fill={star <= rating ? '#2E2E2E' : '#E5E7EB'}
+              viewBox="0 0 24 24"
+            >
+              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+            </svg>
+          ))}
+          <span className="ml-1 font-inter text-xs text-gray-600">
+            ({reviewCount})
           </span>
         </div>
         <span className="font-inter text-xs text-gray-600">{sku}</span>
-      </div>
-
-      <div className="mt-3 flex items-center gap-1">
-        {[1, 2, 3, 4, 5].map((star) => (
-          <svg
-            key={star}
-            className="size-4"
-            fill={star <= rating ? '#444B59' : '#E5E7EB'}
-            viewBox="0 0 24 24"
-          >
-            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
-          </svg>
-        ))}
-        <span className="ml-1 font-inter text-xs text-gray-600">
-          ({reviewCount})
-        </span>
       </div>
 
       <div className="mt-6">
@@ -137,7 +136,7 @@ function ProductInfo({
       </div>
 
       <div className="mt-6 flex gap-3">
-        <button className="flex-1 rounded bg-[#E89FAC] py-3 font-inter text-sm font-bold uppercase text-white transition-colors hover:bg-[#d88d9a]">
+        <button className="flex-1 rounded bg-button-hover py-3 font-inter text-sm font-bold uppercase text-white">
           Add to Bag
         </button>
         <button className="flex size-12 items-center justify-center rounded border-2 border-gray-300 bg-white transition-colors hover:bg-gray-50">
