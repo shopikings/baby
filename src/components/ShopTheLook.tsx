@@ -3,7 +3,7 @@ function ShopTheLook() {
     <section className="bg-cream py-12 sm:py-16 lg:py-20">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mb-8 sm:mb-12">
-          <h3 className="mb-4 font-rubik text-3xl font-bold text-text-primary sm:text-4xl md:text-5xl lg:text-6xl">
+          <h3 className="mb-4 font-rubik text-3xl font-bold capitalize text-text-primary sm:text-4xl md:text-5xl lg:text-6xl">
             Shop the Look
           </h3>
           <p className="font-inter text-lg text-text-primary/70 sm:text-xl">

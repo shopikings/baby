@@ -112,7 +112,7 @@ function Footer() {
           <div className="flex flex-col items-center gap-4 sm:flex-row sm:items-center">
             <div className="flex items-center gap-3 sm:gap-4">
               <a
-                href="https://instagram.com"
+                href="https://www.instagram.com/maisonbabyandkids/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="transition-opacity hover:opacity-80"
@@ -124,7 +124,7 @@ function Footer() {
                 />
               </a>
               <a
-                href="https://facebook.com"
+                href="https://www.facebook.com/MaisonBabyandKids/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="transition-opacity hover:opacity-80"
@@ -203,7 +203,18 @@ function Footer() {
         </div>
 
         <div className="mt-4 text-center text-xs">
-          © 2025, All Things Maison Baby & Kids. Powered by Shopify
+          <p>© 2025 Maison Baby & Kids</p>
+          <p className="mt-1">
+            Powered By{' '}
+            <a
+              href="https://shopikings.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline hover:opacity-80"
+            >
+              Shopikings.com
+            </a>
+          </p>
         </div>
       </div>
     </footer>
