@@ -1,4 +1,4 @@
-import { useRef } from 'react'
+import { useRef, useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 
 interface Product {
@@ -10,6 +10,33 @@ interface Product {
 
 function YouMayAlsoLike() {
   const scrollRef = useRef<HTMLDivElement>(null)
+  const [canScrollLeft, setCanScrollLeft] = useState(false)
+  const [canScrollRight, setCanScrollRight] = useState(false)
+
+  const checkScroll = () => {
+    if (scrollRef.current) {
+      const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current
+      setCanScrollLeft(scrollLeft > 0)
+      setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 10)
+    }
+  }
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      checkScroll()
+    }, 100)
+
+    const scrollElement = scrollRef.current
+    if (scrollElement) {
+      scrollElement.addEventListener('scroll', checkScroll)
+      window.addEventListener('resize', checkScroll)
+      return () => {
+        clearTimeout(timer)
+        scrollElement.removeEventListener('scroll', checkScroll)
+        window.removeEventListener('resize', checkScroll)
+      }
+    }
+  }, [])
 
   const products: Product[] = [
     {
@@ -116,36 +143,38 @@ function YouMayAlsoLike() {
 
       <div className="bg-white py-8">
         <div className="relative">
-          <button
-            onClick={scrollLeft}
-            className="absolute left-4 top-1/2 z-10 flex size-10 -translate-y-1/2 items-center justify-center rounded-full bg-gray-100 shadow-lg transition-all hover:bg-gray-200 hover:shadow-xl"
-          >
-            <svg
-              className="size-5 text-gray-600"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
+          {canScrollLeft && (
+            <button
+              onClick={scrollLeft}
+              className="absolute left-0 top-1/2 z-10 flex h-12 w-8 -translate-y-1/2 items-center justify-center border border-gray-200 bg-white text-text-primary shadow-lg transition-all hover:w-10 hover:bg-gray-50"
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M15 19l-7-7 7-7"
-              />
-            </svg>
-          </button>
+              <svg
+                className="size-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M15 19l-7-7 7-7"
+                />
+              </svg>
+            </button>
+          )}
 
           <div
             ref={scrollRef}
-            className="flex gap-6 overflow-x-auto px-12 pb-4"
+            className="flex gap-6 overflow-x-auto px-2 pb-4"
             style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
           >
             {products.map((product) => (
               <div
                 key={product.id}
-                className="min-w-[220px] shrink-0 cursor-pointer transition-all hover:scale-105"
+                className="w-[200px] shrink-0 cursor-pointer transition-all"
               >
-                <div className="h-48 overflow-hidden rounded-lg bg-gray-100">
+                <div className="h-48 overflow-hidden rounded-none bg-gray-100">
                   <img
                     src={product.image}
                     alt={product.title}
@@ -164,24 +193,26 @@ function YouMayAlsoLike() {
             ))}
           </div>
 
-          <button
-            onClick={scrollRight}
-            className="absolute right-4 top-1/2 z-10 flex size-10 -translate-y-1/2 items-center justify-center rounded-full bg-gray-100 shadow-lg transition-all hover:bg-gray-200 hover:shadow-xl"
-          >
-            <svg
-              className="size-5 text-gray-600"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
+          {canScrollRight && (
+            <button
+              onClick={scrollRight}
+              className="absolute right-0 top-1/2 z-10 flex h-12 w-8 -translate-y-1/2 items-center justify-center border border-gray-200 bg-white text-text-primary shadow-lg transition-all hover:w-10 hover:bg-gray-50"
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M9 5l7 7-7 7"
-              />
-            </svg>
-          </button>
+              <svg
+                className="size-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M9 5l7 7-7 7"
+                />
+              </svg>
+            </button>
+          )}
         </div>
       </div>
     </div>

@@ -7,11 +7,10 @@ import YouMayAlsoLike from '../components/YouMayAlsoLike'
 
 function ProductDetail() {
   const thumbnails = [
-    '/assets/images/product1.png',
-    '/assets/images/product2.png',
-    '/assets/images/product3.png',
-    '/assets/images/product4.png',
-    '/assets/images/product5.png'
+    '/assets/images/product-gallery-1.png',
+    '/assets/images/product-gallery-2.png',
+    '/assets/images/product-gallery-3.png',
+    '/assets/images/product-gallery-4.png'
   ]
 
   const colors = [
@@ -42,18 +41,24 @@ function ProductDetail() {
     {
       id: 1,
       author: 'John Doe',
-      initials: 'JD',
+      location: 'New York, US',
       rating: 5,
       comment:
-        'Amazing quality! My baby loves this fleece. It&apos;s so soft and warm.'
+        'Amazing quality! My baby loves this fleece. It&apos;s so soft and warm.',
+      date: 'January 15, 2025',
+      color: 'Beige',
+      verified: true
     },
     {
       id: 2,
       author: 'Sarah Miller',
-      initials: 'SM',
+      location: 'London, UK',
       rating: 5,
       comment:
-        'Perfect for cold weather. The zipper works smoothly and the fit is just right.'
+        'Perfect for cold weather. The zipper works smoothly and the fit is just right.',
+      date: 'January 10, 2025',
+      color: 'Navy',
+      verified: true
     }
   ]
 
@@ -75,20 +80,24 @@ function ProductDetail() {
     <div className="bg-cream">
       <YouMayAlsoLike />
       <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
-          <ProductImageGallery
-            thumbnails={thumbnails}
-            productName={productData.name}
-          />
-          <ProductInfo {...productData} />
+        <div className="flex flex-col gap-8 lg:flex-row lg:items-start">
+          <div className="lg:w-1/2">
+            <ProductImageGallery
+              thumbnails={thumbnails}
+              productName={productData.name}
+            />
+          </div>
+          <div className="lg:w-1/2">
+            <ProductInfo {...productData} />
+          </div>
         </div>
-        {/* <ProductReviews
+        <ProductReviews
           overallRating={productData.rating}
           totalReviews={productData.reviewCount}
           reviews={reviews}
         />
 
-        <RecentlyViewed products={recentlyViewed} /> */}
+        <RecentlyViewed products={recentlyViewed} />
       </div>
     </div>
   )

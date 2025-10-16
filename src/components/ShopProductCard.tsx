@@ -85,7 +85,7 @@ function ShopProductCard({
       </div>
 
       <div className="space-y-2">
-        <h3 className="font-rubik text-xs font-normal leading-[18px] text-text-primary">
+        <h3 className="line-clamp-3 font-rubik text-xs font-normal leading-[18px] text-text-primary">
           {title}
         </h3>
         <p className="font-raleway text-sm font-bold text-text-primary">

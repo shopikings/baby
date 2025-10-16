@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import FilterSection from 'components/FilterSection'
 import ShopProductCard from 'components/ShopProductCard'
@@ -7,8 +7,11 @@ function Shop() {
   const [filters, setFilters] = useState<any>({})
   const [loading, setLoading] = useState(true)
   const [searchParams] = useSearchParams()
+  const [currentPage, setCurrentPage] = useState(0)
+  const gridRef = useRef<HTMLDivElement>(null)
 
   const category = searchParams.get('category')
+  const itemsPerPage = 8
 
   const getHeading = () => {
     if (!category) return 'Shop All'
@@ -16,6 +19,24 @@ function Shop() {
       .split('-')
       .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
       .join(' ')
+  }
+
+  const handleNext = () => {
+    if (currentPage < Math.ceil(products.length / itemsPerPage) - 1) {
+      setCurrentPage(currentPage + 1)
+      if (gridRef.current) {
+        gridRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      }
+    }
+  }
+
+  const handlePrev = () => {
+    if (currentPage > 0) {
+      setCurrentPage(currentPage - 1)
+      if (gridRef.current) {
+        gridRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      }
+    }
   }
 
   useEffect(() => {
@@ -323,8 +344,45 @@ function Shop() {
     )
   }
 
+  const startIndex = currentPage * itemsPerPage
+  const endIndex = startIndex + itemsPerPage
+  const currentProducts = products.slice(startIndex, endIndex)
+  const totalPages = Math.ceil(products.length / itemsPerPage)
+
   return (
-    <div className="bg-white">
+    <div className="relative bg-white">
+      {currentPage > 0 && (
+        <button
+          onClick={handlePrev}
+          className="fixed left-0 top-1/2 z-40 flex h-12 w-8 -translate-y-1/2 items-center justify-center bg-button-hover text-white shadow-lg transition-all hover:w-10 hover:bg-[#7d969a]"
+        >
+          <svg className="size-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M15 19l-7-7 7-7"
+            />
+          </svg>
+        </button>
+      )}
+
+      {currentPage < totalPages - 1 && (
+        <button
+          onClick={handleNext}
+          className="fixed right-0 top-1/2 z-40 flex h-12 w-8 -translate-y-1/2 items-center justify-center bg-button-hover text-white shadow-lg transition-all hover:w-10 hover:bg-[#7d969a]"
+        >
+          <svg className="size-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M9 5l7 7-7 7"
+            />
+          </svg>
+        </button>
+      )}
+
       <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
         <div className="mb-6">
           <h1 className="text-center font-rubik text-xl font-bold uppercase text-text-primary">
@@ -334,8 +392,11 @@ function Shop() {
 
         <FilterSection onFilterChange={handleFilterChange} />
 
-        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
-          {products.map((product) => (
+        <div
+          ref={gridRef}
+          className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4"
+        >
+          {currentProducts.map((product) => (
             <ShopProductCard
               key={product.id}
               id={product.id}
@@ -344,14 +405,15 @@ function Shop() {
               title={product.title}
               price={product.price}
               rating={product.rating}
+              className="scale-90"
             />
           ))}
         </div>
 
-        <div className="mt-12 text-center">
-          <button className="rounded-lg border-2 border-button-hover bg-white px-8 py-3 font-raleway text-base font-semibold text-button-hover transition-colors hover:bg-button-hover hover:text-white">
-            LOAD MORE
-          </button>
+        <div className="mt-8 text-center">
+          <p className="font-inter text-sm text-gray-600">
+            Page {currentPage + 1} of {totalPages}
+          </p>
         </div>
       </div>
     </div>
