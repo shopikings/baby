@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom'
+
 function OurStorySection() {
   return (
     <section className="bg-cream py-12 sm:py-16 lg:py-20">
@@ -41,9 +43,11 @@ function OurStorySection() {
               </p>
             </div>
 
-            <button className="rounded-full bg-button-hover px-8 py-3 font-inter text-sm font-medium text-white transition-colors hover:bg-button-hover/90 sm:text-base">
-              READ MORE
-            </button>
+            <Link to={'/about'}>
+              <button className="mt-3 rounded-full bg-button-hover px-8 py-3 font-inter text-sm font-medium text-white transition-colors hover:bg-button-hover/90 sm:text-base">
+                READ MORE
+              </button>
+            </Link>
           </div>
         </div>
       </div>

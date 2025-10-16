@@ -205,7 +205,7 @@ function RecommendationsSlider({ bgWhite }: RecommendationsSliderProps) {
         <div className="mb-8 sm:mb-12">
           <div className="flex flex-col gap-4 lg:relative lg:flex-row lg:items-center lg:justify-between lg:gap-0">
             <h2
-              className="text-center font-rubik font-normal text-text-primary lg:text-start"
+              className="text-center font-rubik font-normal uppercase text-text-primary lg:text-start"
               style={{ fontSize: '32px' }}
             >
               BEST SELLING Collection

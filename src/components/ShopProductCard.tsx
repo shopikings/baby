@@ -1,6 +1,8 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 interface ShopProductCardProps {
+  id?: number
   title: string
   price: string
   mainImage: string
@@ -10,6 +12,7 @@ interface ShopProductCardProps {
 }
 
 function ShopProductCard({
+  id,
   title,
   price,
   mainImage,
@@ -19,8 +22,10 @@ function ShopProductCard({
 }: ShopProductCardProps) {
   const [currentImage, setCurrentImage] = useState(mainImage)
   const [isTransitioning, setIsTransitioning] = useState(false)
+  const navigate = useNavigate()
 
-  const handleImageClick = (image: string) => {
+  const handleImageClick = (image: string, e: React.MouseEvent) => {
+    e.stopPropagation()
     if (image === currentImage) return
 
     setIsTransitioning(true)
@@ -30,8 +35,21 @@ function ShopProductCard({
     }, 200)
   }
 
+  const handleCardClick = () => {
+    if (id) {
+      navigate(`/product/${id}`)
+    }
+  }
+
+  const handleWishlistClick = (e: React.MouseEvent) => {
+    e.stopPropagation()
+  }
+
   return (
-    <div className={`group cursor-pointer ${className}`}>
+    <div
+      className={`group cursor-pointer ${className}`}
+      onClick={handleCardClick}
+    >
       <div className="mb-4 overflow-hidden rounded-lg bg-white p-4 shadow-sm transition-shadow duration-300 group-hover:shadow-md">
         <div className="relative aspect-square w-full overflow-hidden rounded-lg">
           <img
@@ -44,6 +62,7 @@ function ShopProductCard({
 
           <div className="absolute bottom-3 right-3 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
             <button
+              onClick={handleWishlistClick}
               className="rounded-lg bg-white p-2 transition-transform hover:scale-110"
               style={{ boxShadow: '0 0 8px rgba(0, 0, 0, 0.15)' }}
             >
@@ -66,7 +85,7 @@ function ShopProductCard({
       </div>
 
       <div className="space-y-2">
-        <h3 className="font-rubik text-xs font-normal leading-[18px] text-text-primary">
+        <h3 className="line-clamp-3 font-rubik text-xs font-normal leading-[18px] text-text-primary">
           {title}
         </h3>
         <p className="font-raleway text-sm font-bold text-text-primary">
@@ -91,7 +110,7 @@ function ShopProductCard({
             {variantImages.map((image, index) => (
               <button
                 key={index}
-                onClick={() => handleImageClick(image)}
+                onClick={(e) => handleImageClick(image, e)}
                 className={`size-8 overflow-hidden rounded-md border-2 transition-all hover:scale-110 ${
                   currentImage === image
                     ? 'border-button-hover'

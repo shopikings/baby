@@ -35,8 +35,8 @@ function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
     }
   }, [isQuantityOpen])
 
-  const itemPrice = 30.0
-  const freeShippingThreshold = 20.0
+  const itemPrice = 0.0
+  const freeShippingThreshold = 0.0
   const currentTotal = itemPrice * quantity
   const remainingForFreeShipping = Math.max(
     0,
@@ -71,7 +71,7 @@ function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
 
           <div className="flex items-center justify-between border-b border-gray-200 p-4">
             <h2 className="font-rubik text-2xl font-medium text-text-primary">
-              CART <span className="text-xs text-text-primary">(1 ITEM)</span>
+              CART <span className="text-xs text-text-primary">(0 ITEM)</span>
             </h2>
             <button
               onClick={onClose}

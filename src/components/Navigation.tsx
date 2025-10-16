@@ -6,16 +6,16 @@ function Navigation() {
   const timeoutRef = useRef<NodeJS.Timeout | null>(null)
 
   const shopItems = [
-    { name: 'New Arrivals', href: '/shop' },
-    { name: 'clothing', href: '/shop' },
-    { name: 'Activities & Toys', href: '/shop' },
-    { name: 'Feeding & Nursing', href: '/shop' },
-    { name: 'Bath Time', href: '/shop' },
-    { name: 'Gear', href: '/shop' },
-    { name: 'Gift', href: '/shop' },
-    { name: 'Maternity', href: '/shop' },
-    { name: 'Nursing Favourite', href: '/shop' },
-    { name: 'Sale', href: '/shop' }
+    { name: 'New Arrivals', href: '/shop?category=new-arrivals' },
+    { name: 'clothing', href: '/shop?category=clothing' },
+    { name: 'Activities & Toys', href: '/shop?category=activities-toys' },
+    { name: 'Feeding & Nursing', href: '/shop?category=feeding-nursing' },
+    { name: 'Bath Time', href: '/shop?category=bath-time' },
+    { name: 'Gear', href: '/shop?category=gear' },
+    { name: 'Gift', href: '/shop?category=gift' },
+    { name: 'Maternity', href: '/shop?category=maternity' },
+    { name: 'Nursing Favourite', href: '/shop?category=nursing-favourite' },
+    { name: 'Sale', href: '/shop?category=sale' }
   ]
 
   const aboutItems = [

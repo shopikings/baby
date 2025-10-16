@@ -1,5 +1,4 @@
-import { Link } from 'react-router-dom'
-import ShopProductCard from './ShopProductCard'
+import { Link, useNavigate } from 'react-router-dom'
 
 interface Product {
   id: number
@@ -15,6 +14,8 @@ interface RecentlyViewedProps {
 }
 
 function RecentlyViewed({ products }: RecentlyViewedProps) {
+  const navigate = useNavigate()
+
   if (products.length === 0) {
     return null
   }
@@ -22,19 +23,39 @@ function RecentlyViewed({ products }: RecentlyViewedProps) {
   return (
     <div className="mt-16">
       <div className="mb-6 flex items-center justify-between">
-        <h2 className="font-rubik text-2xl font-medium text-text-primary">
+        <h2 className="font-rubik text-sm font-bold text-text-primary">
           Recently viewed
         </h2>
         <Link
           to="/shop"
-          className="font-inter text-sm font-medium text-text-primary hover:underline"
+          className="font-inter text-xs font-bold text-[#2E2E2E] underline hover:underline"
         >
-          View History
+          Clear History
         </Link>
       </div>
       <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
         {products.map((product) => (
-          <ShopProductCard key={product.id} {...product} />
+          <div
+            key={product.id}
+            onClick={() => navigate(`/product/${product.id}`)}
+            className="w-[200px] cursor-pointer"
+          >
+            <div className="aspect-[3/4] overflow-hidden">
+              <img
+                src={product.mainImage}
+                alt={product.title}
+                className="size-full object-cover"
+              />
+            </div>
+            <div className="p-4 text-center">
+              <p className="mb-4 font-inter text-sm font-medium text-text-primary">
+                {product.price} - $32
+              </p>
+              <button className="mt-1 w-full cursor-pointer bg-white p-2 font-inter text-xs font-bold text-gray-600">
+                Today
+              </button>
+            </div>
+          </div>
         ))}
       </div>
     </div>
