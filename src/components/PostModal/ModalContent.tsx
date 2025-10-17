@@ -10,7 +10,9 @@ function ModalContent({ children, onClose, isVisible }: ModalContentProps) {
   return (
     <div
       className={`fixed inset-0 z-50 flex items-center justify-center p-2 transition-opacity duration-300 sm:p-4 ${
-        isVisible ? 'pointer-events-auto opacity-100' : 'pointer-events-none opacity-0'
+        isVisible
+          ? 'pointer-events-auto opacity-100'
+          : 'pointer-events-none opacity-0'
       }`}
     >
       <div
