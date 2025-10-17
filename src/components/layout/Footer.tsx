@@ -32,6 +32,11 @@ function Footer() {
                   About Us
                 </Link>
               </li>
+              <li>
+                <Link to="/faq" className="hover:underline">
+                  FAQs
+                </Link>
+              </li>
             </ul>
           </div>
 

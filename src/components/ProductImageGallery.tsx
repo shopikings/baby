@@ -37,13 +37,13 @@ function ProductImageGallery({
   return (
     <>
       <div className="rounded-lg bg-white p-4 shadow-sm">
-        <div className="flex gap-3">
-          <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-3 lg:flex-row">
+          <div className="flex flex-row gap-2 lg:flex-col">
             {thumbnails.map((img, index) => (
               <button
                 key={index}
                 onClick={() => handleImageChange(index)}
-                className={`w-20 flex-1 overflow-hidden rounded-none border-2 transition-all hover:scale-105 ${
+                className={`h-20 w-20 flex-shrink-0 overflow-hidden rounded-none border-2 transition-all hover:scale-105 lg:h-auto lg:w-20 lg:flex-1 ${
                   selectedIndex === index
                     ? 'border-text-primary'
                     : 'border-gray-300'

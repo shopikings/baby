@@ -108,8 +108,8 @@ function ProductReviews({
           <div className="lg:col-span-2">
             <div className="space-y-6">
               {reviews.map((review) => (
-                <div key={review.id} className="p-6 shadow-sm">
-                  <div className="flex items-start justify-between">
+                <div key={review.id} className="p-4 sm:p-6">
+                  <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
                     <div className="flex-1">
                       <div className="flex gap-0">
                         {[1, 2, 3, 4, 5].map((star) => (
@@ -127,7 +127,7 @@ function ProductReviews({
                         {review.date}
                       </p>
                     </div>
-                    <div className="space-y-2 text-right">
+                    <div className="space-y-1 sm:space-y-2 sm:text-right">
                       <p className="font-inter text-xs font-bold text-text-primary">
                         {review.author}
                       </p>
@@ -137,7 +137,7 @@ function ProductReviews({
                         </p>
                       )}
                       {review.verified && (
-                        <div className="mt-1 flex items-center justify-end">
+                        <div className="mt-1 flex items-center sm:justify-end">
                           <img
                             src="/assets/icons/feefo.svg"
                             alt="Feefo verified"
@@ -148,7 +148,7 @@ function ProductReviews({
                     </div>
                   </div>
 
-                  <p className="-mt-3 font-inter text-sm text-text-primary">
+                  <p className="mt-3 font-inter text-sm text-text-primary sm:-mt-3">
                     {review.comment}
                   </p>
 

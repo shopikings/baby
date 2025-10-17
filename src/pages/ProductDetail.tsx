@@ -80,14 +80,16 @@ function ProductDetail() {
     <div className="bg-cream">
       <YouMayAlsoLike />
       <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-        <div className="flex flex-col gap-8 lg:flex-row lg:items-start">
+        <div className="flex flex-col gap-8 lg:flex-row lg:items-stretch">
           <div className="lg:w-1/2">
-            <ProductImageGallery
-              thumbnails={thumbnails}
-              productName={productData.name}
-            />
+            <div className="sticky top-0">
+              <ProductImageGallery
+                thumbnails={thumbnails}
+                productName={productData.name}
+              />
+            </div>
           </div>
-          <div className="lg:w-1/2">
+          <div className=" pt-5 lg:w-1/2">
             <ProductInfo {...productData} />
           </div>
         </div>

@@ -5,7 +5,7 @@ interface ModalImageProps {
 
 function ModalImage({ image, alt }: ModalImageProps) {
   return (
-    <div className="flex w-full items-center justify-center bg-black md:w-3/5">
+    <div className="flex w-full items-center justify-center bg-cream md:w-3/5">
       <img
         src={image}
         alt={alt}
