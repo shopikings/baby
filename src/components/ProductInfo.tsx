@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import CustomersAlsoBoughtSlider from './CustomersAlsoBoughtSlider'
 
 interface Color {
   name: string
@@ -31,6 +32,7 @@ function ProductInfo({
   const [selectedColor, setSelectedColor] = useState(colors[0]?.name || '')
   const [selectedSize, setSelectedSize] = useState('')
   const [isDescriptionOpen, setIsDescriptionOpen] = useState(false)
+  const [isShoppingOpen, setIsShoppingOpen] = useState(false)
 
   const sizes = [
     '3-6 months',
@@ -152,15 +154,15 @@ function ProductInfo({
         </button>
       </div>
 
-      <div className="mt-6 border-y border-gray-300 py-4">
+      <div className="mt-6 pl-6 pr-4">
         <button
-          onClick={() => setIsDescriptionOpen(!isDescriptionOpen)}
-          className="flex w-full items-center justify-between font-inter text-sm font-bold text-text-primary"
+          onClick={() => setIsShoppingOpen(!isShoppingOpen)}
+          className="flex w-full items-center justify-between font-inter text-sm font-normal text-[#2E2E2E]"
         >
-          <span>Description</span>
+          <span>Why you'll love shopping with NEXT</span>
           <svg
             className={`size-5 transition-transform ${
-              isDescriptionOpen ? 'rotate-180' : ''
+              isShoppingOpen ? 'rotate-180' : ''
             }`}
             fill="none"
             stroke="currentColor"
@@ -174,10 +176,109 @@ function ProductInfo({
             />
           </svg>
         </button>
+        {isShoppingOpen && (
+          <div className="mt-8 flex justify-center">
+            <div className="flex items-center gap-8">
+              <div className="space-y-3">
+                <div className="flex items-start">
+                  <div className="flex flex-1 flex-col">
+                    <span className="font-inter text-sm font-medium text-text-primary">
+                      Free delivery
+                    </span>
+                    <span className="font-inter text-xs text-gray-600">
+                      over $90
+                    </span>
+                  </div>
+                  <img
+                    src="/assets/icons/check-icon.svg"
+                    alt="Check"
+                    className="ml-4 size-8"
+                  />
+                </div>
+
+                <div className="flex items-center">
+                  <span className="flex-1 font-inter text-sm font-medium text-text-primary">
+                    We pay tax & duty
+                  </span>
+                  <img
+                    src="/assets/icons/check-icon.svg"
+                    alt="Check"
+                    className="ml-4 size-8"
+                  />
+                </div>
+
+                <div className="flex items-start">
+                  <div className="flex flex-1 flex-col">
+                    <span className="font-inter text-sm font-medium text-text-primary">
+                      Delivery 3-4
+                    </span>
+                    <span className="font-inter text-xs text-gray-600">
+                      working days
+                    </span>
+                  </div>
+                  <img
+                    src="/assets/icons/check-icon.svg"
+                    alt="Check"
+                    className="ml-4 size-8"
+                  />
+                </div>
+              </div>
+
+              <div className="flex flex-col gap-3">
+                <img
+                  src="/assets/icons/apple-pay-white.svg"
+                  alt="Apple Pay"
+                  className="h-8 w-auto"
+                />
+                <img
+                  src="/assets/icons/paypal-full.svg"
+                  alt="PayPal"
+                  className="h-6 w-auto"
+                />
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+
+      <div className="mt-6 py-4">
+        <button
+          onClick={() => setIsDescriptionOpen(!isDescriptionOpen)}
+          className="w-full text-left"
+        >
+          <div className="flex items-center justify-between">
+            <span className="font-inter text-sm font-bold text-[#2E2E2E]">
+              Description
+            </span>
+            <svg
+              className={`size-5 transition-transform ${
+                isDescriptionOpen ? 'rotate-180' : ''
+              }`}
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M19 9l-7 7-7-7"
+              />
+            </svg>
+          </div>
+          <div className="mt-2">
+            <p
+              className={`font-inter text-sm text-gray-600 ${
+                isDescriptionOpen ? '' : 'line-clamp-1'
+              }`}
+            >
+              {description}
+            </p>
+          </div>
+        </button>
         {isDescriptionOpen && (
           <div className="mt-3">
-            <p className="font-inter text-sm text-gray-600">{description}</p>
-            <ul className="mt-3 space-y-1 font-inter text-sm text-gray-600">
+            <ul className="space-y-1 font-inter text-sm text-gray-600">
               {productInfo.map((info, index) => (
                 <li key={index}>{info}</li>
               ))}
@@ -186,42 +287,13 @@ function ProductInfo({
         )}
       </div>
 
-      <div className="mt-4 border-b border-gray-300 py-4">
-        <button className="flex w-full items-center justify-between font-inter text-sm font-bold text-text-primary">
-          <span>Why you'll love shopping with NEXT</span>
-          <svg
-            className="size-5"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M19 9l-7 7-7-7"
-            />
-          </svg>
-        </button>
-      </div>
-
-      <div className="mt-4 border-b border-gray-300 py-4">
-        <button className="flex w-full items-center justify-between font-inter text-sm font-bold text-text-primary">
-          <span>Customers Also Bought</span>
-          <svg
-            className="size-5"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M19 9l-7 7-7-7"
-            />
-          </svg>
-        </button>
+      <div className="mt-6 py-4">
+        <h3 className="font-inter text-sm font-bold text-[#2E2E2E]">
+          Customers Also Bought
+        </h3>
+        <div className="mt-4">
+          <CustomersAlsoBoughtSlider />
+        </div>
       </div>
     </div>
   )

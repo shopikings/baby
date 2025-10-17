@@ -87,7 +87,7 @@ function ProductDetail() {
               productName={productData.name}
             />
           </div>
-          <div className="lg:w-1/2">
+          <div className="pt-5 lg:w-1/2">
             <ProductInfo {...productData} />
           </div>
         </div>
