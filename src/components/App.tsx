@@ -11,6 +11,7 @@ import Returns from 'pages/Returns'
 import Terms from 'pages/Terms'
 import Privacy from 'pages/Privacy'
 import Collection from 'pages/Collection'
+import FAQ from 'pages/FAQ'
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
         <Route path="/terms" element={<Terms />} />
         <Route path="/privacy" element={<Privacy />} />
         <Route path="/collection" element={<Collection />} />
+        <Route path="/faq" element={<FAQ />} />
       </Routes>
       <Footer />
     </Router>
