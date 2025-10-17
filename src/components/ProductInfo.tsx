@@ -287,7 +287,7 @@ function ProductInfo({
         )}
       </div>
 
-      <div className="mt-6 py-4">
+      <div className="mt-0 py-4">
         <h3 className="font-inter text-sm font-bold text-[#2E2E2E]">
           Customers Also Bought
         </h3>
