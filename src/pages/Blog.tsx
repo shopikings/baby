@@ -477,7 +477,7 @@ export default function BlogPage() {
 
       <FeaturesSection />
 
-      <div className="fixed right-2 top-[30vh] z-50 sm:right-4 md:right-6 xl:right-8 2xl:right-[calc((100vw-1400px)/2+24px)]">
+      <div className="fixed right-2 top-[30vh] z-50 sm:right-4 md:right-8 xl:right-8 2xl:right-[calc((100vw-1400px)/2+24px)]">
         <motion.div
           initial={false}
           animate={{
@@ -527,7 +527,7 @@ export default function BlogPage() {
         </motion.div>
       </div>
 
-      <div className="fixed right-2 top-[90vh] z-50 sm:right-4 md:right-6 xl:right-8 2xl:right-[calc((100vw-1400px)/2+24px)]">
+      <div className="fixed right-2 top-[90vh] z-50 sm:right-4 md:right-8 xl:right-8 2xl:right-[calc((100vw-1400px)/2+24px)]">
         <button
           ref={creditButtonRef}
           onClick={() => setIsCreditModalOpen(true)}

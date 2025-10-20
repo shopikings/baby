@@ -13,6 +13,7 @@ import Privacy from 'pages/Privacy'
 import Collection from 'pages/Collection'
 import FAQ from 'pages/FAQ'
 import BlogPage from 'pages/Blog'
+import Wishlist from 'pages/Wishlist'
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/shop" element={<Shop />} />
         <Route path="/blog" element={<BlogPage />} />
+        <Route path="/wishlist" element={<Wishlist />} />
         <Route path="/product/:id" element={<ProductDetail />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/about" element={<About />} />
