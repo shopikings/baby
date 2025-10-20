@@ -12,6 +12,7 @@ import Terms from 'pages/Terms'
 import Privacy from 'pages/Privacy'
 import Collection from 'pages/Collection'
 import FAQ from 'pages/FAQ'
+import BlogPage from 'pages/Blog'
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/shop" element={<Shop />} />
+        <Route path="/blog" element={<BlogPage />} />
         <Route path="/product/:id" element={<ProductDetail />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/about" element={<About />} />
