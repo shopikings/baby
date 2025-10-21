@@ -150,7 +150,7 @@ function Navigation() {
                 {brandItems.map((brand, index) => (
                   <Link
                     key={index}
-                    to={`/collection?${brand
+                    to={`/shop?category=${brand
                       .toLowerCase()
                       .replace(/\s+/g, '-')}`}
                     className="block px-6 py-2 font-inter text-sm font-medium uppercase text-black transition-colors hover:bg-gray-50 hover:text-gray-600"

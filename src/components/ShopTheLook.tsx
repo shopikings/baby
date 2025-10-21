@@ -1,4 +1,56 @@
+import { useState } from 'react'
+import ShopTheLookCard from './ShopTheLookCard'
+
+interface Product {
+  id: number
+  name: string
+  price: string
+  image: string
+  buttonText: string
+}
+
 function ShopTheLook() {
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null)
+  const [cardPosition, setCardPosition] = useState({ top: 0, left: 0 })
+
+  const products = [
+    {
+      id: 1,
+      name: 'Boys Outdoor Multi-Stripe Long Sleeve Hoodie',
+      price: '$40.00',
+      image: '/assets/images/blogOne.png',
+      buttonText: 'Boys Outdoor Multi-Stripe Long Sleeve Hoodie'
+    },
+    {
+      id: 2,
+      name: 'Boys JAY Cotton Twill Trousers in Charcoal Grey',
+      price: '$35.00',
+      image: '/assets/images/blogOne.png',
+      buttonText: 'Boys JAY Cotton Twill Trousers in Charcoal Grey'
+    },
+    {
+      id: 3,
+      name: 'Kids No-Logo Trucker Hat in Olive & Black',
+      price: '$25.00',
+      image: '/assets/images/blogOne.png',
+      buttonText: 'Kids No-Logo Trucker Hat in Olive & Black'
+    }
+  ]
+
+  const handleProductClick = (product: Product, event: React.MouseEvent) => {
+    const rect = event.currentTarget.getBoundingClientRect()
+    const newPosition = {
+      top: rect.top - 30,
+      left: rect.right - 100
+    }
+    console.log('Button clicked:', product.name, 'Position:', newPosition)
+    setCardPosition(newPosition)
+    setSelectedProduct(product)
+  }
+
+  const closeModal = () => {
+    setSelectedProduct(null)
+  }
   return (
     <section className="bg-cream py-12 sm:py-16 lg:py-20">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -32,10 +84,13 @@ function ShopTheLook() {
                 alt=""
                 className="absolute right-[-12%] top-[-220%] size-8"
               />
-              <button className="cursor-pointer rounded-lg bg-cream px-3 py-2 shadow-lg transition-all hover:shadow-xl">
+              <button
+                className="cursor-pointer rounded-lg bg-cream px-3 py-2 shadow-lg transition-all hover:shadow-xl"
+                onClick={(e) => handleProductClick(products[0], e)}
+              >
                 <div className="flex items-center gap-2">
                   <p className="text-xs font-medium text-text-primary">
-                    Boys Outdoor Multi-Stripe Long Sleeve Hoodie
+                    {products[0].buttonText}
                   </p>
                   <svg
                     className="size-3"
@@ -67,10 +122,13 @@ function ShopTheLook() {
                 alt=""
                 className="absolute bottom-[-190%] right-1/4 size-8"
               />
-              <button className="cursor-pointer rounded-lg bg-cream px-3 py-2 shadow-lg transition-all hover:shadow-xl">
+              <button
+                className="cursor-pointer rounded-lg bg-cream px-3 py-2 shadow-lg transition-all hover:shadow-xl"
+                onClick={(e) => handleProductClick(products[1], e)}
+              >
                 <div className="flex items-center gap-2">
                   <p className="text-xs font-medium text-text-primary">
-                    Boys JAY Cotton Twill Trousers in Charcoal Grey
+                    {products[1].buttonText}
                   </p>
                   <svg
                     className="size-3"
@@ -102,10 +160,13 @@ function ShopTheLook() {
                 alt=""
                 className="absolute bottom-[-190%] right-2/4 size-8"
               />
-              <button className="cursor-pointer rounded-lg bg-cream px-3 py-2 shadow-lg transition-all hover:shadow-xl">
+              <button
+                className="cursor-pointer rounded-lg bg-cream px-3 py-2 shadow-lg transition-all hover:shadow-xl"
+                onClick={(e) => handleProductClick(products[2], e)}
+              >
                 <div className="flex items-center gap-2">
                   <p className="text-xs font-medium text-text-primary">
-                    Kids No-Logo Trucker Hat in Olive & Black
+                    {products[2].buttonText}
                   </p>
                   <svg
                     className="size-3"
@@ -126,6 +187,15 @@ function ShopTheLook() {
           </div>
         </div>
       </div>
+
+      {selectedProduct && (
+        <ShopTheLookCard
+          isOpen={!!selectedProduct}
+          onClose={closeModal}
+          product={selectedProduct}
+          position={cardPosition}
+        />
+      )}
     </section>
   )
 }

@@ -1,4 +1,7 @@
+import { useNavigate } from 'react-router-dom'
+
 function FeaturedBrands() {
+  const navigate = useNavigate()
   const brands = [
     {
       name: 'JELLY CAT',
@@ -29,7 +32,14 @@ function FeaturedBrands() {
           {brands.map((brand, index) => (
             <div
               key={index}
-              className="group relative overflow-hidden rounded-lg bg-gray-200"
+              className="group relative cursor-pointer overflow-hidden rounded-lg bg-gray-200"
+              onClick={() =>
+                navigate(
+                  `/shop?category=${brand.name
+                    .toLowerCase()
+                    .replace(/\s+/g, '-')}`
+                )
+              }
             >
               <div className="aspect-square w-full">
                 <img

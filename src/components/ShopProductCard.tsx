@@ -1,5 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useWishlist } from 'contexts/WishlistContext'
+import toast from 'react-hot-toast'
 
 interface ShopProductCardProps {
   id?: number
@@ -23,6 +25,11 @@ function ShopProductCard({
   const [currentImage, setCurrentImage] = useState(mainImage)
   const [isTransitioning, setIsTransitioning] = useState(false)
   const navigate = useNavigate()
+  const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist()
+
+  const productId =
+    id?.toString() || `product-${title.replace(/\s+/g, '-').toLowerCase()}`
+  const isWishlisted = isInWishlist(productId)
 
   const handleImageClick = (image: string, e: React.MouseEvent) => {
     e.stopPropagation()
@@ -43,6 +50,20 @@ function ShopProductCard({
 
   const handleWishlistClick = (e: React.MouseEvent) => {
     e.stopPropagation()
+
+    if (isWishlisted) {
+      removeFromWishlist(productId)
+      toast.success('Removed from wishlist')
+    } else {
+      const wishlistItem = {
+        id: productId,
+        name: title,
+        price: price,
+        image: currentImage
+      }
+      addToWishlist(wishlistItem)
+      toast.success('Added to wishlist')
+    }
   }
 
   return (
@@ -68,8 +89,8 @@ function ShopProductCard({
             >
               <svg
                 className="size-5"
-                fill="none"
-                stroke="black"
+                fill={isWishlisted ? '#E8A5A5' : 'none'}
+                stroke={isWishlisted ? '#E8A5A5' : 'black'}
                 strokeWidth={2}
                 viewBox="0 0 24 24"
               >

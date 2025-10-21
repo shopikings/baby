@@ -1,4 +1,7 @@
 import { useState } from 'react'
+import { useCart } from 'contexts/CartContext'
+import { useWishlist } from 'contexts/WishlistContext'
+import toast from 'react-hot-toast'
 import CustomersAlsoBoughtSlider from './CustomersAlsoBoughtSlider'
 
 interface Color {
@@ -34,6 +37,13 @@ function ProductInfo({
   const [isDescriptionOpen, setIsDescriptionOpen] = useState(false)
   const [isShoppingOpen, setIsShoppingOpen] = useState(false)
 
+  const { addToCart, removeFromCart, cartItems } = useCart()
+  const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist()
+
+  const productId = `product-${name.replace(/\s+/g, '-').toLowerCase()}`
+  const isInCart = cartItems.some((item) => item.id === productId)
+  const isWishlisted = isInWishlist(productId)
+
   const sizes = [
     '3-6 months',
     '6-9 months',
@@ -41,6 +51,43 @@ function ProductInfo({
     '12-18 months',
     '18-24 months'
   ]
+
+  const handleAddToBag = () => {
+    if (!selectedSize) {
+      toast.error('Please select a size')
+      return
+    }
+
+    if (isInCart) {
+      removeFromCart(productId)
+      toast.success('Removed from cart')
+    } else {
+      const cartItem = {
+        id: productId,
+        name: name,
+        price: `$${price}`,
+        image: '/assets/images/product-gallery-1.png' // Using first gallery image
+      }
+      addToCart(cartItem)
+      toast.success('Added to cart')
+    }
+  }
+
+  const handleWishlistClick = () => {
+    if (isWishlisted) {
+      removeFromWishlist(productId)
+      toast.success('Removed from wishlist')
+    } else {
+      const wishlistItem = {
+        id: productId,
+        name: name,
+        price: `$${price}`,
+        image: '/assets/images/product-gallery-1.png' // Using first gallery image
+      }
+      addToWishlist(wishlistItem)
+      toast.success('Added to wishlist')
+    }
+  }
 
   return (
     <div className="bg-cream">
@@ -138,14 +185,22 @@ function ProductInfo({
       </div>
 
       <div className="mt-6 flex gap-3">
-        <button className="flex-1 rounded bg-button-hover py-3 font-inter text-sm font-bold uppercase text-white">
-          Add to Bag
+        <button
+          onClick={handleAddToBag}
+          className={`flex-1 rounded py-3 font-inter text-sm font-bold uppercase text-white transition-colors ${
+            isInCart ? 'bg-red-500' : 'bg-button-hover'
+          }`}
+        >
+          {isInCart ? 'Remove from Bag' : 'Add to Bag'}
         </button>
-        <button className="flex size-12 items-center justify-center rounded border-2 border-gray-300 bg-white transition-colors hover:bg-gray-50">
+        <button
+          onClick={handleWishlistClick}
+          className="flex size-12 items-center justify-center rounded border-2 border-gray-300 bg-white transition-colors hover:bg-gray-50"
+        >
           <svg
             className="size-6"
-            fill="none"
-            stroke="currentColor"
+            fill={isWishlisted ? '#E8A5A5' : 'none'}
+            stroke={isWishlisted ? '#E8A5A5' : 'currentColor'}
             strokeWidth={2}
             viewBox="0 0 24 24"
           >
@@ -159,7 +214,7 @@ function ProductInfo({
           onClick={() => setIsShoppingOpen(!isShoppingOpen)}
           className="flex w-full items-center justify-between font-inter text-sm font-normal text-[#2E2E2E]"
         >
-          <span>Why you'll love shopping with NEXT</span>
+          <span>Why you'll love shopping with maison baby & kids</span>
           <svg
             className={`size-5 transition-transform ${
               isShoppingOpen ? 'rotate-180' : ''
