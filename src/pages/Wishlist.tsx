@@ -1,43 +1,42 @@
-import { useState } from 'react'
 import { Link } from 'react-router-dom'
+import { useWishlist } from 'contexts/WishlistContext'
+import { useCart } from 'contexts/CartContext'
 import WishlistCard from 'components/WishlistCard'
-
-interface WishlistItem {
-  id: number
-  image: string
-  title: string
-  subtitle: string
-  price: string
-}
+import toast from 'react-hot-toast'
 
 function Wishlist() {
-  const [wishlistItems, setWishlistItems] = useState<WishlistItem[]>([
-    {
-      id: 1,
-      image: '/assets/images/wishlistOne.png',
-      title: 'kids t-shirts',
-      subtitle: 'default title',
-      price: '$19'
-    },
-    {
-      id: 2,
-      image: '/assets/images/wishlistTwo.png',
-      title: 'boys core set',
-      subtitle: 'default title',
-      price: '$39'
-    }
-  ])
+  const { wishlistItems, removeFromWishlist, clearWishlist } = useWishlist()
+  const { addToCart } = useCart()
 
-  const handleRemoveFromWishlist = (id: number) => {
-    setWishlistItems((items) => items.filter((item) => item.id !== id))
+  const handleRemoveFromWishlist = (id: string) => {
+    removeFromWishlist(id)
+    toast.success('Removed from wishlist')
   }
 
-  const handleAddToCart = (id: number) => {
-    console.log('Adding item to cart:', id)
+  const handleAddToCart = (id: string) => {
+    const item = wishlistItems.find((item) => item.id === id)
+    if (item) {
+      addToCart({
+        id: item.id,
+        name: item.name,
+        price: item.price,
+        image: item.image
+      })
+      toast.success('Added to cart')
+    }
   }
 
   const handleAddAllToCart = () => {
-    console.log('Adding all items to cart')
+    wishlistItems.forEach((item) => {
+      addToCart({
+        id: item.id,
+        name: item.name,
+        price: item.price,
+        image: item.image
+      })
+    })
+    toast.success(`Added ${wishlistItems.length} items to cart`)
+    clearWishlist()
   }
 
   const getTotalPrice = () => {
@@ -84,8 +83,8 @@ function Wishlist() {
                     key={item.id}
                     id={item.id}
                     image={item.image}
-                    title={item.title}
-                    subtitle={item.subtitle}
+                    title={item.name}
+                    subtitle="default title"
                     price={item.price}
                     onRemove={handleRemoveFromWishlist}
                     onAddToCart={handleAddToCart}

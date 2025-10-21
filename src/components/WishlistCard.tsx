@@ -1,11 +1,11 @@
 interface WishlistCardProps {
-  id: number
+  id: string
   image: string
   title: string
   subtitle: string
   price: string
-  onRemove: (id: number) => void
-  onAddToCart: (id: number) => void
+  onRemove: (id: string) => void
+  onAddToCart: (id: string) => void
 }
 
 function WishlistCard({
