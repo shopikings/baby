@@ -10,7 +10,6 @@ interface CartDrawerProps {
 function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
   const { cartItems, getTotalItems, getTotalPrice } = useCart()
 
-  console.log('CartDrawer - cartItems:', cartItems, 'length:', cartItems.length)
   const [isOrderNotesOpen, setIsOrderNotesOpen] = useState(false)
   const [isGiftNoteOpen, setIsGiftNoteOpen] = useState(false)
   const [orderNotes, setOrderNotes] = useState('')
@@ -211,7 +210,7 @@ function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
           </div>
 
           <div className="border-t border-gray-200 p-4">
-            <button className="mb-4 w-full rounded-lg bg-button-hover py-3 font-raleway text-base font-semibold text-white transition-colors hover:bg-pink-500">
+            <button className="mb-4 w-full rounded-lg bg-button-hover py-3 font-raleway text-base font-semibold text-white">
               CHECKOUT • ${getTotalPrice().toFixed(2)}
             </button>
             <p className="text-center font-raleway text-sm font-semibold text-black">
