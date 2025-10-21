@@ -210,7 +210,7 @@ function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
           </div>
 
           <div className="border-t border-gray-200 p-4">
-            <button className="mb-4 w-full rounded-lg bg-button-hover py-3 font-raleway text-base font-semibold text-white">
+            <button className="mb-4 w-full rounded-lg bg-button-hover py-3 font-raleway text-base font-semibold text-white transition-colors hover:bg-banner-lower">
               CHECKOUT • ${getTotalPrice().toFixed(2)}
             </button>
             <p className="text-center font-raleway text-sm font-semibold text-black">
