@@ -116,24 +116,29 @@ function CategoryGrid() {
                     }`}
                   >
                     <button
-                      type="button"
-                      className="rounded-full bg-button-hover px-3 py-1.5 text-xs font-medium text-white transition-colors hover:bg-button-hover/80 sm:px-4 sm:py-2 sm:text-sm md:px-6 md:py-3 md:text-base"
+                      className=" cursor-pointer rounded-full bg-button-hover px-3 py-1.5 text-xs font-medium text-white  sm:px-4 sm:py-2 sm:text-sm md:px-6 md:py-3 md:text-base"
                       onClick={(e) => {
                         e.stopPropagation()
-                        navigate('/shop')
+                        navigate(
+                          `/shop?category=${category.name
+                            .toLowerCase()
+                            .replace(/\s+/g, '-')}`
+                        )
                       }}
                     >
-                      {category.button}
+                      SHOP ALL
                     </button>
                   </div>
 
                   <div
-                    className={`flex items-end justify-center transition-opacity duration-500 ${
+                    className={`flex items-end justify-center transition-all duration-500 ${
                       expandedMobileIndex === index
-                        ? 'opacity-0'
-                        : 'opacity-100'
+                        ? 'translate-y-full opacity-0'
+                        : 'translate-y-0 opacity-100'
                     } md:absolute md:inset-x-0 md:bottom-4 md:flex md:items-end md:justify-center ${
-                      hoveredIndex === index ? 'md:opacity-0' : 'md:opacity-100'
+                      hoveredIndex === index
+                        ? 'md:translate-y-[130%] md:opacity-0'
+                        : 'md:translate-y-0 md:opacity-100'
                     }`}
                   >
                     <h3 className="font-raleway text-base font-bold tracking-wider text-cream sm:text-lg md:text-lg md:[text-orientation:mixed] md:[writing-mode:vertical-rl]">

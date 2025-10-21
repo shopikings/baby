@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
+import { useCart } from 'contexts/CartContext'
 
 interface CartDrawerProps {
   isOpen: boolean
@@ -6,6 +7,13 @@ interface CartDrawerProps {
 }
 
 function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
+  const {
+    cartItems,
+    removeFromCart,
+    updateQuantity,
+    getTotalItems,
+    getTotalPrice
+  } = useCart()
   const [isOrderNotesOpen, setIsOrderNotesOpen] = useState(false)
   const [isGiftNoteOpen, setIsGiftNoteOpen] = useState(false)
   const [isQuantityOpen, setIsQuantityOpen] = useState(false)
@@ -71,7 +79,10 @@ function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
 
           <div className="flex items-center justify-between border-b border-gray-200 p-4">
             <h2 className="font-rubik text-2xl font-medium text-text-primary">
-              CART <span className="text-xs text-text-primary">(0 ITEM)</span>
+              CART{' '}
+              <span className="text-xs text-text-primary">
+                ({getTotalItems()} ITEM{getTotalItems() !== 1 ? 'S' : ''})
+              </span>
             </h2>
             <button
               onClick={onClose}
@@ -94,28 +105,82 @@ function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
           </div>
 
           <div className="flex-1 overflow-y-auto p-4">
-            {/* Empty Cart Message */}
-            <div className="flex h-full flex-col items-center justify-center py-12">
-              <svg
-                className="mb-4 size-16 text-gray-400"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={1.5}
-                  d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"
-                />
-              </svg>
-              <h3 className="mb-2 font-rubik text-lg font-medium text-text-primary">
-                Your cart is empty
-              </h3>
-              <p className="text-center font-raleway text-sm text-gray-600">
-                Add some products to get started
-              </p>
-            </div>
+            {cartItems.length === 0 ? (
+              <div className="flex h-full flex-col items-center justify-center py-12">
+                <svg
+                  className="mb-4 size-16 text-gray-400"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={1.5}
+                    d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"
+                  />
+                </svg>
+                <h3 className="mb-2 font-rubik text-lg font-medium text-text-primary">
+                  Your cart is empty
+                </h3>
+                <p className="text-center font-raleway text-sm text-gray-600">
+                  Add some products to get started
+                </p>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                {cartItems.map((item) => (
+                  <div key={item.id} className="border-b border-gray-200 pb-4">
+                    <div className="flex gap-4">
+                      <div className="size-20 shrink-0 overflow-hidden rounded-lg bg-gray-100">
+                        <img
+                          src={item.image}
+                          alt={item.name}
+                          className="size-full object-cover"
+                        />
+                      </div>
+                      <div className="flex-1">
+                        <h3 className="font-rubik text-xs font-semibold text-black line-clamp-2">
+                          {item.name}
+                        </h3>
+                        <div className="mt-2 flex items-center justify-between">
+                          <div className="flex items-center gap-2">
+                            <button
+                              onClick={() =>
+                                updateQuantity(item.id, item.quantity - 1)
+                              }
+                              className="flex size-6 items-center justify-center rounded border border-gray-300 text-sm hover:bg-gray-50"
+                            >
+                              -
+                            </button>
+                            <span className="text-sm">{item.quantity}</span>
+                            <button
+                              onClick={() =>
+                                updateQuantity(item.id, item.quantity + 1)
+                              }
+                              className="flex size-6 items-center justify-center rounded border border-gray-300 text-sm hover:bg-gray-50"
+                            >
+                              +
+                            </button>
+                          </div>
+                          <button
+                            onClick={() => removeFromCart(item.id)}
+                            className="font-raleway text-sm text-black underline hover:text-text-primary"
+                          >
+                            Remove
+                          </button>
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <p className="font-raleway text-sm font-medium text-black">
+                          {item.price}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
 
             {/* Product Card - Commented Out */}
             {/* <div className="mb-6">
@@ -296,7 +361,7 @@ function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
 
           <div className="border-t border-gray-200 p-4">
             <button className="mb-4 w-full rounded-lg bg-button-hover py-3 font-raleway text-base font-semibold text-white transition-colors hover:bg-pink-500">
-              CHECKOUT • ${currentTotal.toFixed(2)}
+              CHECKOUT • ${getTotalPrice().toFixed(2)}
             </button>
             <p className="text-center font-raleway text-sm font-semibold text-black">
               SHIPPING & TAXES CALCULATED AT CHECKOUT

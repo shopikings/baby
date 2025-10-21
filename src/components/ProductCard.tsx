@@ -1,9 +1,13 @@
+import { useCart } from 'contexts/CartContext'
+import toast from 'react-hot-toast'
+
 interface ProductCardProps {
   image: string
   hoverImage?: string
   title: string
   price: string
   className?: string
+  id?: number
 }
 
 function ProductCard({
@@ -11,8 +15,21 @@ function ProductCard({
   hoverImage,
   title,
   price,
-  className = ''
+  className = '',
+  id
 }: ProductCardProps) {
+  const { addToCart } = useCart()
+
+  const handleAddToCart = (e: React.MouseEvent) => {
+    e.stopPropagation()
+    addToCart({
+      id: id?.toString() || `product-${Date.now()}`,
+      name: title,
+      price: price,
+      image: image
+    })
+    toast.success(`${title} added to cart!`)
+  }
   return (
     <div className={`group cursor-pointer ${className}`}>
       <div className="mb-4 overflow-hidden rounded-lg bg-white p-4 shadow-sm transition-shadow duration-300 group-hover:shadow-md">
@@ -32,6 +49,7 @@ function ProductCard({
 
           <div className="absolute bottom-3 right-3 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
             <button
+              onClick={handleAddToCart}
               className="rounded-lg bg-white p-2 transition-transform hover:scale-105"
               style={{ boxShadow: '0 0 8px rgba(0, 0, 0, 0.15)' }}
             >

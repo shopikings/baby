@@ -265,6 +265,7 @@ function RecommendationsSlider({ bgWhite }: RecommendationsSliderProps) {
             {currentProducts.map((product) => (
               <div key={product.id} className="min-w-[280px] sm:min-w-[320px]">
                 <ProductCard
+                  id={product.id}
                   image={product.image}
                   hoverImage={product.hoverImage}
                   title={product.title}
