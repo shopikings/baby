@@ -41,16 +41,21 @@ export function CartProvider({ children }: { children: ReactNode }) {
   }, [cartItems])
 
   const addToCart = (item: Omit<CartItem, 'quantity'>) => {
+    console.log('CartContext - Adding item to cart:', item)
     setCartItems((prev) => {
       const existingItem = prev.find((cartItem) => cartItem.id === item.id)
       if (existingItem) {
-        return prev.map((cartItem) =>
+        const updated = prev.map((cartItem) =>
           cartItem.id === item.id
             ? { ...cartItem, quantity: cartItem.quantity + 1 }
             : cartItem
         )
+        console.log('CartContext - Updated existing item, new cart:', updated)
+        return updated
       }
-      return [...prev, { ...item, quantity: 1 }]
+      const newCart = [...prev, { ...item, quantity: 1 }]
+      console.log('CartContext - Added new item, new cart:', newCart)
+      return newCart
     })
   }
 

@@ -16,7 +16,7 @@ function ShopTheLook() {
   const products = [
     {
       id: 1,
-      name: 'Boys Oakdale Multi-Stripe Long Sleeve Hoodie',
+      name: 'Boys Outdoor Multi-Stripe Long Sleeve Hoodie',
       price: '$40.00',
       image: '/assets/images/blogOne.png',
       buttonText: 'Boys Outdoor Multi-Stripe Long Sleeve Hoodie'

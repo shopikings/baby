@@ -1,5 +1,6 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState } from 'react'
 import { useCart } from 'contexts/CartContext'
+import CartItem from './CartItem'
 
 interface CartDrawerProps {
   isOpen: boolean
@@ -7,45 +8,16 @@ interface CartDrawerProps {
 }
 
 function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
-  const {
-    cartItems,
-    removeFromCart,
-    updateQuantity,
-    getTotalItems,
-    getTotalPrice
-  } = useCart()
+  const { cartItems, getTotalItems, getTotalPrice } = useCart()
+
+  console.log('CartDrawer - cartItems:', cartItems, 'length:', cartItems.length)
   const [isOrderNotesOpen, setIsOrderNotesOpen] = useState(false)
   const [isGiftNoteOpen, setIsGiftNoteOpen] = useState(false)
-  const [isQuantityOpen, setIsQuantityOpen] = useState(false)
-  const [quantity, setQuantity] = useState(1)
   const [orderNotes, setOrderNotes] = useState('')
   const [giftNote, setGiftNote] = useState('')
 
-  const quantityOptions = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-  const quantityRef = useRef<HTMLDivElement>(null)
-
-  useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      if (
-        quantityRef.current &&
-        !quantityRef.current.contains(event.target as Node)
-      ) {
-        setIsQuantityOpen(false)
-      }
-    }
-
-    if (isQuantityOpen) {
-      document.addEventListener('mousedown', handleClickOutside)
-    }
-
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside)
-    }
-  }, [isQuantityOpen])
-
-  const itemPrice = 0.0
-  const freeShippingThreshold = 0.0
-  const currentTotal = itemPrice * quantity
+  const freeShippingThreshold = 75.0
+  const currentTotal = getTotalPrice()
   const remainingForFreeShipping = Math.max(
     0,
     freeShippingThreshold - currentTotal
@@ -128,235 +100,114 @@ function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                 </p>
               </div>
             ) : (
-              <div className="space-y-4">
+              <>
+                {' '}
+                <div className="mb-6">
+                  <p className="mb-2 text-center font-raleway text-xs font-medium text-black">
+                    SPEND ${remainingForFreeShipping.toFixed(2)} MORE FOR FREE
+                    SHIPPING.
+                  </p>
+                  <div className="h-2 w-full rounded-full bg-gray-200">
+                    <div
+                      className="h-2 rounded-full bg-button-hover transition-all duration-300"
+                      style={{ width: `${progressPercentage}%` }}
+                    />
+                  </div>
+                </div>
                 {cartItems.map((item) => (
-                  <div key={item.id} className="border-b border-gray-200 pb-4">
-                    <div className="flex gap-4">
-                      <div className="size-20 shrink-0 overflow-hidden rounded-lg bg-gray-100">
-                        <img
-                          src={item.image}
-                          alt={item.name}
-                          className="size-full object-cover"
+                  <CartItem key={item.id} item={item} />
+                ))}
+                <div className="">
+                  <div
+                    className={`rounded-lg transition-colors duration-300 ${
+                      isOrderNotesOpen ? 'bg-white' : 'bg-cream'
+                    }`}
+                  >
+                    <button
+                      onClick={() => setIsOrderNotesOpen(!isOrderNotesOpen)}
+                      className="flex w-full items-center justify-between px-4 py-2  text-left"
+                    >
+                      <span className="font-raleway text-sm font-medium text-text-primary">
+                        ADD ORDER NOTES
+                      </span>
+                      <svg
+                        className={`size-4 transition-transform ${
+                          isOrderNotesOpen ? 'rotate-180' : ''
+                        }`}
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M19 9l-7 7-7-7"
+                        />
+                      </svg>
+                    </button>
+                    {isOrderNotesOpen && (
+                      <div className="px-4 pb-4">
+                        <label className="mb-2 block font-raleway text-xs font-medium text-text-primary">
+                          SPECIAL INSTRUCTIONS FOR SELLER
+                        </label>
+                        <textarea
+                          value={orderNotes}
+                          onChange={(e) => setOrderNotes(e.target.value)}
+                          className="w-full rounded border border-gray-300 p-3 font-raleway text-sm focus:border-button-hover focus:outline-none"
+                          rows={4}
+                          placeholder="Add your special instructions here..."
                         />
                       </div>
-                      <div className="flex-1">
-                        <h3 className="font-rubik text-xs font-semibold text-black line-clamp-2">
-                          {item.name}
-                        </h3>
-                        <div className="mt-2 flex items-center justify-between">
-                          <div className="flex items-center gap-2">
-                            <button
-                              onClick={() =>
-                                updateQuantity(item.id, item.quantity - 1)
-                              }
-                              className="flex size-6 items-center justify-center rounded border border-gray-300 text-sm hover:bg-gray-50"
-                            >
-                              -
-                            </button>
-                            <span className="text-sm">{item.quantity}</span>
-                            <button
-                              onClick={() =>
-                                updateQuantity(item.id, item.quantity + 1)
-                              }
-                              className="flex size-6 items-center justify-center rounded border border-gray-300 text-sm hover:bg-gray-50"
-                            >
-                              +
-                            </button>
-                          </div>
-                          <button
-                            onClick={() => removeFromCart(item.id)}
-                            className="font-raleway text-sm text-black underline hover:text-text-primary"
-                          >
-                            Remove
-                          </button>
-                        </div>
-                      </div>
-                      <div className="text-right">
-                        <p className="font-raleway text-sm font-medium text-black">
-                          {item.price}
-                        </p>
-                      </div>
-                    </div>
+                    )}
                   </div>
-                ))}
-              </div>
-            )}
 
-            {/* Product Card - Commented Out */}
-            {/* <div className="mb-6">
-              <p className="mb-2 text-center font-raleway text-xs font-medium text-black">
-                SPEND ${remainingForFreeShipping.toFixed(2)} MORE FOR FREE
-                SHIPPING.
-              </p>
-              <div className="h-2 w-full rounded-full bg-gray-200">
-                <div
-                  className="h-2 rounded-full bg-button-hover transition-all duration-300"
-                  style={{ width: `${progressPercentage}%` }}
-                />
-              </div>
-            </div>
-
-            <div className="mb-6 border-y border-[#444B59A8] bg-cream p-4">
-              <div className="flex gap-4">
-                <div className="size-20 shrink-0 overflow-hidden rounded-lg bg-blue-100">
-                  <img
-                    src="/assets/images/product1.png"
-                    alt="Kids Organic Cotton Girl Power Short Sleeve T-Shirt"
-                    className="size-full object-cover"
-                  />
-                </div>
-                <div className="flex-1">
-                  <h3 className="font-rubik text-xs font-semibold text-black">
-                    KIDS ORGANIC COTTON GIRL POWER SHORT SLEEVE T-SHIRT IN
-                    NATURAL
-                  </h3>
-                  <p className="mt-1 font-rubik text-xs text-black">SIZE: 2T</p>
-                  <div className="mt-2 flex items-center justify-between">
-                    <div className="relative" ref={quantityRef}>
-                      <button
-                        onClick={() => setIsQuantityOpen(!isQuantityOpen)}
-                        className="flex items-center justify-between rounded border border-gray-300 bg-white px-3 py-2 text-sm hover:bg-gray-50 focus:border-button-hover focus:outline-none"
+                  <div
+                    className={`rounded-lg transition-colors duration-300 ${
+                      isGiftNoteOpen ? 'bg-white' : 'bg-cream'
+                    }`}
+                  >
+                    <button
+                      onClick={() => setIsGiftNoteOpen(!isGiftNoteOpen)}
+                      className="flex w-full items-center justify-between px-4 py-2 text-left"
+                    >
+                      <span className="font-raleway text-sm font-medium text-text-primary">
+                        IS THIS A GIFT? ADD A NOTE.
+                      </span>
+                      <svg
+                        className={`size-4 transition-transform ${
+                          isGiftNoteOpen ? 'rotate-180' : ''
+                        }`}
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
                       >
-                        <span>{quantity}</span>
-                        <svg
-                          className={`ml-2 size-4 transition-transform ${
-                            isQuantityOpen ? 'rotate-180' : ''
-                          }`}
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M19 9l-7 7-7-7"
-                          />
-                        </svg>
-                      </button>
-                      {isQuantityOpen && (
-                        <div className="absolute left-0 top-full z-10 mt-1 w-full rounded border border-gray-300 bg-white shadow-lg">
-                          <div className="max-h-40 overflow-y-auto">
-                            {quantityOptions.map((option) => (
-                              <button
-                                key={option}
-                                onClick={() => {
-                                  setQuantity(option)
-                                  setIsQuantityOpen(false)
-                                }}
-                                className={`block w-full px-3 py-2 text-left text-sm hover:bg-gray-50 ${
-                                  quantity === option ? 'bg-gray-100' : ''
-                                }`}
-                              >
-                                {option}
-                              </button>
-                            ))}
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                    <button className="font-raleway text-sm text-black underline hover:text-text-primary">
-                      Remove
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M19 9l-7 7-7-7"
+                        />
+                      </svg>
                     </button>
+                    {isGiftNoteOpen && (
+                      <div className="px-4 pb-4">
+                        <label className="mb-2 block font-raleway text-xs font-medium text-text-primary">
+                          ADD A NOTE FOR RECIPIENT
+                        </label>
+                        <textarea
+                          value={giftNote}
+                          onChange={(e) => setGiftNote(e.target.value)}
+                          className="w-full rounded border border-gray-300 p-3 font-raleway text-sm focus:border-button-hover focus:outline-none"
+                          rows={4}
+                          placeholder="Add your gift message here..."
+                        />
+                      </div>
+                    )}
                   </div>
                 </div>
-                <div className="text-right">
-                  <p className="font-raleway text-sm font-medium text-black">
-                    ${itemPrice.toFixed(2)}
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <div className="">
-              <div
-                className={`rounded-lg transition-colors duration-300 ${
-                  isOrderNotesOpen ? 'bg-white' : 'bg-cream'
-                }`}
-              >
-                <button
-                  onClick={() => setIsOrderNotesOpen(!isOrderNotesOpen)}
-                  className="flex w-full items-center justify-between px-4 py-2  text-left"
-                >
-                  <span className="font-raleway text-sm font-medium text-text-primary">
-                    ADD ORDER NOTES
-                  </span>
-                  <svg
-                    className={`size-4 transition-transform ${
-                      isOrderNotesOpen ? 'rotate-180' : ''
-                    }`}
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M19 9l-7 7-7-7"
-                    />
-                  </svg>
-                </button>
-                {isOrderNotesOpen && (
-                  <div className="px-4 pb-4">
-                    <label className="mb-2 block font-raleway text-xs font-medium text-text-primary">
-                      SPECIAL INSTRUCTIONS FOR SELLER
-                    </label>
-                    <textarea
-                      value={orderNotes}
-                      onChange={(e) => setOrderNotes(e.target.value)}
-                      className="w-full rounded border border-gray-300 p-3 font-raleway text-sm focus:border-button-hover focus:outline-none"
-                      rows={4}
-                      placeholder="Add your special instructions here..."
-                    />
-                  </div>
-                )}
-              </div>
-
-              <div
-                className={`rounded-lg transition-colors duration-300 ${
-                  isGiftNoteOpen ? 'bg-white' : 'bg-cream'
-                }`}
-              >
-                <button
-                  onClick={() => setIsGiftNoteOpen(!isGiftNoteOpen)}
-                  className="flex w-full items-center justify-between px-4 py-2 text-left"
-                >
-                  <span className="font-raleway text-sm font-medium text-text-primary">
-                    IS THIS A GIFT? ADD A NOTE.
-                  </span>
-                  <svg
-                    className={`size-4 transition-transform ${
-                      isGiftNoteOpen ? 'rotate-180' : ''
-                    }`}
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M19 9l-7 7-7-7"
-                    />
-                  </svg>
-                </button>
-                {isGiftNoteOpen && (
-                  <div className="px-4 pb-4">
-                    <label className="mb-2 block font-raleway text-xs font-medium text-text-primary">
-                      ADD A NOTE FOR RECIPIENT
-                    </label>
-                    <textarea
-                      value={giftNote}
-                      onChange={(e) => setGiftNote(e.target.value)}
-                      className="w-full rounded border border-gray-300 p-3 font-raleway text-sm focus:border-button-hover focus:outline-none"
-                      rows={4}
-                      placeholder="Add your gift message here..."
-                    />
-                  </div>
-                )}
-              </div>
-            </div> */}
+              </>
+            )}
           </div>
 
           <div className="border-t border-gray-200 p-4">

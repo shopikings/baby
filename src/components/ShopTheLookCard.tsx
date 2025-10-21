@@ -25,12 +25,14 @@ function ShopTheLookCard({
   const { addToCart } = useCart()
 
   const handleQuickBuy = () => {
-    addToCart({
+    const cartItem = {
       id: product.id?.toString() || `shop-look-${Date.now()}`,
       name: product.name,
       price: product.price,
       image: product.image
-    })
+    }
+    console.log('Adding to cart:', cartItem)
+    addToCart(cartItem)
     toast.success(`${product.name} added to cart!`)
     onClose()
   }
