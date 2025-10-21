@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom'
 import { useCart } from 'contexts/CartContext'
 import toast from 'react-hot-toast'
 
@@ -19,6 +20,13 @@ function ProductCard({
   id
 }: ProductCardProps) {
   const { addToCart } = useCart()
+  const navigate = useNavigate()
+
+  const handleCardClick = () => {
+    if (id) {
+      navigate(`/product/${id}`)
+    }
+  }
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.stopPropagation()
@@ -31,7 +39,10 @@ function ProductCard({
     toast.success(`${title} added to cart!`)
   }
   return (
-    <div className={`group cursor-pointer ${className}`}>
+    <div
+      className={`group cursor-pointer ${className}`}
+      onClick={handleCardClick}
+    >
       <div className="mb-4 overflow-hidden rounded-lg bg-white p-4 shadow-sm transition-shadow duration-300 group-hover:shadow-md">
         <div className="relative aspect-square w-full overflow-hidden rounded-lg">
           <img
