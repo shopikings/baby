@@ -5,6 +5,26 @@ interface FAQItem {
   answer: string
 }
 
+const renderAnswerWithLinks = (answer: string) => {
+  const emailRegex = /([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/g
+  const parts = answer.split(emailRegex)
+
+  return parts.map((part, index) => {
+    if (emailRegex.test(part)) {
+      return (
+        <a
+          key={index}
+          href={`mailto:${part}`}
+          className="text-button-hover underline hover:text-banner-lower"
+        >
+          {part}
+        </a>
+      )
+    }
+    return part
+  })
+}
+
 interface FAQCategory {
   id: string
   name: string
@@ -12,80 +32,77 @@ interface FAQCategory {
 }
 
 function FAQ() {
-  const [activeCategory, setActiveCategory] = useState('orders')
+  const [activeCategory, setActiveCategory] = useState('order-payment')
   const [openQuestions, setOpenQuestions] = useState<number[]>([])
 
   const categories: FAQCategory[] = [
     {
-      id: 'orders',
-      name: 'Orders',
+      id: 'order-payment',
+      name: 'Order & Payment',
       items: [
         {
-          question: 'Can I Cancel My Order?',
+          question: 'Can I cancel my order?',
           answer:
-            'Yes, you can cancel your order within 24 hours of placing it. After 24 hours, if the order has been processed, cancellation may not be possible.'
+            'Unfortunately, we are not able to cancel an order once it has been placed.'
         },
         {
-          question: 'I Put The Wrong Address In My Order, What Should I Do?',
+          question: 'I put the wrong address in my order, what should I do?',
           answer:
-            "Please contact our customer support immediately. If the order hasn't shipped yet, we can update the address. Once shipped, you may need to contact the carrier directly."
+            'Please be careful when entering your shipping address, Maison Baby & Kids will not be responsible for orders sent to the incorrect delivery address provided by the customer.'
         },
         {
           question:
-            'I Have Not Received My Order Confirmation, What Should I Do?',
+            'I have not received my order confirmation, what should I do?',
           answer:
-            "Check your spam/junk folder. If you still can't find it, contact our support team with your order details and we'll resend the confirmation."
+            'Sending order confirmations can sometimes take up to 24 hours due to high demand. If you have not received your order confirmation email after 24 hours, please contact us.'
         },
         {
-          question: 'How Can I Track My Order?',
+          question: 'How can I track my order?',
           answer:
-            "Once your order ships, you'll receive a tracking number via email. You can use this number on our tracking page or the carrier's website."
+            'You can track your order using the tracking number you received in your mail.'
         },
         {
-          question: 'How Can I Check The Status Of My Order?',
+          question: 'How can I check the status of my order?',
           answer:
-            'Log into your account and go to "My Orders" to see the current status. You can also use the tracking number provided in your shipping confirmation.'
+            'You can track your order using the tracking number you received in your mail.'
         },
         {
-          question: 'My Packages Seem To Have Stopped Moving?',
+          question: 'My packages seem to have stopped moving?',
           answer:
-            "Sometimes tracking updates can be delayed. If your package hasn't moved in 5-7 business days, please contact our support team for assistance."
+            'If your package stops moving at any point, do not fret! It is still on its way to you and is likely just clearing customs. Occasionally, there may be delays due to customs or weather events. If this happens, your tracking page will be updated with the latest shipping status.'
         },
         {
-          question: 'Do You Offer Returns?',
+          question: 'Do you offer returns?',
           answer:
-            'Yes, we offer returns within 30 days of delivery. Items must be unused and in original packaging. Some exclusions may apply.'
+            'We offer a 100% money back guarantee, if the product is not defective or damaged. We give you 30 days to send it back to us for a full refund. You must ship it back at your own expense, once we have received the product we will refund the full amount of your original purchase. Please Include all a name and order number on the returned parcels.'
         },
         {
-          question: 'Do You Offer Exchanges?',
+          question: 'Do you offer exchanges?',
           answer:
-            'Yes, we offer exchanges for different sizes or colors within 30 days. Contact our support team to initiate an exchange.'
+            'Yes, we offer exchanges, get in touch with our customer care team at hello@maisonbabyandkids.com'
         },
         {
-          question: 'I Received Incorrect Items In My Order, What Should I Do?',
+          question: 'I received incorrect items in my order, what should I do?',
           answer:
-            "We apologize for the error. Please contact our support team immediately with photos of the items received, and we'll arrange for a replacement or refund."
+            'Please drop an email at hello@maisonbabyandkids.com within 48 hours of receiving your order, so that we can take care of this for you. Please provide your order number with your inquiry.'
         },
         {
-          question: 'How Can I Contact Support?',
-          answer:
-            'You can reach us via email at support@example.com, through our contact form, or call us at 1-800-XXX-XXXX during business hours.'
+          question: 'How can I contact support?',
+          answer: 'please drop an email at hello@maisonbabyandkids.com'
         },
         {
-          question: 'How Long Does It Take To Hear Back From Support?',
-          answer:
-            'We typically respond to all inquiries within 24-48 hours during business days. For urgent matters, please call our support line.'
-        }
-      ]
-    },
-    {
-      id: 'payment',
-      name: 'Payment',
-      items: [
+          question: 'How long does it take to hear back from support?',
+          answer: 'The customer care team will get back to you within 24 hours.'
+        },
         {
-          question: 'What Payment Methods Do You Accept?',
+          question: 'What forms of payment do you accept?',
           answer:
-            'We accept all major credit cards, PayPal, Apple Pay, and Google Pay.'
+            "We accept online payments via visa, mastercard, american express, afterpay, discover, and paypal. If you are an international consumer, we also accept local payment providers. You'll see this list when you visit our checkout page."
+        },
+        {
+          question: 'Why was I charged twice?',
+          answer:
+            'You will only be charged for what you purchased. If you see duplicate charges, please give it a few days until the issue falls off and gets rectified automatically. However, if it still remains and you are positive you only placed one order, please contact us at hello@maisonbabyandkids.com with a screenshot of the duplicate charge for further assistance.'
         }
       ]
     },
@@ -94,9 +111,23 @@ function FAQ() {
       name: 'Accounts',
       items: [
         {
-          question: 'How Do I Create An Account?',
+          question: 'Do I have to set up an account to place an order?',
+          answer: 'No, you do not have to set up an account to place an order.'
+        },
+        {
+          question: 'How do I create an account?',
+          answer: 'You can create an account on the home page.'
+        },
+        {
+          question: 'I forgot my password, what should I do?',
           answer:
-            'Click on "Sign Up" at the top of the page and fill in your details.'
+            'To reset your password, click here. you will then be prompted to enter the e-mail address you used to create your account. Once you submit, you will receive an e-mail notification with a link to reset your password.'
+        },
+        {
+          question:
+            'How do I subscribe to emails or cancel my email subscription?',
+          answer:
+            'You can easily subscribe to emails by visiting maisonbabyandkids.com and using the sign up form located in the footer at the bottom of the page. If you want to cancel/unsubscribe, you can click unsubscribe by locating the "unsubscribe" link within your email.'
         }
       ]
     },
@@ -105,9 +136,24 @@ function FAQ() {
       name: 'Products',
       items: [
         {
-          question: 'Are Your Products Safe For Babies?',
+          question: 'How often do you restock?',
           answer:
-            'Yes, all our products meet safety standards and are tested for baby safety.'
+            'Restock dates vary depending on product availability. please sign up for our emails or sms text alerts to find out when your favorite products will be back in stock!'
+        },
+        {
+          question: 'Do you offer free samples or gifts?',
+          answer:
+            "Occasionally maisonbabyandkids.com will apply a gift with purchase to orders. Please note that unless otherwise stated, all free gifts redeemed alongside a customer's orders are included while supplies last and are therefore not guaranteed. All samples, packets, stickers, and other products or merchandise are subject to change and availability."
+        },
+        {
+          question: 'Where are your products manufactured?',
+          answer:
+            'Our formulas are made in the usa and europe, with globally sourced ingredients.'
+        },
+        {
+          question: 'What temperature do these products need to be stored at?',
+          answer:
+            'We recommend storing your products in a cool dry place, away from direct sunlight and excessive heat.'
         }
       ]
     },
@@ -116,9 +162,14 @@ function FAQ() {
       name: 'Shipping',
       items: [
         {
-          question: 'How Long Does Shipping Take?',
+          question: 'USA shipping',
           answer:
-            'Standard shipping takes 5-7 business days. Express shipping is available for 2-3 day delivery.'
+            'We offer complimentary standard shipping on all orders over $70 in the United States. For orders below $70 we charge for shipping.'
+        },
+        {
+          question: 'International shipping',
+          answer:
+            'We offer complimentary express shipping for most international orders over $400, excluding duties & taxes. there may be product specific restrictions. For orders less than $400, we offer $50.00 flat rate shipping. Based on your shipping country, the rate may be higher to include duties & taxes and will be converted to your local currency. The exact shipping options for your country will be presented during checkout. International orders can experience delays, if your order has not arrived within 3 weeks of order placement, please contact our customer service team for updates via our contact us form.'
         }
       ]
     },
@@ -127,9 +178,19 @@ function FAQ() {
       name: 'Contact',
       items: [
         {
-          question: 'How Can I Reach Customer Service?',
+          question: 'How do I contact your customer support team?',
+          answer: 'Please visit this page: contact us.'
+        },
+        {
+          question:
+            'I contacted your customer support team, when should I expect a response?',
           answer:
-            'You can contact us via email, phone, or through our contact form on the website.'
+            'We respond to all emails as soon as possible. Our goal is to respond to all consumers within 24 hours, however we often experience delays over the weekend and during peak times.'
+        },
+        {
+          question: 'How do I manage my personal data?',
+          answer:
+            'We care about your privacy, please click here to read our privacy policy.'
         }
       ]
     }
@@ -191,7 +252,7 @@ function FAQ() {
               >
                 <div className="pb-4">
                   <p className="font-raleway text-sm text-gray-700">
-                    {item.answer}
+                    {renderAnswerWithLinks(item.answer)}
                   </p>
                 </div>
               </div>
