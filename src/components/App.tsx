@@ -11,13 +11,13 @@ import ProductDetail from 'pages/ProductDetail'
 import Contact from 'pages/Contact'
 import About from 'pages/About'
 import Shipping from 'pages/Shipping'
-import Returns from 'pages/Returns'
 import Terms from 'pages/Terms'
 import Privacy from 'pages/Privacy'
 import RefundPolicy from 'pages/RefundPolicy'
 import Collection from 'pages/Collection'
 import FAQ from 'pages/FAQ'
 import BlogPage from 'pages/Blog'
+import BlogPost from 'pages/BlogPost'
 import Wishlist from 'pages/Wishlist'
 
 function App() {
@@ -31,6 +31,7 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/shop" element={<Shop />} />
             <Route path="/blog" element={<BlogPage />} />
+            <Route path="/blog/:slug" element={<BlogPost />} />
             <Route path="/wishlist" element={<Wishlist />} />
             <Route path="/product/:id" element={<ProductDetail />} />
             <Route path="/contact" element={<Contact />} />
