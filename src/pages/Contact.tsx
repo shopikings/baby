@@ -29,7 +29,7 @@ function Contact() {
     <div className="min-h-screen bg-cream py-12 sm:py-16">
       <div className="mx-auto max-w-md px-6 sm:px-8">
         <div className="text-center">
-          <h1 className="font-rubik text-base font-bold uppercase tracking-wide text-button-hover md:text-2xl">
+          <h1 className="font-rubik text-base font-bold uppercase tracking-wide text-text-primary md:text-2xl">
             CONTACT US
           </h1>
           <p className="mx-auto mt-3 max-w-sm font-raleway text-sm leading-relaxed text-gray-700">
