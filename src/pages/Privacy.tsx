@@ -9,22 +9,21 @@ function Privacy() {
           <h1 className="mb-8 text-center font-rubik text-3xl font-normal text-text-primary sm:text-4xl lg:text-5xl">
             Privacy policy
           </h1>
-          <p className="mb-4 font-raleway text-sm text-text-primary/60">
+          <p className="mb-4 font-raleway text-sm italic text-text-primary/60">
             Last updated October 8, 2025
           </p>
 
           <p className="mb-4 font-raleway text-base font-normal leading-relaxed text-text-primary/80">
-            This Privacy Policy describes how maison baby and kids (the
-            &quot;Site&quot;, &quot;we&quot;, &quot;us&quot;, or
-            &quot;our&quot;) collects, uses and discloses your personal
-            information when you visit, use our services or make a purchase from
-            maisonbabyandkids.co.uk (the &quot;Site&quot;) or otherwise
-            communicate with us regarding the Site (collectively, the
-            &quot;Services&quot;). For purposes of this Privacy Policy,
-            &quot;you&quot; and &quot;your&quot; means you as the user of the
-            Services, whether you are a customer, website visitor, or another
-            individual whose information we have collected pursuant to this
-            Privacy Policy.
+            This Privacy Policy explains how Maison Baby and Kids (“Site”, “we”,
+            “us”, or “our”) collects, uses, and shares your personal information
+            when you visit or make a purchase from maisonbabyandkids.com (the
+            “Site”), use our services, or otherwise interact with us
+            (collectively, the “Services”).
+          </p>
+          <p className="mb-8 font-raleway text-base font-normal leading-relaxed text-text-primary/80">
+            For the purposes of this Privacy Policy, “you” or “your” refers to
+            any individual using our Services, whether as a customer, website
+            visitor, or another person whose information we process.
           </p>
           <p className="mb-8 font-raleway text-base font-normal leading-relaxed text-text-primary/80">
             Please read this Privacy Policy carefully.
@@ -38,30 +37,23 @@ function Privacy() {
                 Changes to This Privacy Policy
               </h3>
               <p className="mb-6 font-raleway text-base font-normal leading-relaxed text-text-primary/80">
-                We may update this Privacy Policy from time to time, including
-                to reflect changes to our practices or for other operational,
-                legal, or regulatory reasons. We will post the revised Privacy
-                Policy on the Site, update the &quot;Last updated&quot; date and
-                take any other steps required by applicable law.
+                We may update this Privacy Policy from time to time to reflect
+                changes in our business practices, legal requirements, or
+                operational reasons. When changes are made, the “Last updated”
+                date will be revised, and where required by law, we will notify
+                you of any significant updates.
               </p>
             </div>
 
             <div className="mb-8">
               <h3 className="mb-4 font-rubik text-3xl font-medium text-text-primary">
-                How We Collect and Use Your Personal Information
+                Information We Collect
               </h3>
               <p className="mb-6 font-raleway text-base font-normal leading-relaxed text-text-primary/80">
-                To provide the Services, we collect personal information about
-                you from a variety of sources, as set out below. The information
-                we collect and use varies depending on how you interact with us.
-              </p>
-              <p className="mb-6 font-raleway text-base font-normal leading-relaxed text-text-primary/80">
-                In addition to the specific uses set out below, we may use
-                information we collect about you to communicate with you,
-                provide or improve or improve the Services, comply with any
-                applicable legal obligations, enforce any applicable terms of
-                service, and to protect or defend the Services, our rights, and
-                the rights of our users or others.
+                The personal information we collect depends on how you interact
+                with our Site and Services. “Personal information” refers to
+                data that identifies, relates to, or can reasonably be linked to
+                you.
               </p>
             </div>
 
