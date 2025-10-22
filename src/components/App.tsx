@@ -14,6 +14,7 @@ import Shipping from 'pages/Shipping'
 import Returns from 'pages/Returns'
 import Terms from 'pages/Terms'
 import Privacy from 'pages/Privacy'
+import RefundPolicy from 'pages/RefundPolicy'
 import Collection from 'pages/Collection'
 import FAQ from 'pages/FAQ'
 import BlogPage from 'pages/Blog'
@@ -35,7 +36,7 @@ function App() {
             <Route path="/contact" element={<Contact />} />
             <Route path="/about" element={<About />} />
             <Route path="/shipping" element={<Shipping />} />
-            <Route path="/returns" element={<Returns />} />
+            <Route path="/returns" element={<RefundPolicy />} />
             <Route path="/terms" element={<Terms />} />
             <Route path="/privacy" element={<Privacy />} />
             <Route path="/collection" element={<Collection />} />
