@@ -7,15 +7,13 @@ function Banner() {
   return (
     <div className="relative">
       <div className="relative h-[700px] overflow-hidden bg-cream">
-        <img
-          src="/assets/images/home-banner.jpg"
-          alt="Kids fashion banner"
-          className="absolute inset-0 size-full"
-          style={{
-            imageRendering: '-webkit-optimize-contrast',
-            objectFit: 'cover',
-            objectPosition: 'center'
-          }}
+        <video
+          src="/assets/images/banner-video.mp4"
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="absolute inset-0 size-full object-cover"
         />
         <div className="absolute inset-0 bg-black/40"></div>
         <div className="relative z-10  flex h-full items-end justify-center pb-[5%]">
