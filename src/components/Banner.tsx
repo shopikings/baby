@@ -8,7 +8,7 @@ function Banner() {
     <div className="relative">
       <div className="relative h-[700px] overflow-hidden bg-cream">
         <video
-          src="/assets/images/banner-video.mp4"
+          src="/assets/images/banner-video-comp.mp4"
           autoPlay
           loop
           muted
