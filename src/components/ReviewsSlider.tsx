@@ -105,10 +105,10 @@ function ReviewsSlider() {
       const scrollWidth = sliderRef.current.scrollWidth
 
       const getCardsPerView = () => {
-        if (window.innerWidth >= 1280) return 6 // xl and above
-        if (window.innerWidth >= 1024) return 5 // lg
-        if (window.innerWidth >= 640) return 4 // sm
-        return 2 // mobile
+        if (window.innerWidth >= 1280) return 6
+        if (window.innerWidth >= 1024) return 5
+        if (window.innerWidth >= 640) return 4
+        return 2
       }
 
       const cardsPerView = getCardsPerView()
