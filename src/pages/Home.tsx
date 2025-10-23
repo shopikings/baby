@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom'
+import { useState, useEffect } from 'react'
 import Banner from 'components/Banner'
 import FeaturesSection from 'components/FeaturesSection'
 import Marquee from 'components/Marquee'
@@ -13,9 +14,24 @@ import FAQSection from 'components/FAQSection'
 import JoinMovementSlider from 'components/JoinMovementSlider'
 import InfoBanner from 'components/InfoBanner'
 import StickyDiscountTag from 'components/StickyDiscountTag'
+import NewsletterModal from 'components/NewsletterModal'
 
 function Home() {
   const navigate = useNavigate()
+  const [showNewsletterModal, setShowNewsletterModal] = useState(false)
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowNewsletterModal(true)
+    }, 5000)
+
+    return () => clearTimeout(timer)
+  }, [])
+
+  const handleCloseNewsletter = () => {
+    setShowNewsletterModal(false)
+  }
+
   return (
     <div className="bg-white">
       <StickyDiscountTag />
@@ -41,6 +57,11 @@ function Home() {
       <FAQSection />
       <JoinMovementSlider />
       <InfoBanner />
+
+      <NewsletterModal
+        isOpen={showNewsletterModal}
+        onClose={handleCloseNewsletter}
+      />
     </div>
   )
 }
