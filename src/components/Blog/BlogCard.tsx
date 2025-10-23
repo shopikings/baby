@@ -1,15 +1,28 @@
-import React from 'react'
+import { useNavigate } from 'react-router-dom'
 
 interface BlogCardProps {
   image: string
   date: string
   title: string
   excerpt: string
+  slug?: string
 }
 
-export function BlogCard({ image, date, title, excerpt }: BlogCardProps) {
+export function BlogCard({ image, date, title, excerpt, slug }: BlogCardProps) {
+  const navigate = useNavigate()
+
+  const handleCardClick = () => {
+    const blogSlug =
+      slug ||
+      title
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/(^-|-$)/g, '')
+    navigate(`/blog/${blogSlug}`)
+  }
+
   return (
-    <div className="flex flex-col">
+    <div className="flex cursor-pointer flex-col" onClick={handleCardClick}>
       <div className="mb-4 aspect-video w-full overflow-hidden">
         <img
           src={image}
