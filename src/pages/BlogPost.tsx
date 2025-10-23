@@ -1,6 +1,7 @@
 import { useParams } from 'react-router-dom'
 import BlogSocialShare from 'components/BlogSocialShare'
 import BlogCommentForm from 'components/BlogCommentForm'
+import BlogReadMore from 'components/BlogReadMore'
 
 function BlogPost() {
   const { slug } = useParams<{ slug: string }>()
@@ -23,7 +24,7 @@ function BlogPost() {
       },
       {
         type: 'heading',
-        level: 2,
+        level: 1,
         content: 'Sustainable Materials Take Center Stage'
       },
       {
@@ -39,7 +40,7 @@ function BlogPost() {
       },
       {
         type: 'heading',
-        level: 2,
+        level: 1,
         content: 'Color Trends for 2024'
       },
       {
@@ -49,7 +50,7 @@ function BlogPost() {
       },
       {
         type: 'heading',
-        level: 2,
+        level: 1,
         content: 'Why November Shopping Still Matters for Parents'
       },
       {
@@ -59,7 +60,7 @@ function BlogPost() {
       },
       {
         type: 'heading',
-        level: 2,
+        level: 1,
         content: 'Must-Have Pieces'
       },
       {
@@ -83,7 +84,7 @@ function BlogPost() {
       },
       {
         type: 'heading',
-        level: 2,
+        level: 1,
         content: 'Shopping Tips for Parents'
       },
       {
@@ -107,7 +108,6 @@ function BlogPost() {
     ]
   }
 
-  // Function to parse rich text with bold formatting
   const parseRichText = (text: string) => {
     const parts = text.split(/(\*\*.*?\*\*)/g)
     return parts.map((part, index) => {
@@ -140,7 +140,7 @@ function BlogPost() {
         return (
           <p
             key={index}
-            className="mb-6 font-raleway text-base leading-relaxed text-text-primary/80"
+            className="mb-6 font-raleway text-base leading-relaxed text-[#2E2E2E]"
           >
             {parseRichText(block.content || '')}
           </p>
@@ -148,9 +148,9 @@ function BlogPost() {
       case 'heading': {
         const HeadingTag = `h${block.level}` as keyof JSX.IntrinsicElements
         const headingClasses = {
-          1: 'mb-6 font-rubik text-3xl font-bold text-text-primary',
-          2: 'mb-4 mt-8 font-rubik text-2xl font-semibold text-text-primary',
-          3: 'mb-3 mt-6 font-rubik text-xl font-semibold text-text-primary',
+          1: 'mb-6 mt-10 font-rubik text-5xl font-bold text-text-primary',
+          2: 'mb-4 mt-8 font-rubik text-4xl font-semibold text-text-primary',
+          3: 'mb-3 mt-6 font-rubik text-3xl font-semibold text-text-primary',
           4: 'mb-3 mt-4 font-rubik text-lg font-semibold text-text-primary'
         }
         return (
@@ -168,7 +168,7 @@ function BlogPost() {
         return (
           <ul
             key={index}
-            className="mb-6 ml-6 list-disc space-y-2 font-raleway text-base leading-relaxed text-text-primary/80"
+            className="mb-6 ml-6 list-disc space-y-2 font-raleway text-base leading-relaxed text-[#2E2E2E]"
           >
             {block?.items?.map((item: string, itemIndex: number) => (
               <li key={itemIndex}>{parseRichText(item)}</li>
@@ -261,10 +261,12 @@ function BlogPost() {
           )}
         </article>
 
-        <div className="mx-auto mt-14 max-w-2xl">
+        <div className="mx-auto mt-14 max-w-xl">
           <BlogSocialShare />
           <BlogCommentForm />
         </div>
+
+        <BlogReadMore />
       </div>
     </div>
   )

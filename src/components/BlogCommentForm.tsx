@@ -27,11 +27,12 @@ function BlogCommentForm() {
         LEAVE A COMMENT
       </h3>
 
-      <div className="mb-6 space-y-2 font-raleway text-base text-text-primary/70">
-        <p>All comments are moderated before being published.</p>
+      <div className="mb-6 space-y-0 font-raleway text-base text-text-primary/70">
+        {/* <p>All comments are moderated before being published.</p> */}
         <p>
-          This site is protected by hCaptcha and the hCaptcha Privacy Policy and
-          Terms of Service apply.
+          All comments are moderated before being published. This site is
+          protected by hCaptcha and the hCaptcha Privacy Policy and Terms of
+          Service apply.
         </p>
       </div>
 
