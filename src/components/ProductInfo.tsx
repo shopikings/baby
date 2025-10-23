@@ -66,7 +66,7 @@ function ProductInfo({
         id: productId,
         name: name,
         price: `$${price}`,
-        image: '/assets/images/product-gallery-1.png' // Using first gallery image
+        image: '/assets/images/product-gallery-1.png'
       }
       addToCart(cartItem)
       toast.success('Added to cart')
@@ -82,7 +82,7 @@ function ProductInfo({
         id: productId,
         name: name,
         price: `$${price}`,
-        image: '/assets/images/product-gallery-1.png' // Using first gallery image
+        image: '/assets/images/product-gallery-1.png'
       }
       addToWishlist(wishlistItem)
       toast.success('Added to wishlist')

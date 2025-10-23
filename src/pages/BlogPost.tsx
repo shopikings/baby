@@ -22,7 +22,6 @@ function BlogPost() {
     readTime: '5 min read',
     category: 'Fashion',
     image: '/assets/images/blogOne.png',
-    // Block-based content structure (modern approach)
     content: [
       {
         type: 'paragraph',
