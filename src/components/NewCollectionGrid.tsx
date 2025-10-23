@@ -73,7 +73,7 @@ function NewCollectionGrid() {
                 />
               </div>
 
-              <div className="absolute inset-0 flex items-center justify-center bg-black/40 transition-all ease-in-out hover:bg-black/20">
+              <div className="absolute inset-0 flex items-center justify-center bg-black/40 transition-all duration-300 ease-in-out hover:bg-black/20">
                 <h3 className="font-raleway text-xs font-medium tracking-wider text-white sm:text-sm md:text-base">
                   {collection.name}
                 </h3>

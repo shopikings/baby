@@ -127,7 +127,7 @@ function Navigation() {
       </div>
 
       <div
-        className="relative"
+        className=""
         onMouseEnter={() => handleMouseEnter('brands')}
         onMouseLeave={handleMouseLeave}
       >
@@ -144,7 +144,7 @@ function Navigation() {
               : 'pointer-events-none -translate-y-2 opacity-0'
           }`}
         >
-          <div className="w-[1200px] rounded-sm bg-cream shadow-lg">
+          <div className="w-screen rounded-sm bg-cream shadow-lg">
             <div className="flex">
               <div className="w-1/4 border-r border-gray-200 py-4">
                 {brandItems.map((brand, index) => (
