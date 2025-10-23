@@ -132,7 +132,7 @@ function Navigation() {
         onMouseLeave={handleMouseLeave}
       >
         <Link
-          to="/brands"
+          to="/collection"
           className="font-inter text-xs font-semibold uppercase text-text-primary transition-colors hover:text-gray-600"
         >
           Our Brands
