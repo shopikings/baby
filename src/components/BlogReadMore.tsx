@@ -17,6 +17,7 @@ function BlogReadMore() {
           date="SEP 16, 2025 | 2 MIN READ"
           title="HOW MUCH DOES MARKETING & INFLUENCERS DISTORT THE TRUTH ABOUT SUPPLEMENTS?"
           excerpt="Discover how marketing tactics and social media influencers distort the truth about supplements—and learn how to separate real science from hype when choosing your next product."
+          slug="marketing-influencers-supplements-truth"
         />
 
         <BlogCard
@@ -24,6 +25,7 @@ function BlogReadMore() {
           date="OCT 2, 2025 | 2 MIN READ"
           title="GLUTAMINE: THE RECOVERY AMINO EVERY ATHLETE SHOULD KNOW ABOUT"
           excerpt="When it comes to supplements, most athletes focus on the big players—protein, creatine, pre-workouts. But one amino acid often flies under the radar despite playing a critical role in"
+          slug="glutamine-recovery-amino-athletes"
         />
       </div>
     </div>

@@ -1,10 +1,17 @@
 import { useParams } from 'react-router-dom'
+import { useState, useRef } from 'react'
+import { motion } from 'framer-motion'
+import { X } from 'lucide-react'
 import BlogSocialShare from 'components/BlogSocialShare'
 import BlogCommentForm from 'components/BlogCommentForm'
 import BlogReadMore from 'components/BlogReadMore'
+import { StoreCreditModal } from 'components/Blog'
 
 function BlogPost() {
   const { slug } = useParams<{ slug: string }>()
+  const [isSubscribeOpen, setIsSubscribeOpen] = useState(false)
+  const [isCreditModalOpen, setIsCreditModalOpen] = useState(false)
+  const creditButtonRef = useRef<HTMLButtonElement>(null)
 
   console.log('Blog slug:', slug)
 
@@ -140,7 +147,7 @@ function BlogPost() {
         return (
           <p
             key={index}
-            className="mb-6 font-raleway text-base leading-relaxed text-[#2E2E2E]"
+            className="mb-4 font-raleway text-base leading-relaxed text-[#2E2E2E]"
           >
             {parseRichText(block.content || '')}
           </p>
@@ -268,6 +275,80 @@ function BlogPost() {
 
         <BlogReadMore />
       </div>
+
+      <div className="fixed right-2 top-[30vh] z-50 sm:right-4 md:right-8 xl:right-8 2xl:right-[calc((100vw-1400px)/2+24px)]">
+        <motion.div
+          initial={false}
+          animate={{
+            width: isSubscribeOpen ? 'auto' : '48px',
+            height: isSubscribeOpen ? 'auto' : '48px'
+          }}
+          transition={{ duration: 0.4, ease: 'easeInOut' }}
+          className="flex items-center gap-0 overflow-hidden rounded-lg bg-button-hover shadow-lg"
+        >
+          <motion.button
+            onClick={() => setIsSubscribeOpen(!isSubscribeOpen)}
+            className="flex size-12 shrink-0 items-center justify-center transition-transform"
+          >
+            <img
+              src="/assets/icons/bell.svg"
+              alt="Notifications"
+              className="size-6"
+            />
+          </motion.button>
+
+          <motion.div
+            initial={false}
+            animate={{
+              opacity: isSubscribeOpen ? 1 : 0,
+              width: isSubscribeOpen ? 'auto' : 0,
+              paddingRight: isSubscribeOpen ? '8px' : 0
+            }}
+            transition={{ duration: 0.4, ease: 'easeInOut' }}
+            className="flex max-w-[calc(100vw-4rem)] items-center gap-1 overflow-hidden sm:max-w-[calc(100vw-5rem)] md:max-w-none md:gap-1 md:whitespace-nowrap md:pr-4"
+          >
+            <span className="max-w-[160px] text-xs leading-tight text-white sm:max-w-none sm:whitespace-nowrap md:text-sm">
+              Get Updated with Latest Offers and Products.
+            </span>
+            <button
+              onClick={() => setIsSubscribeOpen(false)}
+              className="ml-2 shrink-0 rounded-md bg-white px-2 py-1 text-xs font-medium text-black transition-colors hover:bg-gray-100 sm:px-3 md:ml-4 md:px-4 md:py-1.5 md:text-sm"
+            >
+              Subscribe
+            </button>
+            <button
+              onClick={() => setIsSubscribeOpen(false)}
+              className="shrink-0 transition-transform hover:scale-110"
+            >
+              <X className="size-4 text-white md:size-5" />
+            </button>
+          </motion.div>
+        </motion.div>
+      </div>
+
+      <div className="fixed right-2 top-[90vh] z-50 sm:right-4 md:right-8 xl:right-8 2xl:right-[calc((100vw-1400px)/2+24px)]">
+        <button
+          ref={creditButtonRef}
+          onClick={() => setIsCreditModalOpen(true)}
+          className="flex items-center gap-2 rounded-lg bg-button-hover px-4 py-3 shadow-lg transition-all"
+        >
+          <span className="text-sm font-medium text-white">Store Credits</span>
+          <img
+            src="/assets/icons/creditStore.svg"
+            alt="Store Credits"
+            className="size-5"
+          />
+        </button>
+      </div>
+
+      <StoreCreditModal
+        isOpen={isCreditModalOpen}
+        onClose={() => setIsCreditModalOpen(false)}
+        buttonPosition={{
+          top: creditButtonRef.current?.getBoundingClientRect().top || 0,
+          right: 24
+        }}
+      />
     </div>
   )
 }
