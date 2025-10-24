@@ -1,6 +1,7 @@
 import { useState, useRef } from 'react'
 import ProductCard from './ProductCard'
 import { Link } from 'react-router-dom'
+import { ArrowUpRight } from 'lucide-react'
 
 interface RecommendationsSliderProps {
   bgWhite?: boolean
@@ -246,11 +247,7 @@ function RecommendationsSlider({ bgWhite }: RecommendationsSliderProps) {
             <Link to={'/shop'}>
               <button className="flex items-center justify-center gap-2 font-inter text-xs font-medium uppercase text-button-hover hover:text-button-hover/80 sm:text-base lg:justify-start">
                 SHOP ALL
-                <img
-                  src="/assets/icons/ArrowLink.svg"
-                  alt="Arrow"
-                  className="size-3"
-                />
+                <ArrowUpRight className="size-5 text-black" />
               </button>
             </Link>
           </div>
