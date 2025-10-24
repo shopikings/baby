@@ -12,7 +12,7 @@ function Banner() {
     if (animationComplete && isVideoLoaded) {
       const timer = setTimeout(() => {
         setShowLoader(false)
-      }, 300)
+      }, 900)
       return () => clearTimeout(timer)
     }
   }, [animationComplete, isVideoLoaded])
@@ -22,7 +22,7 @@ function Banner() {
     if (animationComplete) {
       setTimeout(() => {
         setShowLoader(false)
-      }, 300)
+      }, 900)
     }
   }
 

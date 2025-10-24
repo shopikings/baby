@@ -19,7 +19,8 @@ export default {
       },
       animation: {
         scroll: 'scroll 30s linear infinite',
-        slideInUp: 'slideInUp 0.6s ease-out forwards'
+        slideInUp: 'slideInUp 0.6s ease-out forwards',
+        quickBounce: 'quickBounce 0.4s ease-out forwards'
       },
       keyframes: {
         scroll: {
@@ -31,6 +32,20 @@ export default {
           '0%': {
             opacity: '0',
             transform: 'translateY(30px)'
+          },
+          '100%': {
+            opacity: '1',
+            transform: 'translateY(0)'
+          }
+        },
+        quickBounce: {
+          '0%': {
+            opacity: '1',
+            transform: 'translateY(0)'
+          },
+          '50%': {
+            opacity: '1',
+            transform: 'translateY(-12px)'
           },
           '100%': {
             opacity: '1',

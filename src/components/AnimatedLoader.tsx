@@ -12,6 +12,7 @@ function AnimatedLoader({
   show
 }: AnimatedLoaderProps) {
   const [animationComplete, setAnimationComplete] = useState(false)
+  const [shouldBounce, setShouldBounce] = useState(false)
 
   const websiteName = 'MAISON BABY & KIDS'
   const letters = websiteName.split('')
@@ -27,13 +28,19 @@ function AnimatedLoader({
     return () => clearTimeout(animationTimer)
   }, [letters.length, onAnimationComplete])
 
+  useEffect(() => {
+    if (animationComplete && isVideoLoaded) {
+      setShouldBounce(true)
+    }
+  }, [animationComplete, isVideoLoaded])
+
   if (!show) return null
 
   return (
     <div
       className={`absolute inset-0 z-50 flex items-center justify-center bg-cream transition-all duration-700 ${
-        animationComplete && isVideoLoaded
-          ? '-translate-y-full opacity-0'
+        shouldBounce
+          ? '-translate-y-full opacity-0 delay-500'
           : 'translate-y-0 opacity-100'
       }`}
     >
@@ -42,11 +49,15 @@ function AnimatedLoader({
           {letters.map((letter, index) => (
             <span
               key={index}
-              className={`inline-block animate-slideInUp opacity-0 ${
-                letter === ' ' ? 'w-4' : ''
+              className={`inline-block ${letter === ' ' ? 'w-4' : ''} ${
+                shouldBounce
+                  ? 'animate-quickBounce'
+                  : 'animate-slideInUp opacity-0'
               }`}
               style={{
-                animationDelay: `${index * 100}ms`
+                animationDelay: shouldBounce
+                  ? `${index * 30}ms`
+                  : `${index * 100}ms`
               }}
             >
               {letter === ' ' ? '\u00A0' : letter}
