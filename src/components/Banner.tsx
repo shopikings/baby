@@ -1,11 +1,43 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
+import AnimatedLoader from './AnimatedLoader'
 
 function Banner() {
   const [isHovered, setIsHovered] = useState(false)
+  const [isVideoLoaded, setIsVideoLoaded] = useState(false)
+  const [showLoader, setShowLoader] = useState(true)
+  const [animationComplete, setAnimationComplete] = useState(false)
+
+  useEffect(() => {
+    if (animationComplete && isVideoLoaded) {
+      const timer = setTimeout(() => {
+        setShowLoader(false)
+      }, 900)
+      return () => clearTimeout(timer)
+    }
+  }, [animationComplete, isVideoLoaded])
+
+  const handleVideoLoad = () => {
+    setIsVideoLoaded(true)
+    if (animationComplete) {
+      setTimeout(() => {
+        setShowLoader(false)
+      }, 900)
+    }
+  }
+
+  const handleAnimationComplete = () => {
+    setAnimationComplete(true)
+  }
 
   return (
     <div className="relative">
+      <AnimatedLoader
+        onAnimationComplete={handleAnimationComplete}
+        isVideoLoaded={isVideoLoaded}
+        show={showLoader}
+      />
+
       <div className="relative h-[700px] overflow-hidden bg-cream">
         <video
           src="/assets/images/banner-video-comp.mp4"
@@ -13,6 +45,7 @@ function Banner() {
           loop
           muted
           playsInline
+          onLoadedData={handleVideoLoad}
           className="absolute inset-0 size-full object-cover"
         />
         <div className="absolute inset-0 bg-black/40"></div>
