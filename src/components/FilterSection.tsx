@@ -2,9 +2,29 @@ import { useState } from 'react'
 
 interface FilterSectionProps {
   onFilterChange?: (filters: any) => void
+  filterCounts?: {
+    sale: number
+    newIn: number
+  }
+  filterOptions?: {
+    gender: string[]
+    size: string[]
+    category: string[]
+    brand: string[]
+    colour: string[]
+    pattern: string[]
+    use: string[]
+    length: string[]
+    style: string[]
+    sort: string[]
+  }
 }
 
-function FilterSection({ onFilterChange }: FilterSectionProps) {
+function FilterSection({
+  onFilterChange,
+  filterCounts,
+  filterOptions
+}: FilterSectionProps) {
   const [showMoreFilters, setShowMoreFilters] = useState(false)
   const [selectedFilters, setSelectedFilters] = useState({
     sale: false,
@@ -23,8 +43,9 @@ function FilterSection({ onFilterChange }: FilterSectionProps) {
 
   const [openDropdown, setOpenDropdown] = useState<string | null>(null)
 
-  const genderOptions = ['Boy', 'Girl', 'Unisex']
-  const sizeOptions = [
+  // Use dynamic options or fallback to static ones
+  const genderOptions = filterOptions?.gender || ['Boy', 'Girl', 'Unisex']
+  const sizeOptions = filterOptions?.size || [
     '0-3M',
     '3-6M',
     '6-12M',
@@ -34,21 +55,27 @@ function FilterSection({ onFilterChange }: FilterSectionProps) {
     '3T',
     '4T'
   ]
-  const categoryOptions = [
+  const categoryOptions = filterOptions?.category || [
     'Tops',
     'Bottoms',
     'Dresses',
     'Outerwear',
     'Accessories'
   ]
-  const brandOptions = ['NEXT', 'H&M', 'Zara', 'Gap', "Carter's"]
-  const sortOptions = [
+  const brandOptions = filterOptions?.brand || [
+    'NEXT',
+    'H&M',
+    'Zara',
+    'Gap',
+    "Carter's"
+  ]
+  const sortOptions = filterOptions?.sort || [
     'Price: Low to High',
     'Price: High to Low',
     'Newest First',
     'Best Selling'
   ]
-  const colourOptions = [
+  const colourOptions = filterOptions?.colour || [
     'Red',
     'Blue',
     'Green',
@@ -58,7 +85,7 @@ function FilterSection({ onFilterChange }: FilterSectionProps) {
     'White',
     'Brown'
   ]
-  const patternOptions = [
+  const patternOptions = filterOptions?.pattern || [
     'Solid',
     'Striped',
     'Floral',
@@ -66,9 +93,26 @@ function FilterSection({ onFilterChange }: FilterSectionProps) {
     'Plaid',
     'Animal Print'
   ]
-  const useOptions = ['Casual', 'Formal', 'Sports', 'Sleepwear', 'Outdoor']
-  const lengthOptions = ['Short', 'Medium', 'Long', 'Full Length']
-  const styleOptions = ['Classic', 'Modern', 'Vintage', 'Trendy', 'Bohemian']
+  const useOptions = filterOptions?.use || [
+    'Casual',
+    'Formal',
+    'Sports',
+    'Sleepwear',
+    'Outdoor'
+  ]
+  const lengthOptions = filterOptions?.length || [
+    'Short',
+    'Medium',
+    'Long',
+    'Full Length'
+  ]
+  const styleOptions = filterOptions?.style || [
+    'Classic',
+    'Modern',
+    'Vintage',
+    'Trendy',
+    'Bohemian'
+  ]
 
   const handleCheckboxChange = (filterType: 'sale' | 'newIn') => {
     const newFilters = {

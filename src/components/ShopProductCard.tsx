@@ -4,31 +4,42 @@ import { useWishlist } from 'contexts/WishlistContext'
 import toast from 'react-hot-toast'
 
 interface ShopProductCardProps {
-  id?: number
+  id?: string
   title: string
   price: string
+  comparePrice?: string
   mainImage: string
   variantImages: string[]
   rating?: number
   className?: string
+  isOnSale?: boolean
+  handle?: string // Add this
+}
+
+const getValidImage = (image: string) => {
+  return image && image.trim() !== ''
+    ? image
+    : '/assets/images/placeholder.webp'
 }
 
 function ShopProductCard({
   id,
   title,
   price,
+  comparePrice,
   mainImage,
   variantImages,
   rating = 0,
-  className = ''
+  className = '',
+  isOnSale = false,
+  handle
 }: ShopProductCardProps) {
-  const [currentImage, setCurrentImage] = useState(mainImage)
+  const [currentImage, setCurrentImage] = useState(getValidImage(mainImage))
   const [isTransitioning, setIsTransitioning] = useState(false)
   const navigate = useNavigate()
   const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist()
 
-  const productId =
-    id?.toString() || `product-${title.replace(/\s+/g, '-').toLowerCase()}`
+  const productId = id || `product-${title.replace(/\s+/g, '-').toLowerCase()}`
   const isWishlisted = isInWishlist(productId)
 
   const handleImageClick = (image: string, e: React.MouseEvent) => {
@@ -41,11 +52,10 @@ function ShopProductCard({
       setIsTransitioning(false)
     }, 200)
   }
-
   const handleCardClick = () => {
-    if (id) {
-      navigate(`/product/${id}`)
-    }
+    // Use the provided handle or fallback to generated one
+    const productHandle = handle || title.replace(/\s+/g, '-').toLowerCase()
+    navigate(`/product/${productHandle}`)
   }
 
   const handleWishlistClick = (e: React.MouseEvent) => {
@@ -59,12 +69,19 @@ function ShopProductCard({
         id: productId,
         name: title,
         price: price,
-        image: currentImage
+        image: currentImage,
+        comparePrice
       }
       addToWishlist(wishlistItem)
       toast.success('Added to wishlist')
     }
   }
+
+  // Filter out empty variant images
+  const validVariantImages = variantImages.filter(
+    (img) =>
+      img && img.trim() !== '' && img !== '/assets/images/placeholder.webp'
+  )
 
   return (
     <div
@@ -79,7 +96,21 @@ function ShopProductCard({
             className={`absolute inset-0 size-full object-cover transition-all duration-300 ${
               isTransitioning ? 'scale-95 opacity-0' : 'scale-100 opacity-100'
             }`}
+            onError={(e) => {
+              // Fallback if image fails to load
+              const target = e.target as HTMLImageElement
+              target.src = '/assets/images/placeholder.webp'
+            }}
           />
+
+          {/* Sale Badge */}
+          {isOnSale && (
+            <div className="absolute left-3 top-3">
+              <span className="rounded-md bg-red-500 px-2 py-1 font-raleway text-xs font-bold text-white">
+                SALE
+              </span>
+            </div>
+          )}
 
           <div className="absolute bottom-3 right-3 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
             <button
@@ -109,10 +140,26 @@ function ShopProductCard({
         <h3 className="line-clamp-3 font-rubik text-xs font-normal leading-[18px] text-text-primary">
           {title}
         </h3>
-        <p className="font-raleway text-sm font-bold text-text-primary">
-          {price}
-        </p>
 
+        {/* Price with compare price */}
+        <div className="flex items-center gap-2">
+          {comparePrice ? (
+            <>
+              <p className="font-raleway text-sm font-bold text-red-500">
+                {price}
+              </p>
+              <p className="font-raleway text-sm text-gray-500 line-through">
+                {comparePrice}
+              </p>
+            </>
+          ) : (
+            <p className="font-raleway text-sm font-bold text-text-primary">
+              {price}
+            </p>
+          )}
+        </div>
+
+        {/* Rating */}
         <div className="flex items-center gap-0">
           {[1, 2, 3, 4, 5].map((star) => (
             <svg
@@ -126,9 +173,10 @@ function ShopProductCard({
           ))}
         </div>
 
-        {variantImages.length > 0 && (
+        {/* Variant Images */}
+        {validVariantImages.length > 0 && (
           <div className="flex items-center gap-2 pt-1">
-            {variantImages.map((image, index) => (
+            {validVariantImages.slice(0, 3).map((image, index) => (
               <button
                 key={index}
                 onClick={(e) => handleImageClick(image, e)}
@@ -142,9 +190,18 @@ function ShopProductCard({
                   src={image}
                   alt={`Variant ${index + 1}`}
                   className="size-full object-cover"
+                  onError={(e) => {
+                    const target = e.target as HTMLImageElement
+                    target.src = '/assets/images/placeholder.webp'
+                  }}
                 />
               </button>
             ))}
+            {variantImages.length > 3 && (
+              <span className="font-raleway text-xs text-gray-500">
+                +{variantImages.length - 3}
+              </span>
+            )}
           </div>
         )}
       </div>

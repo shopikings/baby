@@ -20,6 +20,8 @@ import BlogPage from 'pages/Blog'
 import BlogPost from 'pages/BlogPost'
 import Wishlist from 'pages/Wishlist'
 
+// import { useProducts } from 'shopify/products/useShopify'
+
 function App() {
   return (
     <CartProvider>
@@ -33,7 +35,7 @@ function App() {
             <Route path="/blog" element={<BlogPage />} />
             <Route path="/blog/:slug" element={<BlogPost />} />
             <Route path="/wishlist" element={<Wishlist />} />
-            <Route path="/product/:id" element={<ProductDetail />} />
+            <Route path="/product/:handle" element={<ProductDetail />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/about" element={<About />} />
             <Route path="/shipping" element={<Shipping />} />
