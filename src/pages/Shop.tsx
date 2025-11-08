@@ -8,15 +8,12 @@ function Shop() {
   const [filters, setFilters] = useState<any>({})
   const [loading, setLoading] = useState(true)
   const [searchParams] = useSearchParams()
-  const category = searchParams.get('category')
+  const category = searchParams.get('category') // ← e.g. "activities-and-toys"
 
-  // products shown on page (mapped to existing card props)
   const [products, setProducts] = useState<any[]>([])
-
-  // Pagination state
   const [cursor, setCursor] = useState<string | null>(null)
   const [hasNextPage, setHasNextPage] = useState<boolean>(false)
-  const [pageLoading, setPageLoading] = useState<boolean>(false) // for Load More button
+  const [pageLoading, setPageLoading] = useState<boolean>(false)
 
   const getHeading = () => {
     if (!category) return 'Shop All'
@@ -27,9 +24,7 @@ function Shop() {
   }
 
   const mapShopifyToUI = (items: any[]) => {
-    // Convert ShopifyProduct[] to UI product shape expected by ShopProductCard
     return items.map((p: any, index: number) => ({
-      // keep original Shopify id string (or fallback with index)
       id: p.id || `shopify-${index}-${Math.random().toString(36).slice(2, 8)}`,
       mainImage:
         p.images && p.images.length > 0
@@ -45,7 +40,7 @@ function Shop() {
     }))
   }
 
-  // Load first page (or refresh when category/filters change)
+  // 🔹 Load products on first mount or when filters/category change
   useEffect(() => {
     let cancelled = false
     const loadFirst = async () => {
@@ -57,6 +52,7 @@ function Shop() {
 
         const limit = 12
         const { products: fetched, pageInfo } = await fetchProducts({
+          // 🟢 Collection support (category from URL)
           collectionHandle: category || null,
           tag: filters.tag || null,
           limit,
@@ -64,7 +60,6 @@ function Shop() {
         })
 
         if (cancelled) return
-
         setProducts(mapShopifyToUI(fetched))
         setCursor(pageInfo?.endCursor ?? null)
         setHasNextPage(Boolean(pageInfo?.hasNextPage))
@@ -81,7 +76,7 @@ function Shop() {
     }
   }, [category, filters])
 
-  // Load more page (append)
+  // 🔹 Load more (pagination)
   const loadMore = useCallback(async () => {
     if (!hasNextPage || pageLoading) return
     try {
@@ -94,7 +89,6 @@ function Shop() {
         after: cursor
       })
 
-      // append mapped products
       setProducts((prev) => [...prev, ...mapShopifyToUI(fetched)])
       setCursor(pageInfo?.endCursor ?? null)
       setHasNextPage(Boolean(pageInfo?.hasNextPage))
@@ -109,6 +103,7 @@ function Shop() {
     setFilters(newFilters)
   }
 
+  // 🔹 Loader
   if (loading) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-white">
@@ -131,8 +126,10 @@ function Shop() {
           </h1>
         </div>
 
+        {/* 🧩 Filter Section (tags etc.) */}
         <FilterSection onFilterChange={handleFilterChange} />
 
+        {/* 🛍️ Product Grid */}
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4">
           {products.map((product) => (
             <ShopProductCard
@@ -148,6 +145,7 @@ function Shop() {
           ))}
         </div>
 
+        {/* 🔹 Load More Button */}
         <div className="mt-8 flex justify-center">
           <button
             onClick={loadMore}
