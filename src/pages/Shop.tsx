@@ -1,14 +1,22 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import FilterSection from 'components/FilterSection'
 import ShopProductCard from 'components/ShopProductCard'
+import { fetchProducts } from '../utils/shopify'
 
 function Shop() {
   const [filters, setFilters] = useState<any>({})
   const [loading, setLoading] = useState(true)
   const [searchParams] = useSearchParams()
-
   const category = searchParams.get('category')
+
+  // products shown on page (mapped to existing card props)
+  const [products, setProducts] = useState<any[]>([])
+
+  // Pagination state
+  const [cursor, setCursor] = useState<string | null>(null)
+  const [hasNextPage, setHasNextPage] = useState<boolean>(false)
+  const [pageLoading, setPageLoading] = useState<boolean>(false) // for Load More button
 
   const getHeading = () => {
     if (!category) return 'Shop All'
@@ -18,293 +26,84 @@ function Shop() {
       .join(' ')
   }
 
-  useEffect(() => {
-    setTimeout(() => {
-      setLoading(false)
-    }, 1500)
-  }, [])
+  const mapShopifyToUI = (items: any[]) => {
+    // Convert ShopifyProduct[] to UI product shape expected by ShopProductCard
+    return items.map((p: any, index: number) => ({
+      // keep original Shopify id string (or fallback with index)
+      id: p.id || `shopify-${index}-${Math.random().toString(36).slice(2, 8)}`,
+      mainImage:
+        p.images && p.images.length > 0
+          ? p.images[0]
+          : '/assets/images/product1.png',
+      variantImages:
+        p.images && p.images.length > 0
+          ? p.images
+          : ['/assets/images/product1.png'],
+      title: p.title || 'No title',
+      price: p.price ? `$${p.price}` : '$0',
+      rating: 4
+    }))
+  }
 
-  const products = [
-    {
-      id: 1,
-      mainImage: '/assets/images/product1.png',
-      variantImages: [
-        '/assets/images/product1.png',
-        '/assets/images/product5.png',
-        '/assets/images/product6.png'
-      ],
-      title: 'Kids Organic Cotton Long Sleeve Mix Floral Sweatshirt',
-      price: '$43 - $63',
-      rating: 4
-    },
-    {
-      id: 2,
-      mainImage: '/assets/images/product2.png',
-      variantImages: [
-        '/assets/images/product2.png',
-        '/assets/images/product5.png',
-        '/assets/images/product6.png'
-      ],
-      title: 'Kids Waterproof Hooded Fleece Zip Through Jacket',
-      price: '$40+',
-      rating: 5
-    },
-    {
-      id: 3,
-      mainImage: '/assets/images/product3.png',
-      variantImages: [
-        '/assets/images/product3.png',
-        '/assets/images/product7.png',
-        '/assets/images/product8.png',
-        '/assets/images/product9.png'
-      ],
-      title: 'Kids Stand Collar Zip Flocked Fleece Jacket',
-      price: '$47',
-      rating: 3
-    },
-    {
-      id: 4,
-      mainImage: '/assets/images/product4.png',
-      variantImages: [
-        '/assets/images/product4.png',
-        '/assets/images/product10.png',
-        '/assets/images/product2.png'
-      ],
-      title: 'Kids Textured Multicolor Socks (Multiple Pack)',
-      price: '$43',
-      rating: 4
-    },
-    {
-      id: 5,
-      mainImage: '/assets/images/product5.png',
-      variantImages: [
-        '/assets/images/product5.png',
-        '/assets/images/product3.png'
-      ],
-      title: 'Kids Organic Cotton Zip Panel Sweatshirt',
-      price: '$45 - $65',
-      rating: 5
-    },
-    {
-      id: 6,
-      mainImage: '/assets/images/product6.png',
-      variantImages: [
-        '/assets/images/product6.png',
-        '/assets/images/product4.png',
-        '/assets/images/product1.png'
-      ],
-      title: 'Kids Essential Anti-Fungal Socks (Multiple Pack)',
-      price: '$25+',
-      rating: 4
-    },
-    {
-      id: 7,
-      mainImage: '/assets/images/product7.png',
-      variantImages: [
-        '/assets/images/product7.png',
-        '/assets/images/product9.png'
-      ],
-      title: 'Kids Slim Joggers (Multiple Pack)',
-      price: '$93 - $93',
-      rating: 3
-    },
-    {
-      id: 8,
-      mainImage: '/assets/images/product8.png',
-      variantImages: [
-        '/assets/images/product8.png',
-        '/assets/images/product2.png',
-        '/assets/images/product5.png'
-      ],
-      title: 'Kids Colour Block Iconic Raglan T-Shirt',
-      price: '$43 - $43',
-      rating: 5
-    },
-    {
-      id: 9,
-      mainImage: '/assets/images/product9.png',
-      variantImages: [
-        '/assets/images/product9.png',
-        '/assets/images/product10.png'
-      ],
-      title: 'Kids Quilted Bomber Windproof Jacket',
-      price: '$63',
-      rating: 4
-    },
-    {
-      id: 10,
-      mainImage: '/assets/images/product10.png',
-      variantImages: [
-        '/assets/images/product10.png',
-        '/assets/images/product1.png',
-        '/assets/images/product6.png'
-      ],
-      title: 'Kids Organic Cotton Joggers (Multiple Pack)',
-      price: '$93 - $93',
-      rating: 5
-    },
-    {
-      id: 11,
-      mainImage: '/assets/images/product3.png',
-      variantImages: [
-        '/assets/images/product3.png',
-        '/assets/images/product7.png'
-      ],
-      title: 'Kids Organic Cotton All Over Printed T-Shirt',
-      price: '$25 - $25',
-      rating: 3
-    },
-    {
-      id: 12,
-      mainImage: '/assets/images/product4.png',
-      variantImages: [
-        '/assets/images/product4.png',
-        '/assets/images/product8.png',
-        '/assets/images/product9.png'
-      ],
-      title: 'Kids Teal Tie Dye Flared Rib Tights',
-      price: '$43 - $43',
-      rating: 4
-    },
-    {
-      id: 13,
-      mainImage: '/assets/images/product6.png',
-      variantImages: [
-        '/assets/images/product6.png',
-        '/assets/images/product2.png'
-      ],
-      title: 'Kids Waterproof Hooded Fleece Zip Through Jacket',
-      price: '$47',
-      rating: 5
-    },
-    {
-      id: 14,
-      mainImage: '/assets/images/product7.png',
-      variantImages: [
-        '/assets/images/product7.png',
-        '/assets/images/product3.png',
-        '/assets/images/product4.png'
-      ],
-      title: 'Kids Organic Cotton Long Sleeve Mix Floral Sweatshirt',
-      price: '$25+',
-      rating: 3
-    },
-    {
-      id: 15,
-      mainImage: '/assets/images/product8.png',
-      variantImages: [
-        '/assets/images/product8.png',
-        '/assets/images/product1.png'
-      ],
-      title: 'Kids Slim Joggers (Multiple Pack)',
-      price: '$93 - $93',
-      rating: 4
-    },
-    {
-      id: 16,
-      mainImage: '/assets/images/product9.png',
-      variantImages: [
-        '/assets/images/product9.png',
-        '/assets/images/product5.png',
-        '/assets/images/product6.png'
-      ],
-      title: 'Kids Textured Multicolor Socks (Multiple Pack)',
-      price: '$40+',
-      rating: 5
-    },
-    {
-      id: 17,
-      mainImage: '/assets/images/product10.png',
-      variantImages: [
-        '/assets/images/product10.png',
-        '/assets/images/product7.png'
-      ],
-      title: 'Kids Stand Collar Zip Flocked Fleece Jacket',
-      price: '$45 - $65',
-      rating: 3
-    },
-    {
-      id: 18,
-      mainImage: '/assets/images/product1.png',
-      variantImages: [
-        '/assets/images/product1.png',
-        '/assets/images/product8.png',
-        '/assets/images/product9.png'
-      ],
-      title: 'Kids Colour Block Iconic Raglan T-Shirt',
-      price: '$63',
-      rating: 4
-    },
-    {
-      id: 19,
-      mainImage: '/assets/images/product2.png',
-      variantImages: [
-        '/assets/images/product2.png',
-        '/assets/images/product10.png'
-      ],
-      title: 'Kids Organic Cotton Zip Panel Sweatshirt',
-      price: '$43',
-      rating: 5
-    },
-    {
-      id: 20,
-      mainImage: '/assets/images/product3.png',
-      variantImages: [
-        '/assets/images/product3.png',
-        '/assets/images/product4.png',
-        '/assets/images/product5.png'
-      ],
-      title: 'Kids Essential Anti-Fungal Socks (Multiple Pack)',
-      price: '$25 - $25',
-      rating: 3
-    },
-    {
-      id: 21,
-      mainImage: '/assets/images/product5.png',
-      variantImages: [
-        '/assets/images/product5.png',
-        '/assets/images/product6.png'
-      ],
-      title: 'Kids Quilted Bomber Windproof Jacket',
-      price: '$43 - $63',
-      rating: 4
-    },
-    {
-      id: 22,
-      mainImage: '/assets/images/product4.png',
-      variantImages: [
-        '/assets/images/product4.png',
-        '/assets/images/product1.png',
-        '/assets/images/product2.png'
-      ],
-      title: 'Kids Organic Cotton Joggers (Multiple Pack)',
-      price: '$93 - $93',
-      rating: 5
-    },
-    {
-      id: 23,
-      mainImage: '/assets/images/product8.png',
-      variantImages: [
-        '/assets/images/product8.png',
-        '/assets/images/product9.png'
-      ],
-      title: 'Kids Organic Cotton All Over Printed T-Shirt',
-      price: '$47',
-      rating: 4
-    },
-    {
-      id: 24,
-      mainImage: '/assets/images/product9.png',
-      variantImages: [
-        '/assets/images/product9.png',
-        '/assets/images/product3.png',
-        '/assets/images/product7.png'
-      ],
-      title: 'Kids Teal Tie Dye Flared Rib Tights',
-      price: '$40+',
-      rating: 3
+  // Load first page (or refresh when category/filters change)
+  useEffect(() => {
+    let cancelled = false
+    const loadFirst = async () => {
+      try {
+        setLoading(true)
+        setCursor(null)
+        setHasNextPage(false)
+        setProducts([])
+
+        const limit = 12
+        const { products: fetched, pageInfo } = await fetchProducts({
+          collectionHandle: category || null,
+          tag: filters.tag || null,
+          limit,
+          after: null
+        })
+
+        if (cancelled) return
+
+        setProducts(mapShopifyToUI(fetched))
+        setCursor(pageInfo?.endCursor ?? null)
+        setHasNextPage(Boolean(pageInfo?.hasNextPage))
+      } catch (err) {
+        console.error('Failed to load Shopify products:', err)
+      } finally {
+        if (!cancelled) setLoading(false)
+      }
     }
-  ]
+
+    loadFirst()
+    return () => {
+      cancelled = true
+    }
+  }, [category, filters])
+
+  // Load more page (append)
+  const loadMore = useCallback(async () => {
+    if (!hasNextPage || pageLoading) return
+    try {
+      setPageLoading(true)
+      const limit = 12
+      const { products: fetched, pageInfo } = await fetchProducts({
+        collectionHandle: category || null,
+        tag: filters.tag || null,
+        limit,
+        after: cursor
+      })
+
+      // append mapped products
+      setProducts((prev) => [...prev, ...mapShopifyToUI(fetched)])
+      setCursor(pageInfo?.endCursor ?? null)
+      setHasNextPage(Boolean(pageInfo?.hasNextPage))
+    } catch (err) {
+      console.error('Load more failed:', err)
+    } finally {
+      setPageLoading(false)
+    }
+  }, [cursor, hasNextPage, pageLoading, category, filters])
 
   const handleFilterChange = (newFilters: unknown) => {
     setFilters(newFilters)
@@ -350,8 +149,20 @@ function Shop() {
         </div>
 
         <div className="mt-8 flex justify-center">
-          <button className="rounded-none bg-button-hover px-8 py-3 font-inter text-sm font-medium uppercase text-white transition-colors hover:bg-[#7d969a]">
-            Load More
+          <button
+            onClick={loadMore}
+            disabled={!hasNextPage || pageLoading}
+            className={`rounded-none px-8 py-3 font-inter text-sm font-medium uppercase text-white transition-colors ${
+              !hasNextPage
+                ? 'bg-gray-400 cursor-not-allowed'
+                : 'bg-button-hover hover:bg-[#7d969a]'
+            }`}
+          >
+            {pageLoading
+              ? 'Loading...'
+              : hasNextPage
+                ? 'Load More'
+                : 'No more products'}
           </button>
         </div>
       </div>
