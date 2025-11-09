@@ -175,3 +175,65 @@ export async function fetchProducts({
     return { products: [], pageInfo: { hasNextPage: false, endCursor: null } }
   }
 }
+export async function fetchProductById(id: string) {
+  const query = `
+    query getProduct($id: ID!) {
+      product(id: $id) {
+        id
+        title
+        description
+        tags
+        images(first: 10) {
+          edges {
+            node {
+              url
+            }
+          }
+        }
+        variants(first: 5) {
+          edges {
+            node {
+              id
+              title
+              price {
+                amount
+                currencyCode
+              }
+            }
+          }
+        }
+      }
+    }
+  `
+
+  const response = await fetch(
+    `https://maison-drake.myshopify.com/api/2024-04/graphql.json`,
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Shopify-Storefront-Access-Token': import.meta.env
+          .VITE_SHOPIFY_STOREFRONT_TOKEN
+      },
+      body: JSON.stringify({
+        query,
+        variables: { id }
+      })
+    }
+  )
+
+  const { data, errors } = await response.json()
+  if (errors) {
+    console.error(errors)
+    throw new Error('Shopify GraphQL error')
+  }
+
+  const product = data?.product
+  if (!product) throw new Error('Product not found')
+
+  return {
+    ...product,
+    images: product.images.edges.map((e: any) => e.node),
+    variants: product.variants.edges.map((e: any) => e.node)
+  }
+}

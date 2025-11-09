@@ -24,7 +24,12 @@ function ProductCard({
 
   const handleCardClick = () => {
     if (id) {
-      navigate(`/product/${id}`)
+      // Convert Shopify ID to plain number if needed
+      const cleanId = id.toString().includes('gid://shopify/Product/')
+        ? id.toString().split('/').pop()
+        : id.toString()
+
+      navigate(`/product/${cleanId}`)
     }
   }
 

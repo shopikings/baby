@@ -1,36 +1,88 @@
+import { useEffect, useState } from 'react'
+import { useParams } from 'react-router-dom'
 import ProductImageGallery from '../components/ProductImageGallery'
 import ProductInfo from '../components/ProductInfo'
 import ProductReviews from '../components/ProductReviews'
 import RecentlyViewed from '../components/RecentlyViewed'
 import YouMayAlsoLike from '../components/YouMayAlsoLike'
+import { fetchProductById } from '../utils/shopify'
 
 function ProductDetail() {
-  const thumbnails = [
-    '/assets/images/product-gallery-1.png',
-    '/assets/images/product-gallery-2.png',
-    '/assets/images/product-gallery-3.png',
-    '/assets/images/product-gallery-4.png'
-  ]
+  const { id } = useParams()
+  const [loading, setLoading] = useState(true)
+  const [product, setProduct] = useState<any>(null)
+  const [error, setError] = useState<string | null>(null)
 
-  const colors = [
-    { name: 'beige', hex: '#E5D4C1' },
-    { name: 'blue', hex: '#6B9FBF' },
-    { name: 'navy', hex: '#2C3E50' },
-    { name: 'brown', hex: '#8B6F47' },
-    { name: 'black', hex: '#000000' }
+  useEffect(() => {
+    if (!id) return
+
+    // 🧩 Extract only numeric part of Shopify GID
+    const cleanId = id.includes('gid://shopify/Product/')
+      ? id.replace('gid://shopify/Product/', '')
+      : id
+
+    const gid = `gid://shopify/Product/${cleanId}`
+
+    const loadProduct = async () => {
+      try {
+        setLoading(true)
+        const data = await fetchProductById(gid)
+        setProduct(data)
+      } catch (err: any) {
+        console.error('Error fetching product:', err)
+        setError('Failed to load product')
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    loadProduct()
+  }, [id])
+
+  if (loading)
+    return (
+      <div className="flex h-screen items-center justify-center text-lg text-gray-500">
+        Loading product...
+      </div>
+    )
+
+  if (error)
+    return (
+      <div className="flex h-screen items-center justify-center text-red-500">
+        {error}
+      </div>
+    )
+
+  if (!product)
+    return (
+      <div className="flex h-screen items-center justify-center text-gray-500">
+        Product not found
+      </div>
+    )
+
+  // 🧠 Extract data safely
+  const thumbnails = product.images?.map((img: any) => img.url) || [
+    '/assets/images/product1.png'
   ]
 
   const productData = {
-    name: 'Quincy Mae Sherpa Fleece Zip Up',
+    name: product.title || 'Untitled Product',
     rating: 5,
     reviewCount: 24,
-    price: 48,
-    originalPrice: 60,
-    colors: colors,
+    price: product.variants?.[0]?.price?.amount || '0.00',
+    originalPrice: Number(product.variants?.[0]?.price?.amount || 0) + 10,
+    colors: [
+      { name: 'beige', hex: '#E5D4C1' },
+      { name: 'blue', hex: '#6B9FBF' },
+      { name: 'navy', hex: '#2C3E50' },
+      { name: 'brown', hex: '#8B6F47' },
+      { name: 'black', hex: '#000000' }
+    ],
     description:
-      'This cozy sherpa fleece zip-up is perfect for keeping your little one warm. Made with soft, high-quality materials that are gentle on delicate skin. Features a full zip closure and relaxed fit for easy movement.',
+      product.description ||
+      'This cozy sherpa fleece zip-up is perfect for keeping your little one warm.',
     productInfo: [
-      'Material: 100% Polyester Sherpa Fleece',
+      'Material: 100% Cotton',
       'Care: Machine wash cold, tumble dry low',
       'Made in USA'
     ]
@@ -42,8 +94,7 @@ function ProductDetail() {
       author: 'John Doe',
       location: 'New York, US',
       rating: 5,
-      comment:
-        'Amazing quality! My baby loves this fleece. It&apos;s so soft and warm.',
+      comment: 'Amazing quality! My baby loves this product.',
       date: 'January 15, 2025',
       color: 'Beige',
       verified: true
@@ -53,8 +104,7 @@ function ProductDetail() {
       author: 'Sarah Miller',
       location: 'London, UK',
       rating: 5,
-      comment:
-        'Perfect for cold weather. The zipper works smoothly and the fit is just right.',
+      comment: 'Perfect fit and soft fabric. Worth the price.',
       date: 'January 10, 2025',
       color: 'Navy',
       verified: true
@@ -88,10 +138,11 @@ function ProductDetail() {
               />
             </div>
           </div>
-          <div className=" pt-5 lg:w-1/2">
+          <div className="pt-5 lg:w-1/2">
             <ProductInfo {...productData} />
           </div>
         </div>
+
         <ProductReviews
           overallRating={productData.rating}
           totalReviews={productData.reviewCount}

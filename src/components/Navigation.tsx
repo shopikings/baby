@@ -1,21 +1,27 @@
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useState, useRef } from 'react'
 
-function Navigation() {
+interface NavigationProps {
+  onCollectionSelect?: (slug: string) => void
+}
+
+function Navigation({ onCollectionSelect }: NavigationProps) {
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null)
   const timeoutRef = useRef<NodeJS.Timeout | null>(null)
+  const navigate = useNavigate()
 
+  // ✅ Make sure slugs exactly match Shopify collection handles
   const shopItems = [
-    { name: 'New Arrivals', href: '/shop?category=new-arrivals' },
-    { name: 'clothing', href: '/shop?category=clothing' },
-    { name: 'Activities & Toys', href: '/shop?category=activities-toys' },
-    { name: 'Feeding & Nursing', href: '/shop?category=feeding-nursing' },
-    { name: 'Bath Time', href: '/shop?category=bath-time' },
-    { name: 'Gear', href: '/shop?category=gear' },
-    { name: 'Gift', href: '/shop?category=gift' },
-    { name: 'Maternity', href: '/shop?category=maternity' },
-    { name: 'Nursing Favourite', href: '/shop?category=nursing-favourite' },
-    { name: 'Sale', href: '/shop?category=sale' }
+    { name: 'New Arrivals', slug: 'new-arrivals' },
+    { name: 'Clothing', slug: 'clothing' },
+    { name: 'Activities & Toys', slug: 'activities-toys' },
+    { name: 'Feeding & Nursing', slug: 'feeding-nursing' },
+    { name: 'Bath Time', slug: 'bath-time' },
+    { name: 'Gear', slug: 'gear' },
+    { name: 'Gifts', slug: 'gifts' }, // ✅ not "gift"
+    { name: 'Maternity', slug: 'maternity' },
+    { name: 'Nursing Favourite', slug: 'nursing-favourite' },
+    { name: 'Sale', slug: 'sale' }
   ]
 
   const aboutItems = [
@@ -44,20 +50,33 @@ function Navigation() {
   ]
 
   const handleMouseEnter = (dropdown: string) => {
-    if (timeoutRef.current) {
-      clearTimeout(timeoutRef.current)
-    }
+    if (timeoutRef.current) clearTimeout(timeoutRef.current)
     setActiveDropdown(dropdown)
   }
 
   const handleMouseLeave = () => {
-    timeoutRef.current = setTimeout(() => {
-      setActiveDropdown(null)
-    }, 150)
+    timeoutRef.current = setTimeout(() => setActiveDropdown(null), 150)
+  }
+
+  const handleShopClick = (slug: string) => {
+    // ✅ Ensure we use correct query param key
+    const url = `/shop?category=${encodeURIComponent(slug)}`
+    if (onCollectionSelect) {
+      onCollectionSelect(slug)
+    } else {
+      navigate(url)
+    }
+    setActiveDropdown(null)
+  }
+
+  const handleBrandClick = (brand: string) => {
+    navigate(`/collection?brand=${encodeURIComponent(brand)}`)
+    setActiveDropdown(null)
   }
 
   return (
     <nav className="hidden flex-1 items-center justify-start gap-8 lg:flex">
+      {/* SHOP DROPDOWN */}
       <div
         className="relative"
         onMouseEnter={() => handleMouseEnter('shop')}
@@ -78,20 +97,21 @@ function Navigation() {
         >
           <div className="w-48 rounded-sm bg-cream shadow-lg">
             <div className="py-2">
-              {shopItems.map((item, index) => (
-                <Link
-                  key={index}
-                  to={item.href}
-                  className="block px-4 py-2 font-inter text-sm uppercase text-black transition-colors hover:bg-gray-50 hover:text-gray-600"
+              {shopItems.map((item) => (
+                <button
+                  key={item.slug}
+                  onClick={() => handleShopClick(item.slug)}
+                  className="block w-full text-left px-4 py-2 font-inter text-sm uppercase text-black transition-colors hover:bg-gray-50 hover:text-gray-600"
                 >
                   {item.name}
-                </Link>
+                </button>
               ))}
             </div>
           </div>
         </div>
       </div>
 
+      {/* ABOUT DROPDOWN */}
       <div
         className="relative"
         onMouseEnter={() => handleMouseEnter('about')}
@@ -112,9 +132,9 @@ function Navigation() {
         >
           <div className="w-48 rounded-sm bg-cream shadow-lg">
             <div className="py-2">
-              {aboutItems.map((item, index) => (
+              {aboutItems.map((item) => (
                 <Link
-                  key={index}
+                  key={item.href}
                   to={item.href}
                   className="block px-4 py-2 font-inter text-sm uppercase text-black transition-colors hover:bg-gray-50 hover:text-gray-600"
                 >
@@ -126,8 +146,9 @@ function Navigation() {
         </div>
       </div>
 
+      {/* OUR BRANDS DROPDOWN */}
       <div
-        className=""
+        className="relative"
         onMouseEnter={() => handleMouseEnter('brands')}
         onMouseLeave={handleMouseLeave}
       >
@@ -147,16 +168,14 @@ function Navigation() {
           <div className="w-screen rounded-sm bg-cream shadow-lg">
             <div className="flex">
               <div className="w-1/4 border-r border-gray-200 py-4">
-                {brandItems.map((brand, index) => (
-                  <Link
-                    key={index}
-                    to={`/shop?category=${brand
-                      .toLowerCase()
-                      .replace(/\s+/g, '-')}`}
-                    className="block px-6 py-2 font-inter text-sm font-medium uppercase text-black transition-colors hover:bg-gray-50 hover:text-gray-600"
+                {brandItems.map((brand) => (
+                  <button
+                    key={brand}
+                    onClick={() => handleBrandClick(brand)}
+                    className="block w-full text-left px-6 py-2 font-inter text-sm font-medium uppercase text-black transition-colors hover:bg-gray-50 hover:text-gray-600"
                   >
                     {brand}
-                  </Link>
+                  </button>
                 ))}
               </div>
               <div className="w-3/4 p-4">

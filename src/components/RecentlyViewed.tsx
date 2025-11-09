@@ -37,7 +37,15 @@ function RecentlyViewed({ products }: RecentlyViewedProps) {
         {products.map((product) => (
           <div
             key={product.id}
-            onClick={() => navigate(`/product/${product.id}`)}
+            onClick={() => {
+              const cleanId = product.id
+                .toString()
+                .includes('gid://shopify/Product/')
+                ? product.id.toString().split('/').pop()
+                : product.id.toString()
+
+              navigate(`/product/${cleanId}`)
+            }}
             className="w-[200px] cursor-pointer"
           >
             <div className="aspect-[3/4] overflow-hidden">

@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import Marquee from '../Marquee'
 import MobileDrawer from '../MobileDrawer'
 import Navigation from '../Navigation'
@@ -9,6 +9,12 @@ import CartDrawer from '../CartDrawer'
 function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [isCartOpen, setIsCartOpen] = useState(false)
+  const navigate = useNavigate()
+
+  // ✅ No UI change — these are for consistent category linking
+  const handleCollectionSelect = (slug: string) => {
+    navigate(`/shop?category=${slug}`)
+  }
 
   return (
     <>
@@ -21,6 +27,7 @@ function Header() {
         </div>
 
         <div className="mx-auto flex max-w-7xl items-center px-4 py-5 sm:px-6 lg:px-8 lg:py-2">
+          {/* Mobile Menu Button */}
           <button
             onClick={() => setIsMobileMenuOpen(true)}
             className="mr-4 flex items-center justify-center transition-colors hover:text-gray-600 lg:hidden"
@@ -40,8 +47,10 @@ function Header() {
             </svg>
           </button>
 
-          <Navigation />
+          {/* Navigation */}
+          <Navigation onCollectionSelect={handleCollectionSelect} />
 
+          {/* Logo */}
           <div className="absolute left-1/2 -translate-x-1/2 lg:static lg:left-auto lg:translate-x-0">
             <Link to="/">
               <img
@@ -52,6 +61,7 @@ function Header() {
             </Link>
           </div>
 
+          {/* Cart / Profile / Search */}
           <HeaderActions onCartClick={() => setIsCartOpen(true)} />
         </div>
       </header>
