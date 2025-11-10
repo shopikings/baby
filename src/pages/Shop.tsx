@@ -1,3 +1,4 @@
+// --- inside Shop.tsx ---
 import { useState, useEffect, useCallback } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import FilterSection from 'components/FilterSection'
@@ -5,11 +6,11 @@ import ShopProductCard from 'components/ShopProductCard'
 import { fetchProducts } from '../utils/shopify'
 
 function Shop() {
-  const [filters, setFilters] = useState<any>({})
+  const [filters, setFilters] = useState<Record<string, string | boolean>>({})
   const [loading, setLoading] = useState(true)
   const [searchParams] = useSearchParams()
-  const category = searchParams.get('category') // ← e.g. "activities-and-toys"
-
+  const category = searchParams.get('category')
+  const [allProducts, setAllProducts] = useState<any[]>([])
   const [products, setProducts] = useState<any[]>([])
   const [cursor, setCursor] = useState<string | null>(null)
   const [hasNextPage, setHasNextPage] = useState<boolean>(false)
@@ -23,8 +24,8 @@ function Shop() {
       .join(' ')
   }
 
-  const mapShopifyToUI = (items: any[]) => {
-    return items.map((p: any, index: number) => ({
+  const mapShopifyToUI = (items: any[]) =>
+    items.map((p: any, index: number) => ({
       id: p.id || `shopify-${index}-${Math.random().toString(36).slice(2, 8)}`,
       mainImage:
         p.images && p.images.length > 0
@@ -36,31 +37,45 @@ function Shop() {
           : ['/assets/images/product1.png'],
       title: p.title || 'No title',
       price: p.price ? `$${p.price}` : '$0',
+      tags: p.tags || [],
       rating: 4
     }))
+
+  // ✅ Compute tag to send to Shopify based on selected filters
+  const getTagFromFilters = () => {
+    if (filters.gender) return filters.gender.toString().toLowerCase()
+    if (filters.brand) return filters.brand.toString().toLowerCase()
+    if (filters.size) return filters.size.toString().toLowerCase()
+    // extend here later...
+    return null
   }
 
-  // 🔹 Load products on first mount or when filters/category change
+  // ✅ Load products from Shopify whenever filters or category changes
   useEffect(() => {
     let cancelled = false
-    const loadFirst = async () => {
+
+    const loadProducts = async () => {
       try {
         setLoading(true)
         setCursor(null)
         setHasNextPage(false)
         setProducts([])
+        setAllProducts([])
 
-        const limit = 12
+        const limit = 50
+        const tag = getTagFromFilters()
+
         const { products: fetched, pageInfo } = await fetchProducts({
-          // 🟢 Collection support (category from URL)
           collectionHandle: category || null,
-          tag: filters.tag || null,
+          tag,
           limit,
           after: null
         })
 
         if (cancelled) return
-        setProducts(mapShopifyToUI(fetched))
+        const mapped = mapShopifyToUI(fetched)
+        setAllProducts(mapped)
+        setProducts(mapped)
         setCursor(pageInfo?.endCursor ?? null)
         setHasNextPage(Boolean(pageInfo?.hasNextPage))
       } catch (err) {
@@ -70,26 +85,33 @@ function Shop() {
       }
     }
 
-    loadFirst()
+    loadProducts()
     return () => {
       cancelled = true
     }
   }, [category, filters])
 
-  // 🔹 Load more (pagination)
+  const handleFilterChange = (newFilters: any) => {
+    setFilters({ ...newFilters }) // ensures re-render
+  }
+
   const loadMore = useCallback(async () => {
     if (!hasNextPage || pageLoading) return
     try {
       setPageLoading(true)
       const limit = 12
+      const tag = getTagFromFilters()
+
       const { products: fetched, pageInfo } = await fetchProducts({
         collectionHandle: category || null,
-        tag: filters.tag || null,
+        tag,
         limit,
         after: cursor
       })
 
-      setProducts((prev) => [...prev, ...mapShopifyToUI(fetched)])
+      const mapped = mapShopifyToUI(fetched)
+      setAllProducts((prev) => [...prev, ...mapped])
+      setProducts((prev) => [...prev, ...mapped])
       setCursor(pageInfo?.endCursor ?? null)
       setHasNextPage(Boolean(pageInfo?.hasNextPage))
     } catch (err) {
@@ -99,11 +121,6 @@ function Shop() {
     }
   }, [cursor, hasNextPage, pageLoading, category, filters])
 
-  const handleFilterChange = (newFilters: unknown) => {
-    setFilters(newFilters)
-  }
-
-  // 🔹 Loader
   if (loading) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-white">
@@ -126,26 +143,21 @@ function Shop() {
           </h1>
         </div>
 
-        {/* 🧩 Filter Section (tags etc.) */}
+        {/* ✅ Hooked up filter */}
         <FilterSection onFilterChange={handleFilterChange} />
 
-        {/* 🛍️ Product Grid */}
+        {/* Product Grid */}
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4">
           {products.map((product) => (
             <ShopProductCard
               key={product.id}
-              id={product.id}
-              mainImage={product.mainImage}
-              variantImages={product.variantImages}
-              title={product.title}
-              price={product.price}
-              rating={product.rating}
+              {...product}
               className="scale-90"
             />
           ))}
         </div>
 
-        {/* 🔹 Load More Button */}
+        {/* Load More */}
         <div className="mt-8 flex justify-center">
           <button
             onClick={loadMore}

@@ -88,28 +88,18 @@ function ProductDetail() {
     ]
   }
 
-  const reviews = [
-    {
-      id: 1,
-      author: 'John Doe',
-      location: 'New York, US',
-      rating: 5,
-      comment: 'Amazing quality! My baby loves this product.',
-      date: 'January 15, 2025',
-      color: 'Beige',
-      verified: true
-    },
-    {
-      id: 2,
-      author: 'Sarah Miller',
-      location: 'London, UK',
-      rating: 5,
-      comment: 'Perfect fit and soft fabric. Worth the price.',
-      date: 'January 10, 2025',
-      color: 'Navy',
-      verified: true
-    }
-  ]
+  const reviews = product.reviews?.length
+    ? product.reviews.map((rev: any, index: number) => ({
+        id: index + 1,
+        author: rev.author || 'Anonymous',
+        location: rev.location || '',
+        rating: rev.rating || 0,
+        comment: rev.comment || '',
+        date: rev.date || '',
+        color: rev.color || '',
+        verified: rev.verified || false
+      }))
+    : [] // <-- safe default empty array
 
   const recentlyViewed = [
     {
@@ -139,7 +129,7 @@ function ProductDetail() {
             </div>
           </div>
           <div className="pt-5 lg:w-1/2">
-            <ProductInfo {...productData} />
+            <ProductInfo {...productData} image={thumbnails[0]} />
           </div>
         </div>
 

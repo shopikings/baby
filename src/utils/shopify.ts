@@ -56,19 +56,70 @@ export async function fetchProducts({
   pageInfo: { hasNextPage: boolean; endCursor: string | null }
 }> {
   try {
-    const afterPart = after ? `, after: "${after}"` : ''
-    const tagQuery = tag ? `, query: "tag:${tag}"` : ''
+    const variables: any = { first: limit }
+    if (after) variables.after = after
 
-    // ✅ If collectionHandle is provided, fetch products from that collection
+    // 🧠 CASE 1: If tag is provided, use global "products" query
+    if (tag) {
+      const query = `
+        query ($first: Int${after ? ', $after: String' : ''}) {
+          products(first: $first${
+            after ? ', after: $after' : ''
+          }, query: "tag:${tag}") {
+            edges {
+              cursor
+              node {
+                id
+                title
+                tags
+                description
+                images(first: 10) {
+                  edges { node { src } }
+                }
+                variants(first: 1) {
+                  edges { node { price { amount } } }
+                }
+              }
+            }
+            pageInfo {
+              hasNextPage
+              endCursor
+            }
+          }
+        }
+      `
+      const data = await graphql(query, variables)
+      const edges = data?.products?.edges || []
+      const pageInfo = data?.products?.pageInfo || {
+        hasNextPage: false,
+        endCursor: null
+      }
+
+      const products = edges.map((e: any) => {
+        const n = e.node
+        return {
+          id: n.id,
+          title: n.title,
+          tags: n.tags || [],
+          description: n.description || '',
+          images: (n.images?.edges || [])
+            .map((ie: any) => ie.node?.src)
+            .filter(Boolean),
+          price: n.variants?.edges?.[0]?.node?.price?.amount || '0.00'
+        } as ShopifyProduct
+      })
+
+      return { products, pageInfo }
+    }
+
+    // 🧠 CASE 2: If collectionHandle is provided (no tag)
     if (collectionHandle) {
       const query = `
         query ($handle: String!, $first: Int${
           after ? ', $after: String' : ''
         }) {
           collectionByHandle(handle: $handle) {
-            products(first: $first${
-              after ? ', after: $after' : ''
-            }${tagQuery}) {
+            products(first: $first${after ? ', after: $after' : ''}) {
               edges {
                 cursor
                 node {
@@ -92,10 +143,12 @@ export async function fetchProducts({
           }
         }
       `
-      const variables: any = { handle: collectionHandle, first: limit }
-      if (after) variables.after = after
+      const data = await graphql(query, {
+        handle: collectionHandle,
+        first: limit,
+        after: after || undefined
+      })
 
-      const data = await graphql(query, variables)
       const edges = data?.collectionByHandle?.products?.edges || []
       const pageInfo = data?.collectionByHandle?.products?.pageInfo || {
         hasNextPage: false,
@@ -119,10 +172,10 @@ export async function fetchProducts({
       return { products, pageInfo }
     }
 
-    // ✅ Otherwise, fallback to global product list
+    // 🧠 CASE 3: Fallback — all products (no collection, no tag)
     const query = `
       query ($first: Int${after ? ', $after: String' : ''}) {
-        products(first: $first${after ? ', after: $after' : ''}${tagQuery}) {
+        products(first: $first${after ? ', after: $after' : ''}) {
           edges {
             cursor
             node {
@@ -145,9 +198,6 @@ export async function fetchProducts({
         }
       }
     `
-    const variables: any = { first: limit }
-    if (after) variables.after = after
-
     const data = await graphql(query, variables)
     const edges = data?.products?.edges || []
     const pageInfo = data?.products?.pageInfo || {
@@ -175,6 +225,7 @@ export async function fetchProducts({
     return { products: [], pageInfo: { hasNextPage: false, endCursor: null } }
   }
 }
+
 export async function fetchProductById(id: string) {
   const query = `
     query getProduct($id: ID!) {
