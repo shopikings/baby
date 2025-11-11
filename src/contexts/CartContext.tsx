@@ -12,6 +12,7 @@ interface CartItem {
   price: string
   image: string
   quantity: number
+  variantId?: string // 👈 add this line
 }
 
 interface CartContextType {

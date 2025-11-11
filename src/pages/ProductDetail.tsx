@@ -78,6 +78,7 @@ function ProductDetail() {
       { name: 'brown', hex: '#8B6F47' },
       { name: 'black', hex: '#000000' }
     ],
+    variantId: product.variants?.[0]?.id || undefined, // => i added this line ?
     description:
       product.description ||
       'This cozy sherpa fleece zip-up is perfect for keeping your little one warm.',

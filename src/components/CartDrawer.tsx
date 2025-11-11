@@ -26,6 +26,22 @@ function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
     (currentTotal / freeShippingThreshold) * 100
   )
 
+  const handleCheckout = () => {
+    if (cartItems.length === 0) return
+    console.log('CartDrawer - Initiating checkout with items:', cartItems)
+    // Shopify expects variantId:quantity pairs
+    // For example: https://maison-drake.myshopify.com/cart/1234567890:2,9876543210:1
+    const cartQuery = cartItems
+      .map((item) => `${item.variantId}:${item.quantity}`)
+      .join(',')
+
+    const shopifyCartUrl = `https://maison-drake.myshopify.com/cart/${cartQuery}`
+
+    console.log('Redirecting to:', shopifyCartUrl)
+
+    window.location.href = shopifyCartUrl
+  }
+
   return (
     <>
       {isOpen && (
@@ -210,7 +226,10 @@ function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
           </div>
 
           <div className="border-t border-gray-200 p-4">
-            <button className="mb-4 w-full rounded-lg bg-button-hover py-3 font-raleway text-base font-semibold text-white transition-colors hover:bg-banner-lower">
+            <button
+              onClick={handleCheckout}
+              className="mb-4 w-full rounded-lg bg-button-hover py-3 font-raleway text-base font-semibold text-white transition-colors hover:bg-banner-lower"
+            >
               CHECKOUT • ${getTotalPrice().toFixed(2)}
             </button>
             <p className="text-center font-raleway text-sm font-semibold text-black">

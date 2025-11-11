@@ -21,6 +21,7 @@ interface ProductInfoProps {
   sku?: string
   sizes?: string[] // add sizes as optional prop for dynamic handling
   image: string // add image prop for dynamic image
+  variantId?: string
 }
 
 function ProductInfo({
@@ -30,6 +31,7 @@ function ProductInfo({
   price,
   originalPrice,
   colors = [],
+  variantId,
   description,
   productInfo,
   sku = 'F60-319',
@@ -59,6 +61,10 @@ function ProductInfo({
       removeFromCart(productId)
       toast.success('Removed from cart')
     } else {
+      // Extract numeric variant ID (if exists)
+      const numericVariantId = variantId
+        ? variantId.split('/').pop()
+        : undefined
       const cartItem = {
         id: productId,
         name,
@@ -66,8 +72,11 @@ function ProductInfo({
         image,
         ...(colors.length > 0 && selectedColor && { color: selectedColor }),
         ...(sizes.length > 0 && selectedSize && { size: selectedSize }),
-        sku
+        sku,
+        variantId: numericVariantId
+        // ...(numericVariantId && { variantId: numericVariantId }) // include variantId if exists
       }
+      console.log('=====>', cartItem)
       addToCart(cartItem)
       toast.success('Added to cart')
     }
