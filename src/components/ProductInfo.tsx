@@ -71,7 +71,7 @@ function ProductInfo({
       const cartItem = {
         id: productId,
         name,
-        price: String(price).replace('$', ''),
+        price: price,
         image: image || '', // fallback to empty string if undefined
         ...(colors.length > 0 && selectedColor && { color: selectedColor }),
         ...(sizes.length > 0 && selectedSize && { size: selectedSize }),
