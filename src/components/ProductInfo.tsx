@@ -68,13 +68,12 @@ function ProductInfo({
       const cartItem = {
         id: productId,
         name,
-        price: price,
-        image,
+        price: price.toString().startsWith('$') ? price : `$${price}`, // ensure string with $ prefix
+        image: image || '', // ensure image is a string, fallback to empty string if undefined
         ...(colors.length > 0 && selectedColor && { color: selectedColor }),
         ...(sizes.length > 0 && selectedSize && { size: selectedSize }),
         sku,
         variantId: numericVariantId
-        // ...(numericVariantId && { variantId: numericVariantId }) // include variantId if exists
       }
       console.log('=====>', cartItem)
       addToCart(cartItem)

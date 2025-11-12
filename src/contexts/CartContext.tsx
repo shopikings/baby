@@ -9,7 +9,7 @@ import {
 interface CartItem {
   id: string
   name: string
-  price: string | number // ✅ allow both
+  price: string
   image: string
   quantity: number
   variantId?: string
