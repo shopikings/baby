@@ -71,8 +71,8 @@ function ProductInfo({
       const cartItem = {
         id: productId,
         name,
-        price: price,
-        image: image || '', // fallback to empty string if undefined
+        price: formattedPrice, // ✅ use string version here
+        image: image || '',
         ...(colors.length > 0 && selectedColor && { color: selectedColor }),
         ...(sizes.length > 0 && selectedSize && { size: selectedSize }),
         sku,
