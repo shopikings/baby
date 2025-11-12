@@ -92,7 +92,7 @@ function ProductInfo({
       const wishlistItem = {
         id: productId,
         name,
-        price: `$${price}`,
+        price: price,
         image
       }
       addToWishlist(wishlistItem)
