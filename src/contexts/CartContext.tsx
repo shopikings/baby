@@ -9,10 +9,10 @@ import {
 interface CartItem {
   id: string
   name: string
-  price: string
+  price: string | number // ✅ allow both
   image: string
   quantity: number
-  variantId?: string // 👈 add this line
+  variantId?: string
 }
 
 interface CartContextType {
@@ -84,8 +84,11 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
   const getTotalPrice = () => {
     return cartItems.reduce((total, item) => {
-      const price = parseFloat(item.price.replace('$', ''))
-      return total + price * item.quantity
+      const numericPrice =
+        typeof item.price === 'number'
+          ? item.price
+          : parseFloat(item.price.replace('$', ''))
+      return total + numericPrice * item.quantity
     }, 0)
   }
 
