@@ -13,7 +13,7 @@ interface ProductInfoProps {
   originalPrice: number
   rating: number
   colors?: Color[]
-  image?: string | undefined
+  image: string
 }
 
 function ProductInfo({
