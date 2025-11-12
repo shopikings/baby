@@ -5,7 +5,7 @@ interface CartItemProps {
   item: {
     id: string
     name: string
-    price: number
+    price: string
     image: string
     quantity: number
   }

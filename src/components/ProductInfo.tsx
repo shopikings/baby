@@ -13,7 +13,7 @@ interface ProductInfoProps {
   name: string
   rating: number
   reviewCount: number
-  price: number
+  price: string
   originalPrice?: number
   colors?: Color[] // made optional
   description: string
@@ -68,7 +68,7 @@ function ProductInfo({
       const cartItem = {
         id: productId,
         name,
-        price: `$${price}`,
+        price: price,
         image,
         ...(colors.length > 0 && selectedColor && { color: selectedColor }),
         ...(sizes.length > 0 && selectedSize && { size: selectedSize }),
