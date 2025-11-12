@@ -9,7 +9,7 @@ interface Color {
 
 interface ProductInfoProps {
   name: string
-  price: number
+  price: string
   originalPrice: number
   rating: number
   colors?: Color[]
