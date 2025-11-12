@@ -61,21 +61,24 @@ function ProductInfo({
       removeFromCart(productId)
       toast.success('Removed from cart')
     } else {
-      // Extract numeric variant ID (if exists)
       const numericVariantId = variantId
         ? variantId.split('/').pop()
         : undefined
+
+      // Convert price to string with $ prefix if it's a number
+      const formattedPrice = typeof price === 'number' ? `$${price}` : price
+
       const cartItem = {
         id: productId,
         name,
-        price: price.toString().startsWith('$') ? price : `$${price}`, // ensure string with $ prefix
-        image: image || '', // ensure image is a string, fallback to empty string if undefined
+        price: formattedPrice,
+        image: image || '', // fallback to empty string if undefined
         ...(colors.length > 0 && selectedColor && { color: selectedColor }),
         ...(sizes.length > 0 && selectedSize && { size: selectedSize }),
         sku,
         variantId: numericVariantId
       }
-      console.log('=====>', cartItem)
+
       addToCart(cartItem)
       toast.success('Added to cart')
     }
