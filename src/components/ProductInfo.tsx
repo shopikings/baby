@@ -14,7 +14,7 @@ interface ProductInfoProps {
   reviewCount: number
   price: string
   originalPrice?: number
-  colors?: string[] | Color[]
+  colors?: string[] | Color[] | undefined
   description: string
   productInfo: string[]
   sku?: string
@@ -70,7 +70,7 @@ function ProductInfo({
       name,
       price,
       image,
-      color: selectedColor,
+      color: selectedColor || 'Default',
       size: selectedSize,
       variantId: numericVariantId
     })
