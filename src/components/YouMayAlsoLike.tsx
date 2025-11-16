@@ -1,15 +1,19 @@
 import { useRef, useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
+import { fetchProducts } from '../utils/shopify' // <-- your existing util
 
 interface Product {
-  id: number
+  id: string
   title: string
   price: string
   image: string
 }
 
-function YouMayAlsoLike() {
+function MostPopular() {
   const scrollRef = useRef<HTMLDivElement>(null)
+  const [products, setProducts] = useState<Product[]>([])
+  const [loading, setLoading] = useState(true)
+
   const [canScrollLeft, setCanScrollLeft] = useState(false)
   const [canScrollRight, setCanScrollRight] = useState(false)
 
@@ -22,115 +26,57 @@ function YouMayAlsoLike() {
   }
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      checkScroll()
-    }, 100)
+    const loadProducts = async () => {
+      const { products } = await fetchProducts({
+        tag: 'best-selling',
+        limit: 20
+      })
 
-    const scrollElement = scrollRef.current
-    if (scrollElement) {
-      scrollElement.addEventListener('scroll', checkScroll)
-      window.addEventListener('resize', checkScroll)
-      return () => {
-        clearTimeout(timer)
-        scrollElement.removeEventListener('scroll', checkScroll)
-        window.removeEventListener('resize', checkScroll)
-      }
+      const formatted = products.map((p) => ({
+        id: p.id,
+        title: p.title,
+        price: p.price,
+        image: p.images[0] || '/no-image.png'
+      }))
+
+      setProducts(formatted)
+      setLoading(false)
+      setTimeout(checkScroll, 200)
+    }
+
+    loadProducts()
+  }, [])
+
+  useEffect(() => {
+    const scrollEl = scrollRef.current
+    if (!scrollEl) return
+
+    scrollEl.addEventListener('scroll', checkScroll)
+    window.addEventListener('resize', checkScroll)
+
+    return () => {
+      scrollEl.removeEventListener('scroll', checkScroll)
+      window.removeEventListener('resize', checkScroll)
     }
   }, [])
 
-  const products: Product[] = [
-    {
-      id: 1,
-      title: 'Blue/Purple Patterned Zip...',
-      price: '$37',
-      image: '/assets/images/product1.png'
-    },
-    {
-      id: 2,
-      title: 'Green/White Harlequin...',
-      price: '$38',
-      image: '/assets/images/product2.png'
-    },
-    {
-      id: 3,
-      title: 'Chocolate Brown Plain Funnel',
-      price: '$35',
-      image: '/assets/images/product3.png'
-    },
-    {
-      id: 4,
-      title: 'Blue Plain Funnel Neck Fleece Zip...',
-      price: '$35',
-      image: '/assets/images/product4.png'
-    },
-    {
-      id: 5,
-      title: 'Stone Plain Funnel Neck Fleece Zip...',
-      price: '$35',
-      image: '/assets/images/product5.png'
-    },
-    {
-      id: 6,
-      title: 'Blue/Navy Pattern Navy Fleece Shock...',
-      price: '$37',
-      image: '/assets/images/product6.png'
-    },
-    {
-      id: 7,
-      title: 'Multi Checkerboard Hooded Fleece Zip...',
-      price: '$35',
-      image: '/assets/images/product7.png'
-    },
-    {
-      id: 8,
-      title: 'Light Blue Hooded Fleece Zip Through...',
-      price: '$35',
-      image: '/assets/images/product8.png'
-    },
-    {
-      id: 9,
-      title: 'Navy Blue Hooded Fleece Zip Through...',
-      price: '$35',
-      image: '/assets/images/clothing.jpg'
-    },
-    {
-      id: 10,
-      title: 'Charcoal Grey Plain Funnel Neck Fleece...',
-      price: '$35',
-      image: '/assets/images/bathTime4.jpg'
-    },
-    {
-      id: 11,
-      title: 'Tan Brown Hooded Fleece Zip Through...',
-      price: '$40',
-      image: '/assets/images/gifts.jpg'
-    }
-  ]
-
   const scrollLeft = () => {
-    if (scrollRef.current) {
-      scrollRef.current.scrollBy({
-        left: -300,
-        behavior: 'smooth'
-      })
-    }
+    scrollRef.current?.scrollBy({ left: -300, behavior: 'smooth' })
   }
 
   const scrollRight = () => {
-    if (scrollRef.current) {
-      scrollRef.current.scrollBy({
-        left: 300,
-        behavior: 'smooth'
-      })
-    }
+    scrollRef.current?.scrollBy({ left: 300, behavior: 'smooth' })
   }
+
+  if (loading)
+    return <p className="text-center py-10 text-gray-500">Loading...</p>
 
   return (
     <div className="pt-10">
       <div className="mx-auto max-w-[90%] px-4 sm:px-6 lg:px-8">
         <div className="mb-6 flex items-center justify-between">
           <h2 className="font-rubik text-2xl font-medium text-text-primary">
-            You May Also Like
+            Most Popular
           </h2>
           <Link
             to="/shop"
@@ -181,12 +127,14 @@ function YouMayAlsoLike() {
                     className="size-full object-cover transition-transform duration-300 hover:scale-105"
                   />
                 </div>
+
                 <div className="mt-4">
                   <h3 className="line-clamp-2 font-inter text-sm font-medium text-text-primary">
                     {product.title}
                   </h3>
+
                   <p className="mt-2 font-inter text-lg font-semibold text-text-primary">
-                    {product.price}
+                    ${product.price}
                   </p>
                 </div>
               </div>
@@ -219,4 +167,4 @@ function YouMayAlsoLike() {
   )
 }
 
-export default YouMayAlsoLike
+export default MostPopular

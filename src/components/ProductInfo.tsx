@@ -2,11 +2,10 @@ import { useState } from 'react'
 import { useCart } from 'contexts/CartContext'
 import { useWishlist } from 'contexts/WishlistContext'
 import toast from 'react-hot-toast'
-import CustomersAlsoBoughtSlider from './CustomersAlsoBoughtSlider'
 
 interface Color {
   name: string
-  hex: string
+  hex?: string
 }
 
 interface ProductInfoProps {
@@ -15,12 +14,12 @@ interface ProductInfoProps {
   reviewCount: number
   price: string
   originalPrice?: number
-  colors?: Color[] // made optional
+  colors?: string[] | Color[]
   description: string
   productInfo: string[]
   sku?: string
-  sizes?: string[] // add sizes as optional prop for dynamic handling
-  image: string // add image prop for dynamic image
+  sizes?: string[]
+  image: string
   variantId?: string
 }
 
@@ -34,14 +33,16 @@ function ProductInfo({
   variantId,
   description,
   productInfo,
-  sku = 'F60-319',
-  sizes = [], // default empty
+  sizes = [],
   image
 }: ProductInfoProps) {
-  const [selectedColor, setSelectedColor] = useState(colors[0]?.name || '')
+  const colorNames =
+    typeof colors[0] === 'string'
+      ? (colors as string[])
+      : (colors as Color[]).map((c) => c.name)
+
+  const [selectedColor, setSelectedColor] = useState(colorNames[0] || 'Default')
   const [selectedSize, setSelectedSize] = useState('')
-  const [isDescriptionOpen, setIsDescriptionOpen] = useState(false)
-  const [isShoppingOpen, setIsShoppingOpen] = useState(false)
 
   const { addToCart, removeFromCart, cartItems } = useCart()
   const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist()
@@ -50,7 +51,6 @@ function ProductInfo({
   const isInCart = cartItems.some((item) => item.id === productId)
   const isWishlisted = isInWishlist(productId)
 
-  // Handle Add to Cart - only require size if sizes array exists and has elements
   const handleAddToBag = () => {
     if (sizes.length > 0 && !selectedSize) {
       toast.error('Please select a size')
@@ -60,28 +60,22 @@ function ProductInfo({
     if (isInCart) {
       removeFromCart(productId)
       toast.success('Removed from cart')
-    } else {
-      const numericVariantId = variantId
-        ? variantId.split('/').pop()
-        : undefined
-
-      // Convert price to string with $ prefix if it's a number
-      const formattedPrice = typeof price === 'number' ? `$${price}` : price
-
-      const cartItem = {
-        id: productId,
-        name,
-        price: formattedPrice, // ✅ use string version here
-        image: image || '',
-        ...(colors.length > 0 && selectedColor && { color: selectedColor }),
-        ...(sizes.length > 0 && selectedSize && { size: selectedSize }),
-        sku,
-        variantId: numericVariantId
-      }
-
-      addToCart(cartItem)
-      toast.success('Added to cart')
+      return
     }
+
+    const numericVariantId = variantId ? variantId.split('/').pop() : undefined
+
+    addToCart({
+      id: productId,
+      name,
+      price,
+      image,
+      color: selectedColor,
+      size: selectedSize,
+      variantId: numericVariantId
+    })
+
+    toast.success('Added to cart')
   }
 
   const handleWishlistClick = () => {
@@ -89,31 +83,30 @@ function ProductInfo({
       removeFromWishlist(productId)
       toast.success('Removed from wishlist')
     } else {
-      const wishlistItem = {
-        id: productId,
-        name,
-        price: price,
-        image
-      }
-      addToWishlist(wishlistItem)
+      addToWishlist({ id: productId, name, price, image })
       toast.success('Added to wishlist')
     }
   }
 
   return (
     <div className="bg-cream">
+      {/* PRODUCT TITLE + PRICE */}
       <div className="flex items-start justify-between gap-4">
         <h1 className="flex-1 font-rubik text-base font-bold text-[#2E2E2E]">
           {name}
         </h1>
-        <div className="flex flex-col items-end">
-          <span className="font-rubik text-base font-bold text-[#2E2E2E]">
-            ${price}
-            {originalPrice && <span className="ml-2"> - ${originalPrice}</span>}
-          </span>
-        </div>
+
+        <span className="font-rubik text-base font-bold text-[#2E2E2E]">
+          ${price}
+          {originalPrice && (
+            <span className="ml-2 text-sm line-through text-gray-500">
+              ${originalPrice}
+            </span>
+          )}
+        </span>
       </div>
 
+      {/* RATING + SKU */}
       <div className="mt-3 flex items-center justify-between">
         <div className="flex items-center gap-0">
           {[1, 2, 3, 4, 5].map((star) => (
@@ -130,37 +123,37 @@ function ProductInfo({
             ({reviewCount})
           </span>
         </div>
-        <span className="font-inter text-xs text-gray-600">{sku}</span>
       </div>
 
-      {/* Only show Color selector if colors exist */}
-      {colors.length > 0 && (
-        <div className="mt-6">
-          <label className="font-inter text-sm font-medium text-text-primary">
-            Colour:{' '}
-            <span className="font-normal">
-              {selectedColor || colors[0]?.name}
-            </span>
-          </label>
-          <div className="mt-3 flex gap-2">
-            {colors.map((color) => (
-              <button
-                key={color.name}
-                onClick={() => setSelectedColor(color.name)}
-                className={`size-10 overflow-hidden rounded border-2 ${
-                  selectedColor === color.name
-                    ? 'border-text-primary'
-                    : 'border-gray-300'
-                }`}
-                style={{ backgroundColor: color.hex }}
-                title={color.name}
-              />
-            ))}
-          </div>
-        </div>
-      )}
+      {/* COLOR DROPDOWN */}
+      <div className="mt-6">
+        <label className="font-inter text-sm font-medium text-text-primary">
+          Color:
+        </label>
 
-      {/* Only show Size selector if sizes exist */}
+        <div className="relative mt-2">
+          <select
+            value={selectedColor}
+            onChange={(e) => setSelectedColor(e.target.value)}
+            className="w-full appearance-none rounded border border-gray-300 bg-white px-4 py-3 pr-10 font-inter text-sm"
+          >
+            {colorNames.map((c) => (
+              <option key={c}>{c}</option>
+            ))}
+          </select>
+
+          <svg
+            className="pointer-events-none absolute right-3 top-1/2 size-5 -translate-y-1/2"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path d="M19 9l-7 7-7-7" strokeWidth={2} />
+          </svg>
+        </div>
+      </div>
+
+      {/* SIZE DROPDOWN */}
       {sizes.length > 0 && (
         <div className="mt-6">
           <div className="flex items-center justify-between">
@@ -171,48 +164,45 @@ function ProductInfo({
               Size Guide
             </button>
           </div>
-          <div className="relative mt-3">
+
+          <div className="relative mt-2">
             <select
               value={selectedSize}
               onChange={(e) => setSelectedSize(e.target.value)}
-              className="w-full appearance-none rounded border border-gray-300 bg-white px-4 py-3 pr-10 font-inter text-sm text-text-primary focus:border-text-primary focus:outline-none"
+              className="w-full appearance-none rounded border border-gray-300 bg-white px-4 py-3 pr-10 font-inter text-sm"
             >
               <option value="">Choose Size</option>
-              {sizes.map((size) => (
-                <option key={size} value={size}>
-                  {size}
-                </option>
+              {sizes.map((s) => (
+                <option key={s}>{s}</option>
               ))}
             </select>
+
             <svg
-              className="pointer-events-none absolute right-3 top-1/2 size-5 -translate-y-1/2 text-text-primary"
+              className="pointer-events-none absolute right-3 top-1/2 size-5 -translate-y-1/2"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M19 9l-7 7-7-7"
-              />
+              <path d="M19 9l-7 7-7-7" strokeWidth={2} />
             </svg>
           </div>
         </div>
       )}
 
+      {/* ADD TO BAG + WISHLIST */}
       <div className="mt-6 flex gap-3">
         <button
           onClick={handleAddToBag}
-          className={`flex-1 rounded py-3 font-inter text-sm font-bold uppercase text-white transition-colors ${
+          className={`flex-1 rounded py-3 font-inter text-sm font-bold uppercase text-white ${
             isInCart ? 'bg-red-500' : 'bg-button-hover'
           }`}
         >
           {isInCart ? 'Remove from Bag' : 'Add to Bag'}
         </button>
+
         <button
           onClick={handleWishlistClick}
-          className="flex size-12 items-center justify-center rounded border-2 border-gray-300 bg-white transition-colors hover:bg-gray-50"
+          className="flex size-12 items-center justify-center rounded border-2 border-gray-300 bg-white"
         >
           <svg
             className="size-6"
@@ -225,8 +215,6 @@ function ProductInfo({
           </svg>
         </button>
       </div>
-
-      {/* ... rest of the code unchanged ... */}
     </div>
   )
 }

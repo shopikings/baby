@@ -59,7 +59,67 @@ export async function fetchProducts({
     const variables: any = { first: limit }
     if (after) variables.after = after
 
-    // 🧠 CASE 1: If tag is provided, use global "products" query
+    // 🧠 CASE 0: BOTH tag AND collection → Use collection query with tag filter
+    if (tag && collectionHandle) {
+      const query = `
+    query ($first: Int${after ? ', $after: String' : ''}) {
+      products(
+        first: $first
+        ${after ? ', after: $after' : ''}
+        , query: "collection:${collectionHandle} AND tag:${tag}"
+      ) {
+        edges {
+          cursor
+          node {
+            id
+            title
+            tags
+            description
+            images(first: 10) {
+              edges { node { src } }
+            }
+            variants(first: 10) {
+              edges { node { price { amount } } }
+            }
+          }
+        }
+        pageInfo {
+          hasNextPage
+          endCursor
+        }
+      }
+    }
+  `
+
+      const data = await graphql(query, {
+        first: limit,
+        after: after || undefined
+      })
+
+      const edges = data?.products?.edges || []
+      const pageInfo = data?.products?.pageInfo || {
+        hasNextPage: false,
+        endCursor: null
+      }
+
+      const products = edges.map((e: any) => {
+        const n = e.node
+        return {
+          id: n.id,
+          title: n.title,
+          tags: n.tags || [],
+          description: n.description || '',
+          images: (n.images?.edges || [])
+            .map((ie: any) => ie.node?.src)
+            .filter(Boolean),
+          price: n.variants?.edges?.[0]?.node?.price?.amount || '0.00'
+        } as ShopifyProduct
+      })
+
+      return { products, pageInfo }
+    }
+
+    // 🧠 CASE 1: Only tag → global tag search
     if (tag) {
       const query = `
         query ($first: Int${after ? ', $after: String' : ''}) {
@@ -88,6 +148,7 @@ export async function fetchProducts({
           }
         }
       `
+
       const data = await graphql(query, variables)
       const edges = data?.products?.edges || []
       const pageInfo = data?.products?.pageInfo || {
@@ -112,7 +173,7 @@ export async function fetchProducts({
       return { products, pageInfo }
     }
 
-    // 🧠 CASE 2: If collectionHandle is provided (no tag)
+    // 🧠 CASE 2: Only collectionHandle → fetch collection
     if (collectionHandle) {
       const query = `
         query ($handle: String!, $first: Int${
@@ -143,6 +204,7 @@ export async function fetchProducts({
           }
         }
       `
+
       const data = await graphql(query, {
         handle: collectionHandle,
         first: limit,
@@ -172,7 +234,7 @@ export async function fetchProducts({
       return { products, pageInfo }
     }
 
-    // 🧠 CASE 3: Fallback — all products (no collection, no tag)
+    // 🧠 CASE 3: No tag, no collection → fetch all products
     const query = `
       query ($first: Int${after ? ', $after: String' : ''}) {
         products(first: $first${after ? ', after: $after' : ''}) {
@@ -198,6 +260,7 @@ export async function fetchProducts({
         }
       }
     `
+
     const data = await graphql(query, variables)
     const edges = data?.products?.edges || []
     const pageInfo = data?.products?.pageInfo || {

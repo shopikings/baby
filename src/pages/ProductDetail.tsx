@@ -14,134 +14,130 @@ function ProductDetail() {
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
-    if (!id) return
-
-    // 🧩 Extract only numeric part of Shopify GID
-    const cleanId = id.includes('gid://shopify/Product/')
-      ? id.replace('gid://shopify/Product/', '')
-      : id
-
-    const gid = `gid://shopify/Product/${cleanId}`
-
-    const loadProduct = async () => {
+    const load = async () => {
       try {
         setLoading(true)
+
+        const cleanId = id?.replace('gid://shopify/Product/', '')
+        const gid = `gid://shopify/Product/${cleanId}`
+
         const data = await fetchProductById(gid)
         setProduct(data)
-      } catch (err: any) {
-        console.error('Error fetching product:', err)
+      } catch (e) {
         setError('Failed to load product')
       } finally {
         setLoading(false)
       }
     }
 
-    loadProduct()
+    if (id) load()
   }, [id])
 
   if (loading)
     return (
-      <div className="flex h-screen items-center justify-center text-lg text-gray-500">
+      <div className="h-screen flex items-center justify-center">
         Loading product...
       </div>
     )
 
   if (error)
     return (
-      <div className="flex h-screen items-center justify-center text-red-500">
+      <div className="h-screen flex items-center justify-center text-red-500">
         {error}
       </div>
     )
 
   if (!product)
     return (
-      <div className="flex h-screen items-center justify-center text-gray-500">
+      <div className="h-screen flex items-center justify-center">
         Product not found
       </div>
     )
 
-  // 🧠 Extract data safely
-  const thumbnails = product.images?.map((img: any) => img.url) || [
-    '/assets/images/product1.png'
-  ]
+  // Extract images
+  const thumbnails = product.images?.map((i: any) => i.url) || []
+
+  // Extract colors & sizes
+  const options = product.options || []
+
+  const colorOption = options.find((o: any) =>
+    o.name.toLowerCase().includes('color')
+  )
+  const sizeOption = options.find((o: any) =>
+    o.name.toLowerCase().includes('size')
+  )
+
+  const colorsList = colorOption?.values || ['Default']
+  const sizesList = sizeOption?.values || ['S', 'M', 'L', 'XL']
 
   const productData = {
-    name: product.title || 'Untitled Product',
+    name: product.title,
     rating: 5,
     reviewCount: 24,
-    price: product.variants?.[0]?.price?.amount || '0.00',
-    originalPrice: Number(product.variants?.[0]?.price?.amount || 0) + 10,
-    colors: [
-      { name: 'beige', hex: '#E5D4C1' },
-      { name: 'blue', hex: '#6B9FBF' },
-      { name: 'navy', hex: '#2C3E50' },
-      { name: 'brown', hex: '#8B6F47' },
-      { name: 'black', hex: '#000000' }
-    ],
-    variantId: product.variants?.[0]?.id || undefined, // => i added this line ?
-    description:
-      product.description ||
-      'This cozy sherpa fleece zip-up is perfect for keeping your little one warm.',
+    price: product?.variants?.[0]?.price?.amount || '0.00',
+    originalPrice: Number(product?.variants?.[0]?.price?.amount || 0) + 10,
+    colors: colorsList,
+    sizes: sizesList,
+    variantId: product?.variants?.[0]?.id,
+    description: product.description,
     productInfo: [
       'Material: 100% Cotton',
       'Care: Machine wash cold, tumble dry low',
       'Made in USA'
-    ]
+    ],
+    image: thumbnails[0] || ''
   }
 
-  const reviews = product.reviews?.length
-    ? product.reviews.map((rev: any, index: number) => ({
-        id: index + 1,
-        author: rev.author || 'Anonymous',
-        location: rev.location || '',
-        rating: rev.rating || 0,
-        comment: rev.comment || '',
-        date: rev.date || '',
-        color: rev.color || '',
-        verified: rev.verified || false
-      }))
-    : [] // <-- safe default empty array
-
-  const recentlyViewed = [
-    {
-      id: 5,
-      title: 'Brown jacket',
-      price: '$60',
-      mainImage: '/assets/images/product5.png',
-      variantImages: [
-        '/assets/images/product5.png',
-        '/assets/images/product6.png'
-      ],
-      rating: 5
-    }
-  ]
-
   return (
-    <div className="bg-cream">
+    <div className="bg-cream pb-8">
       <YouMayAlsoLike />
-      <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-        <div className="flex flex-col gap-8 lg:flex-row lg:items-stretch">
-          <div className="lg:w-1/2">
-            <div className="sticky top-0">
-              <ProductImageGallery
-                thumbnails={thumbnails}
-                productName={productData.name}
-              />
-            </div>
-          </div>
-          <div className="pt-5 lg:w-1/2">
-            <ProductInfo {...productData} image={thumbnails[0]} />
-          </div>
+
+      <div className="max-w-7xl mx-auto px-4 pt-8 flex gap-10 lg:flex-row flex-col">
+        {/* LEFT IMAGES */}
+        <div className="lg:w-1/2">
+          <ProductImageGallery
+            thumbnails={thumbnails}
+            productName={productData.name}
+          />
         </div>
 
-        <ProductReviews
-          overallRating={productData.rating}
-          totalReviews={productData.reviewCount}
-          reviews={reviews}
-        />
+        {/* RIGHT PRODUCT INFO */}
+        <div className="lg:w-1/2 pt-5">
+          <ProductInfo {...productData} />
 
-        <RecentlyViewed products={recentlyViewed} />
+          {/* DESCRIPTION */}
+          <div className="mt-8 border-t border-gray-300 pt-6">
+            <h2 className="text-lg font-semibold mb-3">Description</h2>
+            <p className="text-gray-700">{productData.description}</p>
+
+            <ul className="mt-4 list-disc pl-4 text-gray-700">
+              {productData.productInfo.map((info, i) => (
+                <li key={i}>{info}</li>
+              ))}
+            </ul>
+          </div>
+        </div>
       </div>
+
+      {/* REVIEWS */}
+      <ProductReviews
+        overallRating={productData.rating}
+        totalReviews={productData.reviewCount}
+        reviews={product.reviews || []}
+      />
+
+      {/* <RecentlyViewed
+        products={[
+          {
+            id: 5,
+            title: 'Brown jacket',
+            price: '$60',
+            mainImage: '/assets/images/product5.png',
+            variantImages: ['/assets/images/product5.png'],
+            rating: 5
+          }
+        ]}
+      /> */}
     </div>
   )
 }

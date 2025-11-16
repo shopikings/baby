@@ -10,6 +10,8 @@ interface CartItem {
   id: string
   name: string
   price: string
+  color?: string
+  size?: string
   image: string
   quantity: number
   variantId?: string
