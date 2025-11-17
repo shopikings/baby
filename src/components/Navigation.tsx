@@ -70,7 +70,9 @@ function Navigation({ onCollectionSelect }: NavigationProps) {
   }
 
   const handleBrandClick = (brand: string) => {
-    navigate(`/collection?brand=${encodeURIComponent(brand)}`)
+    const tag = brand.trim().toLowerCase() // Shopify tag must be lowercase
+
+    navigate(`/shop?tag=${encodeURIComponent(tag)}`)
     setActiveDropdown(null)
   }
 

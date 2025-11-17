@@ -34,7 +34,7 @@ function ProductInfo({
       name,
       price,
       image,
-      color: selectedColor || null,
+      color: selectedColor || undefined, // ✅ FIXED
       quantity
     }
 

@@ -101,11 +101,11 @@ function RecommendationsSlider({ bgWhite }: RecommendationsSliderProps) {
               className="text-center font-rubik font-normal uppercase text-text-primary lg:text-start"
               style={{ fontSize: '32px' }}
             >
-              BEST SELLING Collection
+              BEST SELLING
             </h2>
 
             {/* CATEGORY BUTTONS */}
-            <div className="flex justify-center gap-3 lg:absolute lg:left-1/2 lg:-translate-x-1/2">
+            {/* <div className="flex justify-center gap-3 lg:absolute lg:left-1/2 lg:-translate-x-1/2">
               {['toys', 'clothing', 'gifts'].map((cat) => (
                 <button
                   key={cat}
@@ -119,7 +119,7 @@ function RecommendationsSlider({ bgWhite }: RecommendationsSliderProps) {
                   {cat.toUpperCase()}
                 </button>
               ))}
-            </div>
+            </div> */}
 
             <Link to="/shop">
               <button className="flex items-center justify-center gap-2 font-inter text-xs sm:text-base uppercase text-button-hover hover:text-button-hover/80">

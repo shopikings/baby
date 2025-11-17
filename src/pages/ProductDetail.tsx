@@ -72,8 +72,11 @@ function ProductDetail() {
 
   const productData = {
     name: product.title,
-    rating: 5,
-    reviewCount: 24,
+    rating: product.reviews
+      ? product.reviews.reduce((acc: number, r: any) => acc + r.rating, 0) /
+        product.reviews.length
+      : 0,
+    reviewCount: product.reviews ? product.reviews.length : 0,
     price: product?.variants?.[0]?.price?.amount || '0.00',
     originalPrice: Number(product?.variants?.[0]?.price?.amount || 0) + 10,
     colors: colorsList,

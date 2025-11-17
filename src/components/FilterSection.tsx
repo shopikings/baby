@@ -41,13 +41,19 @@ function FilterSection({ onFilterChange }: FilterSectionProps) {
     'Outerwear',
     'Accessories'
   ]
-  const brandOptions = ['NEXT', 'H&M', 'Zara', 'Gap', "Carter's"]
-  const sortOptions = [
-    'Price: Low to High',
-    'Price: High to Low',
-    'Newest First',
-    'Best Selling'
+  const brandOptions = [
+    'JELLY CAT',
+    'RYLE + CRU',
+    'BAREFOOT DREAMS',
+    'KYTE BABY',
+    'MAGNETIC ME',
+    'QUINCY MAE',
+    'ENEWTON',
+    'NUNA',
+    'UPPABABY'
   ]
+  const sortOptions = ['Price: Low to High', 'Price: High to Low']
+
   const colourOptions = [
     'Red',
     'Blue',
@@ -269,27 +275,6 @@ function FilterSection({ onFilterChange }: FilterSectionProps) {
               </div>
             )}
           </div>
-
-          {/* MORE Button */}
-          <button
-            onClick={() => setShowMoreFilters(!showMoreFilters)}
-            className="flex items-center gap-2 rounded-md border border-[#949494] bg-white px-4 py-2.5 font-raleway text-sm font-semibold text-black transition-all hover:border-gray-400"
-          >
-            <span>{showMoreFilters ? 'Show Less' : 'Show More'}</span>
-            <svg
-              className="size-4"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"
-              />
-            </svg>
-          </button>
 
           {/* Sort Dropdown */}
           <div className="relative">

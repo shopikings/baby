@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom'
 
 function FeaturedBrands() {
   const navigate = useNavigate()
+
   const brands = [
     {
       name: 'JELLY CAT',
@@ -21,6 +22,12 @@ function FeaturedBrands() {
     }
   ]
 
+  // ✅ NEW FUNCTION (same logic as Navigation)
+  const handleBrandClick = (brand: string) => {
+    const tag = brand.trim().toLowerCase() // required format for Shopify tag
+    navigate(`/shop?tag=${encodeURIComponent(tag)}`)
+  }
+
   return (
     <section className="bg-cream py-12 sm:py-16 lg:py-20">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -33,13 +40,7 @@ function FeaturedBrands() {
             <div
               key={index}
               className="group relative cursor-pointer overflow-hidden rounded-lg bg-gray-200"
-              onClick={() =>
-                navigate(
-                  `/shop?category=${brand.name
-                    .toLowerCase()
-                    .replace(/\s+/g, '-')}`
-                )
-              }
+              onClick={() => handleBrandClick(brand.name)} // 👈 updated
             >
               <div className="aspect-square w-full">
                 <img

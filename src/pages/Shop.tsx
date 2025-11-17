@@ -9,7 +9,11 @@ function Shop() {
   const [filters, setFilters] = useState<Record<string, string | boolean>>({})
   const [loading, setLoading] = useState(true)
   const [searchParams] = useSearchParams()
+
+  // ✅ We NOW read BOTH: category + tag
   const category = searchParams.get('category')
+  const urlTag = searchParams.get('tag') // <-- ⭐ FEATURED BRAND TAG
+
   const [allProducts, setAllProducts] = useState<any[]>([])
   const [products, setProducts] = useState<any[]>([])
   const [cursor, setCursor] = useState<string | null>(null)
@@ -17,7 +21,9 @@ function Shop() {
   const [pageLoading, setPageLoading] = useState<boolean>(false)
 
   const getHeading = () => {
+    if (urlTag) return urlTag // show "JELLY CAT" as page heading
     if (!category) return 'Shop All'
+
     return category
       .split('-')
       .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
@@ -41,16 +47,23 @@ function Shop() {
       rating: 4
     }))
 
-  // ✅ Compute tag to send to Shopify based on selected filters
+  // ✅ Convert filter UI selections → Shopify tag
   const getTagFromFilters = () => {
-    if (filters.gender) return filters.gender.toString().toLowerCase()
-    if (filters.brand) return filters.brand.toString().toLowerCase()
-    if (filters.size) return filters.size.toString().toLowerCase()
-    // extend here later...
+    if (filters.gender) return filters.gender.toString()
+    if (filters.brand) return filters.brand.toString()
+    if (filters.size) return filters.size.toString()
     return null
   }
 
-  // ✅ Load products from Shopify whenever filters or category changes
+  // 🧠 FINAL TAG PRIORITY:
+  // 1. URL TAG (Featured Brands)
+  // 2. Filter sidebar tags (gender/brand/size)
+  const activeTag = urlTag || getTagFromFilters()
+
+  // ------------------------------------
+  // 🔥 LOAD PRODUCTS ANYTIME:
+  // category changes OR filters change OR URL tag changes
+  // ------------------------------------
   useEffect(() => {
     let cancelled = false
 
@@ -58,21 +71,20 @@ function Shop() {
       try {
         setLoading(true)
         setCursor(null)
-        setHasNextPage(false)
         setProducts([])
         setAllProducts([])
 
         const limit = 50
-        const tag = getTagFromFilters()
 
         const { products: fetched, pageInfo } = await fetchProducts({
           collectionHandle: category || null,
-          tag,
+          tag: activeTag || null,
           limit,
           after: null
         })
 
         if (cancelled) return
+
         const mapped = mapShopifyToUI(fetched)
         setAllProducts(mapped)
         setProducts(mapped)
@@ -86,25 +98,26 @@ function Shop() {
     }
 
     loadProducts()
+
     return () => {
       cancelled = true
     }
-  }, [category, filters])
+  }, [category, filters, urlTag]) // <-- tag included here!
 
   const handleFilterChange = (newFilters: any) => {
-    setFilters({ ...newFilters }) // ensures re-render
+    setFilters({ ...newFilters })
   }
 
   const loadMore = useCallback(async () => {
     if (!hasNextPage || pageLoading) return
+
     try {
       setPageLoading(true)
       const limit = 12
-      const tag = getTagFromFilters()
 
       const { products: fetched, pageInfo } = await fetchProducts({
         collectionHandle: category || null,
-        tag,
+        tag: activeTag || null,
         limit,
         after: cursor
       })
@@ -119,7 +132,7 @@ function Shop() {
     } finally {
       setPageLoading(false)
     }
-  }, [cursor, hasNextPage, pageLoading, category, filters])
+  }, [cursor, hasNextPage, pageLoading, category, activeTag])
 
   if (loading) {
     return (
@@ -143,10 +156,8 @@ function Shop() {
           </h1>
         </div>
 
-        {/* ✅ Hooked up filter */}
         <FilterSection onFilterChange={handleFilterChange} />
 
-        {/* Product Grid */}
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4">
           {products.map((product) => (
             <ShopProductCard
@@ -157,7 +168,6 @@ function Shop() {
           ))}
         </div>
 
-        {/* Load More */}
         <div className="mt-8 flex justify-center">
           <button
             onClick={loadMore}
