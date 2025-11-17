@@ -52,6 +52,9 @@ function Shop() {
     if (filters.gender) return filters.gender.toString()
     if (filters.brand) return filters.brand.toString()
     if (filters.size) return filters.size.toString()
+    if (filters.category) return filters.category.toString()
+    if (filters.sale) return 'sale'
+    if (filters.newIn) return 'new-in'
     return null
   }
 
@@ -156,8 +159,10 @@ function Shop() {
           </h1>
         </div>
 
-        <FilterSection onFilterChange={handleFilterChange} />
-
+        <FilterSection
+          filters={filters} // <-- NEW
+          onFilterChange={handleFilterChange}
+        />
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4">
           {products.map((product) => (
             <ShopProductCard

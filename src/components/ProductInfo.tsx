@@ -14,7 +14,7 @@ interface ProductInfoProps {
   reviewCount: number
   price: string
   originalPrice?: number
-  colors?: string[] | Color[] | undefined
+  colors?: string[] | Color[]
   description: string
   productInfo: string[]
   sku?: string
@@ -36,12 +36,18 @@ function ProductInfo({
   sizes = [],
   image
 }: ProductInfoProps) {
+  // --- SAFE COLOR HANDLING ---
   const colorNames =
-    typeof colors[0] === 'string'
-      ? (colors as string[])
-      : (colors as Color[]).map((c) => c.name)
+    colors.length > 0
+      ? typeof colors[0] === 'string'
+        ? (colors as string[])
+        : (colors as Color[]).map((c) => c.name)
+      : []
 
-  const [selectedColor, setSelectedColor] = useState(colorNames[0] || 'Default')
+  const [selectedColor, setSelectedColor] = useState(
+    colorNames.length > 0 ? colorNames[0] : 'Default'
+  )
+
   const [selectedSize, setSelectedSize] = useState('')
 
   const { addToCart, removeFromCart, cartItems } = useCart()
@@ -106,7 +112,7 @@ function ProductInfo({
         </span>
       </div>
 
-      {/* RATING + SKU */}
+      {/* RATING */}
       <div className="mt-3 flex items-center justify-between">
         <div className="flex items-center gap-0">
           {[1, 2, 3, 4, 5].map((star) => (
@@ -125,7 +131,7 @@ function ProductInfo({
         </div>
       </div>
 
-      {/* COLOR DROPDOWN */}
+      {/* COLOR DROPDOWN (ALWAYS SHOW) */}
       <div className="mt-6">
         <label className="font-inter text-sm font-medium text-text-primary">
           Color:
@@ -135,11 +141,21 @@ function ProductInfo({
           <select
             value={selectedColor}
             onChange={(e) => setSelectedColor(e.target.value)}
-            className="w-full appearance-none rounded border border-gray-300 bg-white px-4 py-3 pr-10 font-inter text-sm"
+            className={`
+        w-full appearance-none rounded border border-gray-300 bg-white px-4 py-3 pr-10 
+        font-inter text-sm 
+        ${selectedColor === 'Default' ? 'text-gray-400' : 'text-text-primary'}
+      `}
           >
-            {colorNames.map((c) => (
-              <option key={c}>{c}</option>
-            ))}
+            {colorNames.length === 0 ? (
+              <option value="Default">Default</option>
+            ) : (
+              colorNames.map((c) => (
+                <option key={c} value={c}>
+                  {c}
+                </option>
+              ))
+            )}
           </select>
 
           <svg
@@ -160,6 +176,7 @@ function ProductInfo({
             <label className="font-inter text-sm font-medium text-text-primary">
               Size:
             </label>
+
             <button className="font-inter text-xs font-medium text-text-primary underline">
               Size Guide
             </button>
@@ -169,11 +186,18 @@ function ProductInfo({
             <select
               value={selectedSize}
               onChange={(e) => setSelectedSize(e.target.value)}
-              className="w-full appearance-none rounded border border-gray-300 bg-white px-4 py-3 pr-10 font-inter text-sm"
+              className={`w-full appearance-none rounded border border-gray-300 bg-white px-4 py-3 pr-10 font-inter text-sm ${
+                selectedSize ? 'text-gray-900' : 'text-gray-400'
+              }`}
             >
-              <option value="">Choose Size</option>
+              <option value="" disabled>
+                Select Size
+              </option>
+
               {sizes.map((s) => (
-                <option key={s}>{s}</option>
+                <option key={s} value={s}>
+                  {s}
+                </option>
               ))}
             </select>
 
