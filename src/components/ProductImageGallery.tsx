@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 interface ProductImageGalleryProps {
   thumbnails: string[]
@@ -38,12 +38,14 @@ function ProductImageGallery({
     <>
       <div className="rounded-lg bg-white p-4 shadow-sm">
         <div className="flex flex-col gap-3 lg:flex-row">
+          {/* Thumbnail Container */}
           <div className="flex flex-row gap-2 lg:flex-col">
             {thumbnails.map((img, index) => (
               <button
                 key={index}
                 onClick={() => handleImageChange(index)}
-                className={`h-20 w-20 flex-shrink-0 overflow-hidden rounded-none border-2 transition-all hover:scale-105 lg:h-auto lg:w-20 lg:flex-1 ${
+                // ⭐ Thumbnails are now explicitly square with 'size-20' (h-20 w-20)
+                className={`size-20 flex-shrink-0 overflow-hidden rounded-none border-2 transition-all hover:scale-105 ${
                   selectedIndex === index
                     ? 'border-text-primary'
                     : 'border-gray-300'
@@ -52,17 +54,19 @@ function ProductImageGallery({
                 <img
                   src={img}
                   alt={`${productName} ${index + 1}`}
-                  className="size-full object-cover"
+                  className="size-full object-cover" // Ensures image covers the square area
                 />
               </button>
             ))}
           </div>
 
-          <div className="relative aspect-square flex-1 overflow-hidden rounded-none">
+          {/* Main Image Container */}
+          <div className="relative flex-1 overflow-hidden rounded-none">
+            {/* ⭐ Main image now forces aspect-square and full height */}
             <img
               src={thumbnails[selectedIndex]}
               alt={productName}
-              className={`absolute inset-0 size-full object-cover transition-opacity duration-200 ${
+              className={`inset-0 h-full w-full aspect-square object-cover transition-opacity duration-200 ${
                 isTransitioning ? 'opacity-0' : 'opacity-100'
               }`}
             />
@@ -159,7 +163,8 @@ function ProductImageGallery({
             <img
               src={thumbnails[selectedIndex]}
               alt={productName}
-              className="max-h-[90vh] max-w-[90vw] object-contain"
+              // ⭐ Fullscreen image also takes up its maximum available square space
+              className="max-h-[90vh] max-w-[90vw] object-contain aspect-square"
               onClick={(e) => e.stopPropagation()}
             />
 
