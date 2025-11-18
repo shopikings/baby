@@ -442,3 +442,56 @@ export async function fetchBlogs({
     return []
   }
 }
+
+export async function fetchBlogArticleByHandle(
+  handle: string
+): Promise<ShopifyBlogArticle | null> {
+  if (!handle) return null // We use the global 'articles' connection and filter by the handle.
+  // We request only the first matching article.
+
+  const query = `
+    query GetArticleByHandle($handle: String!) {
+      articles(first: 1, query: $handle) {
+        edges {
+          node {
+            id
+            title
+            handle
+            author { name }
+            image {
+              url
+              altText
+            }
+            publishedAt
+            contentHtml
+            tags
+          }
+        }
+      }
+    }
+  `
+
+  try {
+    const data = await graphql(query, { handle })
+
+    const articleNode = data?.articles?.edges?.[0]?.node
+    if (!articleNode) {
+      return null // Article not found
+    } // Map the Shopify response to your defined type
+
+    return {
+      id: articleNode.id,
+      title: articleNode.title,
+      handle: articleNode.handle,
+      author: articleNode.author?.name || 'Unknown',
+      image: articleNode.image?.url || null,
+      imageAlt: articleNode.image?.altText || null,
+      publishedAt: articleNode.publishedAt,
+      contentHtml: articleNode.contentHtml,
+      tags: articleNode.tags || []
+    } as ShopifyBlogArticle
+  } catch (err) {
+    console.error(`fetchBlogArticleByHandle error for handle ${handle}:`, err) // Return null or rethrow, depending on how you want to handle errors in the calling component
+    return null
+  }
+}

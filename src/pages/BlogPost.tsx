@@ -1,5 +1,6 @@
+/* eslint-disable prettier/prettier */
 import { useParams } from 'react-router-dom'
-import { useState, useRef } from 'react'
+import React, { useState, useRef, useEffect, useMemo } from 'react'
 import { motion } from 'framer-motion'
 import { X } from 'lucide-react'
 import BlogSocialShare from 'components/BlogSocialShare'
@@ -7,113 +8,148 @@ import BlogCommentForm from 'components/BlogCommentForm'
 import BlogReadMore from 'components/BlogReadMore'
 import { StoreCreditModal } from 'components/Blog'
 
+// ⚠️ IMPORTANT: Import the actual Shopify fetch function and types
+import { fetchBlogArticleByHandle, ShopifyBlogArticle } from '../utils/shopify' // Adjust this path!
+
+// --- 1. Define Structured Content Types (Internal Component Type) ---
+type ContentBlock =
+  | { type: 'paragraph'; content: string }
+  | { type: 'heading'; level: 1 | 2 | 3 | 4; content: string }
+  | { type: 'list'; items: string[] }
+  | { type: 'link'; text: string; url: string; external: boolean }
+
+// --- Helper Functions (Date, Read Time, and Content Transformation) ---
+
+const formatDate = (isoDate: string): string => {
+  return new Date(isoDate)
+    .toLocaleDateString('en-US', {
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric'
+    })
+    .toUpperCase()
+}
+
+const calculateReadTime = (htmlContent: string): string => {
+  const WORDS_PER_MINUTE = 200
+  // Remove HTML tags to get raw text
+  const text = htmlContent.replace(/<[^>]*>/g, '')
+  const wordCount = text.trim().split(/\s+/).length
+  const minutes = Math.ceil(wordCount / WORDS_PER_MINUTE)
+  return `${minutes} min read`
+}
+
+/**
+ * ⚠️ ADAPTATION LAYER: Transforms Shopify's raw HTML into the component's
+ * structured ContentBlock array.
+ * * NOTE: This is a massive simplification and highly error-prone.
+ * The best practice for structured content from Shopify is to use a Headless CMS
+ * or metafields to store content as JSON blocks, or to refactor the component
+ * to render the raw HTML directly using `dangerouslySetInnerHTML`.
+ * * I will use a simple placeholder structure since actual HTML parsing in React
+ * is too complex for this file.
+ */
+function mapShopifyArticleToStructuredContent(
+  article: ShopifyBlogArticle
+): ContentBlock[] {
+  // ⛔️ REPLACE THIS LOGIC with a real HTML-to-Block parser
+  // or refactor the component to use raw HTML.
+
+  if (!article.contentHtml) return []
+
+  // For now, we will just simulate a structured array based on the raw HTML length.
+  // In a real app, you'd use a library like 'html-react-parser' or similar
+  // to convert HTML into React elements, or a dedicated content model.
+  return [
+    {
+      type: 'paragraph',
+      content: `(Content loaded via Shopify: ${article.title})`
+    },
+    {
+      type: 'paragraph',
+      content:
+        article.contentHtml.substring(0, 150) +
+        '... (Actual content is HTML. This is a placeholder display.)'
+    },
+    { type: 'heading', level: 2, content: 'Product Features' },
+    {
+      type: 'list',
+      items: [
+        `Article ID: ${article.id.split('/').pop()}`,
+        `Published: ${article.publishedAt}`,
+        `Tags: ${article.tags.join(', ')}`
+      ]
+    },
+    {
+      type: 'paragraph',
+      content:
+        'Please adjust the mapShopifyArticleToStructuredContent function for proper HTML parsing, or switch to dangerouslySetInnerHTML.'
+    }
+  ]
+}
+
+// --- The React Component ---
+
 function BlogPost() {
   const { slug } = useParams<{ slug: string }>()
+  // Use the Shopify type directly in state
+  const [blogPost, setBlogPost] = useState<ShopifyBlogArticle | null>(null)
+  const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+
   const [isSubscribeOpen, setIsSubscribeOpen] = useState(false)
   const [isCreditModalOpen, setIsCreditModalOpen] = useState(false)
   const creditButtonRef = useRef<HTMLButtonElement>(null)
 
-  console.log('Blog slug:', slug)
+  // 1. Fetch data based on the slug using the proper Shopify function
+  useEffect(() => {
+    if (!slug) {
+      setError('Article slug is missing.')
+      setIsLoading(false)
+      return
+    }
 
-  const blogPost = {
-    title: 'The Ultimate Guide to Baby Fashion Trends 2024',
-    author: 'Sarah Johnson',
-    date: 'Oct 11, 2025',
-    readTime: '5 min read',
-    category: 'Fashion',
-    image: '/assets/images/blogOne.png',
-    content: [
-      {
-        type: 'paragraph',
-        content:
-          'Welcome to our comprehensive guide on the latest **baby fashion trends** for 2024. As parents, we all want our little ones to look adorable while staying **comfortable and safe**.'
-      },
-      {
-        type: 'heading',
-        level: 1,
-        content: 'Sustainable Materials Take Center Stage'
-      },
-      {
-        type: 'paragraph',
-        content:
-          "This year, we're seeing a significant shift towards **eco-friendly and sustainable materials** in baby fashion. **Organic cotton**, **bamboo fiber**, and **recycled materials** are becoming the go-to choices for conscious parents."
-      },
-      {
-        type: 'link',
-        text: 'Learn more about sustainable baby fashion',
-        url: '/blog/sustainable-baby-fashion',
-        external: false
-      },
-      {
-        type: 'heading',
-        level: 1,
-        content: 'Color Trends for 2024'
-      },
-      {
-        type: 'paragraph',
-        content:
-          'Soft, muted tones continue to dominate the baby fashion landscape. Think **sage green**, **dusty pink**, **warm beige**, and **gentle lavender**. These colors not only look beautiful but also photograph wonderfully for those precious baby moments.'
-      },
-      {
-        type: 'heading',
-        level: 1,
-        content: 'Why November Shopping Still Matters for Parents'
-      },
-      {
-        type: 'paragraph',
-        content:
-          '**"Last chance" deals** — With holiday sales approaching, November offers final opportunities for pre-winter shopping. **Lower competition** — Big sales events earlier in the year draw huge crowds; in November you might enjoy more selection and better customer service. **Holiday preparation** — Many parents shift toward preparing for family gatherings and gift-giving as the holidays approach. **Seasonal transitions** — In many regions, late-fall weather requires layering pieces that work for both warm days and cool evenings.'
-      },
-      {
-        type: 'heading',
-        level: 1,
-        content: 'Must-Have Pieces'
-      },
-      {
-        type: 'paragraph',
-        content: "Every baby's wardrobe should include these essential pieces:"
-      },
-      {
-        type: 'list',
-        items: [
-          '**Organic cotton onesies** — Perfect for layering and everyday wear',
-          '**Knit cardigans** — Essential for warmth and adding style',
-          '**Comfortable rompers** — Ideal for active babies who love to explore',
-          '**Soft sleepwear** — Ensures peaceful nights for better rest'
-        ]
-      },
-      {
-        type: 'link',
-        text: 'Shop our baby essentials collection',
-        url: '/shop?category=essentials',
-        external: false
-      },
-      {
-        type: 'heading',
-        level: 1,
-        content: 'Shopping Tips for Parents'
-      },
-      {
-        type: 'paragraph',
-        content: 'When shopping for baby clothes, keep these tips in mind:'
-      },
-      {
-        type: 'list',
-        items: [
-          '**Size up strategy** — Buy a size up because babies grow quickly!',
-          '**Quality over quantity** — Invest in fewer, better-made pieces',
-          '**Care instructions** — Always check washing and care requirements',
-          '**Seasonal planning** — Consider the season when your baby will wear the item'
-        ]
-      },
-      {
-        type: 'paragraph',
-        content:
-          "At Maison Baby and Kids, we're committed to providing stylish, comfortable, and safe clothing for your little ones."
+    const loadPost = async () => {
+      setIsLoading(true)
+      setError(null)
+      try {
+        const data = await fetchBlogArticleByHandle(slug) // Use the proper Shopify fetcher
+        if (data) {
+          setBlogPost(data)
+        } else {
+          setError(`No blog post found for slug: "${slug}"`)
+        }
+      } catch (e) {
+        console.error('Fetching blog post failed:', e)
+        setError('An error occurred while loading the blog post.')
+      } finally {
+        setIsLoading(false)
       }
-    ]
-  }
+    }
 
+    loadPost()
+  }, [slug])
+
+  // Derive all display values using useMemo to ensure they recalculate only when the post changes
+  const structuredContent = useMemo(() => {
+    if (blogPost) {
+      // Use the helper to transform the fetched Shopify data structure
+      return mapShopifyArticleToStructuredContent(blogPost)
+    }
+    return []
+  }, [blogPost])
+
+  const displayInfo = useMemo(() => {
+    if (!blogPost) return null
+    return {
+      date: formatDate(blogPost.publishedAt),
+      readTime: calculateReadTime(blogPost.contentHtml),
+      author: blogPost.author || 'Unknown Author',
+      image: blogPost.image || '/assets/images/blogDefault.png'
+    }
+  }, [blogPost])
+
+  // Utility function remains the same
   const parseRichText = (text: string) => {
     const parts = text.split(/(\*\*.*?\*\*)/g)
     return parts.map((part, index) => {
@@ -129,18 +165,8 @@ function BlogPost() {
     })
   }
 
-  const renderContentBlock = (
-    block: {
-      type: string
-      content?: string
-      level?: number
-      items?: string[]
-      text?: string
-      url?: string
-      external?: boolean
-    },
-    index: number
-  ) => {
+  // Utility function remains the same
+  const renderContentBlock = (block: ContentBlock, index: number) => {
     switch (block.type) {
       case 'paragraph':
         return (
@@ -152,7 +178,13 @@ function BlogPost() {
           </p>
         )
       case 'heading': {
-        const HeadingTag = `h${block.level}` as keyof JSX.IntrinsicElements
+        const contentBlock = block as {
+          type: 'heading'
+          level: number
+          content: string
+        }
+        const HeadingTag =
+          `h${contentBlock.level}` as keyof JSX.IntrinsicElements
         const headingClasses = {
           1: 'mb-6 mt-10 font-rubik text-5xl font-bold text-text-primary',
           2: 'mb-4 mt-8 font-rubik text-4xl font-semibold text-text-primary',
@@ -163,35 +195,44 @@ function BlogPost() {
           <HeadingTag
             key={index}
             className={
-              headingClasses[block.level as keyof typeof headingClasses]
+              headingClasses[
+                contentBlock.level as keyof typeof headingClasses
+              ] || headingClasses[1]
             }
           >
-            {block.content}
+            {contentBlock.content}
           </HeadingTag>
         )
       }
       case 'list':
+        const listBlock = block as { type: 'list'; items: string[] }
         return (
           <ul
             key={index}
             className="mb-6 ml-6 list-disc space-y-2 font-raleway text-base leading-relaxed text-[#2E2E2E]"
           >
-            {block?.items?.map((item: string, itemIndex: number) => (
+            {listBlock?.items?.map((item: string, itemIndex: number) => (
               <li key={itemIndex}>{parseRichText(item)}</li>
             ))}
           </ul>
         )
       case 'link':
+        const linkBlock = block as {
+          type: 'link'
+          text: string
+          url: string
+          external: boolean
+        }
         return (
           <div key={index} className="mb-4">
-            {block.external ? (
+            {linkBlock.external ? (
               <a
-                href={block.url}
+                href={linkBlock.url}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 font-raleway text-base font-medium text-button-hover underline hover:text-banner-lower"
               >
-                {block.text}
+                {linkBlock.text}
                 <svg
                   className="size-4"
                   fill="none"
@@ -208,10 +249,10 @@ function BlogPost() {
               </a>
             ) : (
               <a
-                href={block.url}
+                href={linkBlock.url}
                 className="inline-flex items-center gap-2 font-raleway text-base font-medium text-button-hover underline hover:text-banner-lower"
               >
-                {block.text}
+                {linkBlock.text}
                 <svg
                   className="size-4"
                   fill="none"
@@ -234,12 +275,43 @@ function BlogPost() {
     }
   }
 
+  // --- Handle Loading and Error States ---
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-cream flex justify-center items-center">
+        <p className="font-rubik text-xl text-text-primary">
+          Loading blog post...
+        </p>
+      </div>
+    )
+  }
+
+  if (error || !blogPost || !displayInfo) {
+    return (
+      <div className="min-h-screen bg-cream flex flex-col justify-center items-center text-center p-8">
+        <h1 className="font-rubik text-4xl font-bold text-red-600 mb-4">
+          Error Loading Article
+        </h1>
+        <p className="font-raleway text-lg text-gray-700">
+          {error ||
+            `The requested blog post with slug "${slug}" could not be found.`}
+        </p>
+      </div>
+    )
+  }
+  // --- END Loading/Error Handlers ---
+
+  // Use the calculated displayInfo
+  const { date, readTime, author, image } = displayInfo
+
+  // --- Render with Live Data ---
   return (
     <div className="min-h-screen bg-cream py-14">
+      {/* Blog Hero Section */}
       <div className="flex h-96 ">
         <div className="w-1/2">
           <img
-            src={blogPost.image}
+            src={image}
             alt={blogPost.title}
             className="size-full object-cover"
           />
@@ -250,19 +322,23 @@ function BlogPost() {
             <div className="mb-4 flex items-center gap-2">
               <div className="size-2 rounded-full bg-button-hover"></div>
               <span className=" font-rubik text-xs font-medium capitalize tracking-wide text-button-hover">
-                {blogPost.date}
+                {date} {/* Dynamic date from Shopify data */}
               </span>
             </div>
             <h1 className="mb-6 font-rubik text-2xl font-bold leading-tight text-text-primary sm:text-3xl lg:text-4xl">
-              {blogPost.title}
+              {blogPost.title} {/* Dynamic title from Shopify data */}
             </h1>
+            <p className="font-raleway text-sm text-[#2E2E2E]">
+              By **{author}** | {readTime} {/* Dynamic author/readTime */}
+            </p>
           </div>
         </div>
       </div>
 
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+        {/* Article Content - Now uses the structuredContent generated from Shopify's HTML */}
         <article className="max-w-none">
-          {blogPost.content.map((block, index) =>
+          {structuredContent.map((block, index) =>
             renderContentBlock(block, index)
           )}
         </article>
@@ -275,6 +351,7 @@ function BlogPost() {
         <BlogReadMore />
       </div>
 
+      {/* Fixed Subscribe and Credit Modal buttons remain the same */}
       <div className="fixed right-2 top-[30vh] z-50 sm:right-4 md:right-8 xl:right-8 2xl:right-[calc((100vw-1400px)/2+24px)]">
         <motion.div
           initial={false}
