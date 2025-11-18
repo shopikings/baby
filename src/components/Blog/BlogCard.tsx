@@ -5,20 +5,18 @@ interface BlogCardProps {
   date: string
   title: string
   excerpt: string
-  slug?: string
+  // Updated slug to be required, but with a fallback in the parent component
+  slug: string
 }
 
 export function BlogCard({ image, date, title, excerpt, slug }: BlogCardProps) {
+  console.log('image ==> ', image)
   const navigate = useNavigate()
 
   const handleCardClick = () => {
-    const blogSlug =
-      slug ||
-      title
-        .toLowerCase()
-        .replace(/[^a-z0-9]+/g, '-')
-        .replace(/(^-|-$)/g, '')
-    navigate(`/blog/${blogSlug}`)
+    // We now rely directly on the 'slug' prop passed from the parent.
+    // This 'slug' comes from the Shopify article's 'handle'.
+    navigate(`/blog/${slug}`)
   }
 
   return (
@@ -29,6 +27,7 @@ export function BlogCard({ image, date, title, excerpt, slug }: BlogCardProps) {
           alt={title}
           className="size-full object-cover transition-transform duration-300 hover:scale-110"
           onError={(e) => {
+            // Added explicit type for e for better practice
             e.currentTarget.src = 'https://via.placeholder.com/400x300'
           }}
         />
@@ -42,7 +41,7 @@ export function BlogCard({ image, date, title, excerpt, slug }: BlogCardProps) {
           {date}
         </p>
       </div>
-      <h3 className="mb-3  font-raleway text-2xl font-semibold uppercase text-[#2E2E2E]">
+      <h3 className="mb-3 font-raleway text-2xl font-semibold uppercase text-[#2E2E2E]">
         {title}
       </h3>
       <p className="font-raleway text-sm text-[#2E2E2E]">{excerpt}</p>

@@ -351,3 +351,94 @@ export async function fetchProductById(id: string) {
     variants: product.variants.edges.map((e: any) => e.node)
   }
 }
+
+export type ShopifyBlogArticle = {
+  id: string
+  title: string
+  handle: string
+  author: string
+  image: string | null
+  imageAlt?: string | null
+  publishedAt: string
+  contentHtml: string
+  tags: string[]
+}
+
+export type ShopifyBlog = {
+  id: string
+  title: string
+  handle: string
+  articles: ShopifyBlogArticle[]
+}
+
+export async function fetchBlogs({
+  limit = 1
+}: {
+  limit?: number
+}): Promise<ShopifyBlog[]> {
+  const query = `
+    query GetAllBlogs($first: Int = 10) {
+      blogs(first: $first) {
+        edges {
+          node {
+            id
+            title
+            handle
+            articles(first: 10) {
+              edges {
+                node {
+                  id
+                  title
+                  handle
+                  author { name }
+                  image {
+                    url
+                    altText
+                  }
+                  publishedAt
+                  contentHtml
+                  tags
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  `
+
+  try {
+    const data = await graphql(query, { first: limit })
+
+    const blogs = (data?.blogs?.edges || []).map((blogEdge: any) => {
+      const blog = blogEdge.node
+
+      const articles = (blog.articles?.edges || []).map((a: any) => {
+        const n = a.node
+        return {
+          id: n.id,
+          title: n.title,
+          handle: n.handle,
+          author: n.author?.name || 'Unknown',
+          image: n.image?.url || null,
+          imageAlt: n.image?.altText || null,
+          publishedAt: n.publishedAt,
+          contentHtml: n.contentHtml,
+          tags: n.tags || []
+        } as ShopifyBlogArticle
+      })
+
+      return {
+        id: blog.id,
+        title: blog.title,
+        handle: blog.handle,
+        articles
+      } as ShopifyBlog
+    })
+
+    return blogs
+  } catch (err) {
+    console.error('fetchBlogs error:', err)
+    return []
+  }
+}
