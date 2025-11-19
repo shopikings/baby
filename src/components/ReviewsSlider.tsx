@@ -169,14 +169,14 @@ function ReviewsSlider() {
                     rating={review.rating!}
                     title={review.title}
                     review={review.review!}
-                    author={review.author}
+                    author={review.author || 'Anonymous'}
                     location={review.location}
                   />
                 ) : (
                   <ImageReviewCard
-                    image={review.image}
+                    image={review.image || '/default-image.jpg'}
                     title={review.title}
-                    author={review.author}
+                    author={review.author || 'Anonymous'}
                   />
                 )}
               </div>

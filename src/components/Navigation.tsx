@@ -7,7 +7,8 @@ interface NavigationProps {
 
 function Navigation({ onCollectionSelect }: NavigationProps) {
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null)
-  const timeoutRef = useRef<NodeJS.Timeout | null>(null)
+  // const timeoutRef = useRef<NodeJS.Timeout | null>(null)
+  const timeoutRef = useRef<number | null>(null)
   const navigate = useNavigate()
 
   // ✅ Make sure slugs exactly match Shopify collection handles
