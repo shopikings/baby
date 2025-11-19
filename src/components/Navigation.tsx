@@ -31,7 +31,7 @@ function Navigation({ onCollectionSelect }: NavigationProps) {
   ]
 
   const brandItems = [
-    'JELLY CAT',
+    'JELLYCAT',
     'RYLE + CRU',
     'BAREFOOT DREAMS',
     'KYTE BABY',
@@ -103,7 +103,7 @@ function Navigation({ onCollectionSelect }: NavigationProps) {
                 <button
                   key={item.slug}
                   onClick={() => handleShopClick(item.slug)}
-                  className="block w-full text-left px-4 py-2 font-inter text-sm uppercase text-black transition-colors hover:bg-gray-50 hover:text-gray-600"
+                  className="block w-full px-4 py-2 text-left font-inter text-sm uppercase text-black transition-colors hover:bg-gray-50 hover:text-gray-600"
                 >
                   {item.name}
                 </button>
@@ -174,7 +174,7 @@ function Navigation({ onCollectionSelect }: NavigationProps) {
                   <button
                     key={brand}
                     onClick={() => handleBrandClick(brand)}
-                    className="block w-full text-left px-6 py-2 font-inter text-sm font-medium uppercase text-black transition-colors hover:bg-gray-50 hover:text-gray-600"
+                    className="block w-full px-6 py-2 text-left font-inter text-sm font-medium uppercase text-black transition-colors hover:bg-gray-50 hover:text-gray-600"
                   >
                     {brand}
                   </button>

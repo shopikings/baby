@@ -10,11 +10,11 @@ function ReviewsSlider() {
     {
       id: 1,
       rating: 5,
-      title: 'Big Fan of All Things Maison Baby & Kids!',
+      title: 'Big Fan of Maison Baby & Kids',
       review:
-        "Love having the opportunity to buy brands that you can't buy on the high street",
+        'Amazing selection, the quality of the baby clothes and gear blew me away.',
       author: 'C.E',
-      location: 'London, UK',
+      location: 'Florida',
       image: '/assets/images/review-1.jpg',
       type: 'text'
     },
@@ -22,25 +22,24 @@ function ReviewsSlider() {
       id: 2,
       title: 'Love the clothes!',
       author: 'M.H',
-      image: '/assets/images/review1.png',
+      image: '/assets/images/reviews/new-1.png',
       type: 'image'
     },
     {
       id: 3,
-      rating: 5,
-      title: '11.52 x 11.52 arvice!',
+      title: 'Fast Shipping, Quality Service',
       review:
-        "I've never dealt with a better company. They've been fantastic. I had to change a size and they couldn't have been more responsive or helpful. They sell some lovely sustainable products too",
+        'Speedy shipping and a smooth checkout; my order arrived in perfect condition.',
       author: 'T.A',
-      location: 'Verified Customer',
-      image: '/assets/images/review-3.jpg',
+      location: 'North Carolina',
+      image: '/assets/images/review1.png',
       type: 'text'
     },
     {
       id: 4,
       title: 'Love it!',
-      author: 'T.B.',
-      image: '/assets/images/review3.png',
+      author: 'T.B',
+      image: '/assets/images/reviews/new-2.png',
       type: 'image'
     },
     {
@@ -48,53 +47,46 @@ function ReviewsSlider() {
       rating: 5,
       title: 'Fab Quality Clothes!',
       review:
-        'I recently placed an order & was very pleased to receive such stylish, great quality & easy wear clothing for my toddler.',
-      author: 'M.H',
-      location: 'London, UK',
-      image: '/assets/images/review-5.jpg',
+        'Beautiful, premium brands, I loved how curated and stylish everything felt',
+      author: 'E.F',
+      location: 'California',
+      image: '/assets/images/review-3.jpg',
       type: 'text'
     },
     {
       id: 6,
-      title: 'Cool Shades.',
+      title: 'Cute stuff!',
       author: 'P.H',
-      image: '/assets/images/review3.png',
+      image: '/assets/images/reviews/new-3.png',
       type: 'image'
     },
     {
       id: 7,
-      rating: 5,
-      title: 'Big Fan of All Things Maison Baby & Kids!',
+      title: 'Great Quality Products',
       review:
-        "Love having the opportunity to buy brands that you can't buy on the high street",
-      author: 'C.E',
-      location: 'London, UK',
-      image: '/assets/images/review-1.jpg',
+        'A little pricey, but worth every penny for the craftsmanship and feel of the items.',
       type: 'text'
     },
     {
       id: 8,
-      title: 'Love the clothes!',
+      title: 'Very helpful!',
       author: 'M.H',
-      image: '/assets/images/review1.png',
+      image: '/assets/images/reviews/new-4.png',
       type: 'image'
     },
     {
       id: 9,
       rating: 5,
-      title: '11.52 x 11.52 arvice!',
+      title: 'Helpful Staff & Good Customer Service',
       review:
-        "I've never dealt with a better company. They've been fantastic. I had to change a size and they couldn't have been more responsive or helpful. They sell some lovely sustainable products too",
-      author: 'T.A',
-      location: 'Verified Customer',
-      image: '/assets/images/review-3.jpg',
+        'Customer service was super helpful and friendly when I had questions about sizing.',
       type: 'text'
     },
     {
       id: 10,
-      title: 'Love it!',
-      author: 'T.B.',
-      image: '/assets/images/review3.png',
+      title: 'Keeps my kid busy!',
+      author: 'A.T',
+      image: '/assets/images/reviews/new-5.png',
       type: 'image'
     }
   ]

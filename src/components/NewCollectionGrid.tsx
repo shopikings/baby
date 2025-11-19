@@ -5,7 +5,7 @@ function NewCollectionGrid() {
 
   const collections = [
     {
-      name: 'JELLY CAT',
+      name: 'JELLYCAT',
       image: '/assets/images/featured-brands-one.jpg'
     },
     {
@@ -25,19 +25,19 @@ function NewCollectionGrid() {
       image: '/assets/images/Kyte-baby.png'
     },
     {
-      name: 'MAGNATIC',
+      name: 'MAGNETIC ME',
       image: '/assets/images/magnatic.png'
     },
     {
-      name: 'QUNICY',
+      name: 'QUNICY MAE',
       image: '/assets/images/qunicy.png'
     },
     {
-      name: 'RYLE CRU',
+      name: 'RYLE + CRU',
       image: '/assets/images/ryle-+-cru.png'
     },
     {
-      name: 'DREAMS',
+      name: 'BAREFOOT DREAMS',
       image: '/assets/images/dreams.png'
     }
   ]
