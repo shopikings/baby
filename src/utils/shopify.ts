@@ -102,19 +102,21 @@ export async function fetchProducts({
         endCursor: null
       }
 
-      const products = edges.map((e: any) => {
-        const n = e.node
-        return {
-          id: n.id,
-          title: n.title,
-          tags: n.tags || [],
-          description: n.description || '',
-          images: (n.images?.edges || [])
-            .map((ie: any) => ie.node?.src)
-            .filter(Boolean),
-          price: n.variants?.edges?.[0]?.node?.price?.amount || '0.00'
-        } as ShopifyProduct
-      })
+      const products = edges
+        .map((e: any) => {
+          const n = e.node
+          return {
+            id: n.id,
+            title: n.title,
+            tags: n.tags || [],
+            description: n.description || '',
+            images: (n.images?.edges || [])
+              .map((ie: any) => ie.node?.src)
+              .filter(Boolean),
+            price: n.variants?.edges?.[0]?.node?.price?.amount || '0.00'
+          } as ShopifyProduct
+        })
+        .filter((p: ShopifyProduct) => p.images?.length && p.images.length > 0)
 
       return { products, pageInfo }
     }
@@ -156,19 +158,21 @@ export async function fetchProducts({
         endCursor: null
       }
 
-      const products = edges.map((e: any) => {
-        const n = e.node
-        return {
-          id: n.id,
-          title: n.title,
-          tags: n.tags || [],
-          description: n.description || '',
-          images: (n.images?.edges || [])
-            .map((ie: any) => ie.node?.src)
-            .filter(Boolean),
-          price: n.variants?.edges?.[0]?.node?.price?.amount || '0.00'
-        } as ShopifyProduct
-      })
+      const products = edges
+        .map((e: any) => {
+          const n = e.node
+          return {
+            id: n.id,
+            title: n.title,
+            tags: n.tags || [],
+            description: n.description || '',
+            images: (n.images?.edges || [])
+              .map((ie: any) => ie.node?.src)
+              .filter(Boolean),
+            price: n.variants?.edges?.[0]?.node?.price?.amount || '0.00'
+          } as ShopifyProduct
+        })
+        .filter((p: ShopifyProduct) => p.images?.length && p.images.length > 0)
 
       return { products, pageInfo }
     }
@@ -217,19 +221,21 @@ export async function fetchProducts({
         endCursor: null
       }
 
-      const products = edges.map((e: any) => {
-        const n = e.node
-        return {
-          id: n.id,
-          title: n.title,
-          tags: n.tags || [],
-          description: n.description || '',
-          images: (n.images?.edges || [])
-            .map((ie: any) => ie.node?.src)
-            .filter(Boolean),
-          price: n.variants?.edges?.[0]?.node?.price?.amount || '0.00'
-        } as ShopifyProduct
-      })
+      const products = edges
+        .map((e: any) => {
+          const n = e.node
+          return {
+            id: n.id,
+            title: n.title,
+            tags: n.tags || [],
+            description: n.description || '',
+            images: (n.images?.edges || [])
+              .map((ie: any) => ie.node?.src)
+              .filter(Boolean),
+            price: n.variants?.edges?.[0]?.node?.price?.amount || '0.00'
+          } as ShopifyProduct
+        })
+        .filter((p: ShopifyProduct) => p.images?.length && p.images.length > 0)
 
       return { products, pageInfo }
     }
@@ -268,19 +274,21 @@ export async function fetchProducts({
       endCursor: null
     }
 
-    const products = edges.map((e: any) => {
-      const n = e.node
-      return {
-        id: n.id,
-        title: n.title,
-        tags: n.tags || [],
-        description: n.description || '',
-        images: (n.images?.edges || [])
-          .map((ie: any) => ie.node?.src)
-          .filter(Boolean),
-        price: n.variants?.edges?.[0]?.node?.price?.amount || '0.00'
-      } as ShopifyProduct
-    })
+    const products = edges
+      .map((e: any) => {
+        const n = e.node
+        return {
+          id: n.id,
+          title: n.title,
+          tags: n.tags || [],
+          description: n.description || '',
+          images: (n.images?.edges || [])
+            .map((ie: any) => ie.node?.src)
+            .filter(Boolean),
+          price: n.variants?.edges?.[0]?.node?.price?.amount || '0.00'
+        } as ShopifyProduct
+      })
+      .filter((p: ShopifyProduct) => p.images?.length && p.images.length > 0)
 
     return { products, pageInfo }
   } catch (err) {
