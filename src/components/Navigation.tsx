@@ -14,11 +14,14 @@ function Navigation({ onCollectionSelect }: NavigationProps) {
   const shopItems = [
     { name: 'New Arrivals', slug: 'new-arrivals' },
     { name: 'Clothing', slug: 'clothing' },
+    { name: 'JEWELRY ', slug: 'jewelry' },
+    { name: 'SHOES', slug: 'shoes' },
     { name: 'Activities & Toys', slug: 'activities-toys' },
     { name: 'Feeding & Nursing', slug: 'feeding-nursing' },
     { name: 'Bath Time', slug: 'bath-time' },
     { name: 'Gear', slug: 'gear' },
     { name: 'Gifts', slug: 'gifts' }, // ✅ not "gift"
+    { name: 'BOOKS', slug: 'books' },
     { name: 'Maternity', slug: 'maternity' },
     { name: 'Nursing Favourite', slug: 'nursing-favourite' },
     { name: 'Sale', slug: 'sale' }
