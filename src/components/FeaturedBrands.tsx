@@ -5,7 +5,7 @@ function FeaturedBrands() {
 
   const brands = [
     {
-      name: 'JELLY CAT',
+      name: 'JELLYCAT',
       image: '/assets/images/featured-brands-one.jpg'
     },
     {
