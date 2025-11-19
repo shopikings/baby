@@ -5,22 +5,22 @@ function FAQSection() {
     {
       question: 'WHAT MAKES ALL THINGS MAISON BABY & KIDS UNIQUE?',
       answer:
-        "We curate premium, sustainable children's fashion from independent designers worldwide. Each piece is carefully selected for quality, style, and ethical production practices."
+        'Maison Baby and Kids stands out for its carefully curated collection of premium, stylish, and comfortable products designed for babies and kids. We focus on exceptional quality, safe materials, and modern designs that parents love.'
     },
     {
       question: 'ARE THE CLOTHES YOU CARRY SUSTAINABLE?',
       answer:
-        'Yes, sustainability is at the heart of everything we do. We partner with brands that prioritize eco-friendly materials, ethical manufacturing, and responsible business practices.'
+        'At Maison Baby and Kids, we strive to offer a selection of clothing that’s as kind to the planet as it is to your little one. While not every item in our range is 100% “eco-certified,” many of our pieces are made from sustainable materials like organic cotton, which is grown without harmful pesticides.'
     },
     {
-      question: 'HOW LONG DOES SHIPPING TAKE?',
+      question: 'HOW LONG DOES THE SHIPPING TAKE?',
       answer:
-        'Standard shipping takes 3-5 business days within the UK. International shipping varies by location, typically 7-14 business days. Express options are available at checkout.'
+        'We use UPS for shipping, and typically it takes 6–8 business days from the time you place your order for in-stock items to be delivered.If an item is out of stock, we’ll notify you by email with an estimated delivery time.'
     },
     {
       question: "WHAT'S YOUR RETURN POLICY?",
       answer:
-        "Returns are accepted within 45 days on unworn items. It's quick, easy, and no stress."
+        'We accept returns of unused items within 30 days of when you received your order. Refunds cover only the cost of the merchandise, shipping charges are not refunded. You can read more at the Refund and Return page.'
     }
   ]
 

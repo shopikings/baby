@@ -34,7 +34,12 @@ function Home() {
 
   return (
     <div className="bg-white">
-      <StickyDiscountTag />
+      <div
+        onClick={() => setShowNewsletterModal(true)}
+        className="cursor-pointer"
+      >
+        <StickyDiscountTag />
+      </div>
       <Banner />
       <FeaturesSection />
 
