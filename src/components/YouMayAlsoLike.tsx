@@ -1,6 +1,6 @@
 import { useRef, useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
-import { fetchProducts } from '../utils/shopify' // <-- your existing util
+import { Link, useNavigate } from 'react-router-dom'
+import { fetchProducts } from '../utils/shopify'
 
 interface Product {
   id: string
@@ -16,6 +16,8 @@ function MostPopular() {
 
   const [canScrollLeft, setCanScrollLeft] = useState(false)
   const [canScrollRight, setCanScrollRight] = useState(false)
+
+  const navigate = useNavigate() // ✅ ADDED
 
   const checkScroll = () => {
     if (scrollRef.current) {
@@ -68,6 +70,15 @@ function MostPopular() {
     scrollRef.current?.scrollBy({ left: 300, behavior: 'smooth' })
   }
 
+  // ✅ SAME CLEAN ID LOGIC AS ProductCard
+  const openProduct = (shopifyId: string) => {
+    const cleanId = shopifyId.includes('gid://shopify/Product/')
+      ? shopifyId.split('/').pop()
+      : shopifyId
+
+    navigate(`/product/${cleanId}`)
+  }
+
   if (loading)
     return <p className="text-center py-10 text-gray-500">Loading...</p>
 
@@ -118,6 +129,7 @@ function MostPopular() {
             {products.map((product) => (
               <div
                 key={product.id}
+                onClick={() => openProduct(product.id)} // ✅ CLICK HANDLER
                 className="w-[200px] shrink-0 cursor-pointer transition-all"
               >
                 <div className="h-48 overflow-hidden rounded-none bg-gray-100">

@@ -8,16 +8,16 @@ interface ProductCardProps {
   title: string
   price: string
   className?: string
-  id?: number
+  id?: string
 }
 
 function ProductCard({
+  id,
   image,
   hoverImage,
   title,
   price,
-  className = '',
-  id
+  className = ''
 }: ProductCardProps) {
   const { addToCart } = useCart()
   const navigate = useNavigate()

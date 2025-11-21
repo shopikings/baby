@@ -3,7 +3,6 @@ import { useParams } from 'react-router-dom'
 import ProductImageGallery from '../components/ProductImageGallery'
 import ProductInfo from '../components/ProductInfo'
 import ProductReviews from '../components/ProductReviews'
-import RecentlyViewed from '../components/RecentlyViewed'
 import YouMayAlsoLike from '../components/YouMayAlsoLike'
 import { fetchProductById } from '../utils/shopify'
 

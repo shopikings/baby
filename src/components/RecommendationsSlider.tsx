@@ -148,7 +148,7 @@ function RecommendationsSlider({ bgWhite }: RecommendationsSliderProps) {
                   className="min-w-[280px] sm:min-w-[320px]"
                 >
                   <ProductCard
-                    // id={product.id}
+                    id={product.id}
                     image={product.images?.[0]}
                     hoverImage={product.images?.[1] || product.images?.[0]}
                     title={product.title}
