@@ -48,7 +48,7 @@ function MobileDrawer({ isOpen, onClose }: MobileDrawerProps) {
         }`}
       >
         <div className="flex h-full flex-col bg-cream">
-          <div className="flex items-center justify-between border-gray-200 p-4">
+          <div className="flex items-center justify-between border-gray-200 px-2 py-1">
             <h2 className="font-rubik text-lg font-semibold text-text-primary"></h2>
             <button
               onClick={onClose}
@@ -71,7 +71,7 @@ function MobileDrawer({ isOpen, onClose }: MobileDrawerProps) {
           </div>
 
           <nav className="flex-1 overflow-y-auto p-4">
-            <div className="space-y-4">
+            <div className="space-y-2">
               <Link
                 to="/shop?category=new-arrivals"
                 className="block py-2 font-inter text-sm font-semibold uppercase text-text-primary transition-colors hover:text-gray-600"
@@ -172,7 +172,7 @@ function MobileDrawer({ isOpen, onClose }: MobileDrawerProps) {
               />
             </div>
 
-            <div className="absolute bottom-8 left-4 flex items-center justify-start gap-8 text-text-primary">
+            <div className="absolute bottom-4 left-4 flex items-center justify-start gap-8 text-text-primary">
               <a
                 href="https://www.facebook.com/MaisonBabyandKids/"
                 target="_blank"

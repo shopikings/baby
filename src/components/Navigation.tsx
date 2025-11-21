@@ -188,14 +188,14 @@ function Navigation({ onCollectionSelect }: NavigationProps) {
                 <div className="grid grid-cols-3 gap-4 xl:gap-6">
                   {brandImages.map((item, index) => (
                     <div key={index} className="group cursor-pointer">
-                      <div className="rounded-lg p-2">
+                      <div className="w-full rounded-lg p-1">
                         <img
                           src={item.image}
                           alt={item.title}
-                          className="h-40 w-full object-cover transition-transform duration-300 group-hover:scale-105 lg:h-48 xl:h-56 2xl:h-64"
+                          className="h-40 w-full object-contain transition-transform duration-300 group-hover:scale-105 lg:h-48 xl:h-56 2xl:h-64"
                         />
                       </div>
-                      <div className="mt-2 text-center">
+                      <div className="mt-4 text-center">
                         <h4 className="font-inter text-xs font-semibold uppercase text-black">
                           {item.title}
                         </h4>
