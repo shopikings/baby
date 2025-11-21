@@ -79,7 +79,15 @@ export async function fetchProducts({
               edges { node { src } }
             }
             variants(first: 10) {
-              edges { node { price { amount } } }
+              edges { 
+                node { 
+                  price { amount }
+                  selectedOptions {
+                    name
+                    value
+                  }
+                } 
+              }
             }
           }
         }
@@ -138,8 +146,16 @@ export async function fetchProducts({
                 images(first: 10) {
                   edges { node { src } }
                 }
-                variants(first: 1) {
-                  edges { node { price { amount } } }
+                variants(first: 10) {
+                  edges { 
+                    node { 
+                      price { amount }
+                      selectedOptions {
+                        name
+                        value
+                      }
+                    } 
+                  }
                 }
               }
             }
@@ -195,8 +211,16 @@ export async function fetchProducts({
                   images(first: 10) {
                     edges { node { src } }
                   }
-                  variants(first: 1) {
-                    edges { node { price { amount } } }
+                  variants(first: 10) {
+                    edges { 
+                      node { 
+                        price { amount } 
+                        selectedOptions {
+                          name
+                          value
+                        }
+                      } 
+                    }
                   }
                 }
               }
@@ -254,8 +278,16 @@ export async function fetchProducts({
               images(first: 10) {
                 edges { node { src } }
               }
-              variants(first: 1) {
-                edges { node { price { amount } } }
+              variants(first: 10) {
+                edges { 
+                  node { 
+                    price { amount }
+                    selectedOptions {
+                      name
+                      value
+                    }
+                  } 
+                }
               }
             }
           }
@@ -312,7 +344,7 @@ export async function fetchProductById(id: string) {
             }
           }
         }
-        variants(first: 5) {
+        variants(first: 10) {
           edges {
             node {
               id
@@ -320,6 +352,10 @@ export async function fetchProductById(id: string) {
               price {
                 amount
                 currencyCode
+              }
+              selectedOptions {
+                name
+                value
               }
             }
           }

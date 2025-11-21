@@ -57,18 +57,29 @@ function ProductDetail() {
   // Extract images
   const thumbnails = product.images?.map((i: any) => i.url) || []
 
-  // Extract colors & sizes
-  const options = product.options || []
+  let sizesList: string[] = []
+  let colorsList: string[] = []
 
-  const colorOption = options.find((o: any) =>
-    o.name.toLowerCase().includes('color')
-  )
-  const sizeOption = options.find((o: any) =>
-    o.name.toLowerCase().includes('size')
-  )
+  product.variants?.forEach((v: any) => {
+    v.selectedOptions?.forEach((opt: any) => {
+      // SIZES
+      if (opt.name.toLowerCase().includes('size')) {
+        if (!sizesList.includes(opt.value)) {
+          sizesList.push(opt.value)
+        }
+      }
 
-  const colorsList = colorOption?.values || ['Default']
-  const sizesList = sizeOption?.values || ['S', 'M', 'L', 'XL']
+      // COLORS
+      if (opt.name.toLowerCase().includes('color/pattern')) {
+        if (!colorsList.includes(opt.value)) {
+          colorsList.push(opt.value)
+        }
+      }
+    })
+  })
+
+  if (colorsList.length === 0) colorsList = ['Default']
+  if (sizesList.length === 0) sizesList = ['S', 'M', 'L', 'XL']
 
   const productData = {
     name: product.title,

@@ -24,7 +24,7 @@ function Navigation({ onCollectionSelect }: NavigationProps) {
     { name: 'Gifts', slug: 'gifts' }, // ✅ not "gift"
     { name: 'BOOKS', slug: 'books' },
     { name: 'Maternity', slug: 'maternity' },
-    { name: 'Nursing Favourite', slug: 'nursing-favourite' },
+    { name: 'Nursing Favourite', slug: 'nursery-favorites' },
     { name: 'Sale', slug: 'sale' }
   ]
 
