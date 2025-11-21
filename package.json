@@ -4,18 +4,10 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "author": {
-    "name": "João Paulo Moraes",
-    "email": "joaopaulomoraes@outlook.com",
-    "url": "https://github.com/joaopaulomoraes"
-  },
-  "bugs": {
-    "url": "https://github.com/joaopaulomoraes/reactjs-vite-tailwindcss-boilerplate/issues",
-    "email": "joaopaulomoraes@outlook.com"
-  },
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
+    "build": "tsc && vite build && npm run copy-vercel",
+    "copy-vercel": "cpx vercel.json dist/",
     "serve": "vite preview",
     "test": "vitest",
     "test:ui": "vitest --ui",
@@ -43,6 +35,7 @@
     "@vitejs/plugin-react-swc": "^3.11.0",
     "@vitest/ui": "^4.0.10",
     "autoprefixer": "^10.4.21",
+    "cpx": "^1.2.1",
     "eslint": "^8.57.1",
     "eslint-config-prettier": "^9.1.2",
     "eslint-plugin-prettier": "^5.5.4",

@@ -21,15 +21,21 @@ function Home() {
   const [showNewsletterModal, setShowNewsletterModal] = useState(false)
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setShowNewsletterModal(true)
-    }, 5000)
+    // check if user already saw the modal
+    const hasSeen = localStorage.getItem('newsletter_seen')
 
-    return () => clearTimeout(timer)
+    if (!hasSeen) {
+      const timer = setTimeout(() => {
+        setShowNewsletterModal(true)
+      }, 5000)
+
+      return () => clearTimeout(timer)
+    }
   }, [])
 
   const handleCloseNewsletter = () => {
     setShowNewsletterModal(false)
+    localStorage.setItem('newsletter_seen', 'true') // mark as seen
   }
 
   return (

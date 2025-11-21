@@ -13,7 +13,7 @@ function InfoBanner() {
     {
       icon: '/assets/icons/return-outline.svg',
       title: 'Free Easy Returns',
-      description: 'within 30 days of purchase'
+      description: 'within 90 days of purchase'
     },
     {
       icon: '/assets/icons/heart-outline.svg',

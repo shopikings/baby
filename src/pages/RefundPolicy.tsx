@@ -17,7 +17,7 @@ function RefundPolicy() {
               <p className="mb-6 font-raleway text-base font-normal leading-relaxed text-text-primary/80">
                 At Maison Baby and Kids, we want you to be completely satisfied
                 with your purchase. If for any reason you&apos;re not, we offer
-                a 30-day return policy. This means you have 30 days from the
+                a 90-day return policy. This means you have 90 days from the
                 date of receiving your order to request a return.
               </p>
             </div>
@@ -35,18 +35,26 @@ function RefundPolicy() {
                 <li>Be returned in its original packaging.</li>
                 <li>Include the receipt or proof of purchase.</li>
               </ul>
-              <p className="mb-6 font-raleway text-base font-normal leading-relaxed text-text-primary/80">
-                To initiate a return, please contact us at{' '}
-                <a
-                  href="mailto:hello@maisonbabyandkids.com"
-                  className="text-button-hover underline hover:text-banner-lower"
-                >
-                  hello@maisonbabyandkids.com
-                </a>
-                . If your request is approved, we&apos;ll provide you with a
-                return shipping label and detailed instructions. Please note
-                that items sent back without prior approval will not be
-                accepted.
+              <p className="mb-6 font-raleway text-base font-semibold leading-relaxed text-text-primary/80">
+                Maison Baby will accept returns up to 90 days from delivery.
+                Items need to be in new condition and in original packaging for
+                a full refund. Specific to baby gear products, we will not be
+                able to accept returns on used items, opened box or unsealed
+                boxes for safety reasons. Maison Baby will absorb the cost of
+                the return shipping if it is determined that the product is
+                defective, the wrong item or variant was received, or any other
+                error occurred on our part. Customer is responsible for return
+                shipping fees in all other circumstances. Please contact us if
+                you would like for us to provide you a return label for which we
+                will deduct those fees from the refund. Refunds will be issued
+                within 48 hours of return delivery. We stand by all our products
+                and take great pride in providing excellent customer service.
+                <br />
+                Please note, all sales are final on sale and holiday/seasonal
+                items and can not be returned or exchanged.
+                <br />
+                Please note, all sales for Uppababy Vista V2 and Mesa Max are
+                final and can not be returned or exchanged.
               </p>
               <p className="mb-6 font-raleway text-base font-normal leading-relaxed text-text-primary/80">
                 You may contact us at any time with questions regarding returns

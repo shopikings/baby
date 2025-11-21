@@ -1,3 +1,4 @@
+import { FacebookIcon, InstagramIcon, MapPin } from 'lucide-react'
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 
@@ -7,8 +8,7 @@ interface MobileDrawerProps {
 }
 
 function MobileDrawer({ isOpen, onClose }: MobileDrawerProps) {
-  const [shopAccordionOpen, setShopAccordionOpen] = useState(false)
-  const [brandsAccordionOpen, setBrandsAccordionOpen] = useState(false)
+  const [openAccordion, setOpenAccordion] = useState<string | null>(null)
   const [isVisible, setIsVisible] = useState(false)
   const [isAnimating, setIsAnimating] = useState(false)
 
@@ -27,6 +27,10 @@ function MobileDrawer({ isOpen, onClose }: MobileDrawerProps) {
     }
   }, [isOpen])
 
+  const toggleAccordion = (name: string) => {
+    setOpenAccordion((prev) => (prev === name ? null : name))
+  }
+
   if (!isVisible) return null
 
   return (
@@ -44,7 +48,7 @@ function MobileDrawer({ isOpen, onClose }: MobileDrawerProps) {
         }`}
       >
         <div className="flex h-full flex-col bg-cream">
-          <div className="flex items-center justify-between border-gray-200 p-4">
+          <div className="flex items-center justify-between border-gray-200 px-2 py-1">
             <h2 className="font-rubik text-lg font-semibold text-text-primary"></h2>
             <button
               onClick={onClose}
@@ -67,38 +71,129 @@ function MobileDrawer({ isOpen, onClose }: MobileDrawerProps) {
           </div>
 
           <nav className="flex-1 overflow-y-auto p-4">
-            <div className="space-y-4">
+            <div className="space-y-2">
+              <Link
+                to="/shop?category=new-arrivals"
+                className="block py-2 font-inter text-sm font-semibold uppercase text-text-primary transition-colors hover:text-gray-600"
+                onClick={onClose}
+              >
+                New Arrivals
+              </Link>
+
               <AccordionItem
-                title="Shop"
-                isOpen={shopAccordionOpen}
-                onToggle={() => setShopAccordionOpen(!shopAccordionOpen)}
+                title="Collections"
+                isOpen={openAccordion === 'collections'}
+                onToggle={() => toggleAccordion('collections')}
                 onClose={onClose}
                 items={[
-                  { label: 'Clothing', href: '/shop/clothing' },
-                  { label: 'Toys', href: '/shop/toys' },
-                  { label: 'Accessories', href: '/shop/accessories' }
+                  { label: 'Clothing', href: '/shop?category=clothing' },
+                  { label: 'Jewelry', href: '/shop?category=jewelry' },
+                  { label: 'Shoes', href: '/shop?category=shoes' },
+                  {
+                    label: 'Activities & Toy',
+                    href: '/shop?category=activities-toys'
+                  },
+                  {
+                    label: 'Feeding & Nursing',
+                    href: '/shop?category=feeding-nursing'
+                  },
+                  { label: 'Bath Time', href: '/shop?category=bath-time' },
+                  { label: 'Gear', href: '/shop?category=gear' },
+                  { label: 'Gifts', href: '/shop?category=gifts' },
+                  { label: 'Books', href: '/shop?category=books' },
+                  { label: 'Maternity', href: '/shop?category=maternity' },
+                  {
+                    label: 'Nursing Favourite',
+                    href: '/shop?category=nursing-favourite'
+                  }
                 ]}
               />
 
               <AccordionItem
                 title="Our Brands"
-                isOpen={brandsAccordionOpen}
-                onToggle={() => setBrandsAccordionOpen(!brandsAccordionOpen)}
+                isOpen={openAccordion === 'brands'}
+                onToggle={() => toggleAccordion('brands')}
                 onClose={onClose}
                 items={[
-                  { label: 'Premium Brands', href: '/brands/premium' },
-                  { label: 'Sustainable Brands', href: '/brands/sustainable' },
-                  { label: 'Featured Brands', href: '/brands/featured' }
+                  { label: 'JELLYCAT', href: '/shop?tag=jellycat' },
+                  { label: 'RYLE + CRU', href: '/shop?tag=ryle%20%2B%20cru' },
+                  {
+                    label: 'BAREFOOT DREAMS',
+                    href: '/shop?tag=barefoot%20dreams'
+                  },
+                  { label: 'KYTE BABY', href: '/shop?tag=kyte%20baby' },
+                  { label: 'MAGNETIC ME', href: '/shop?tag=magnetic%20me' },
+                  { label: 'QUINCY MAE', href: '/shop?tag=quincy%20mae' },
+                  {
+                    label: 'ENEWTON',
+                    href: '/shop?tag=enewton'
+                  },
+                  { label: 'NUNA', href: '/shop?tag=nuna' },
+                  { label: 'UPPABABY', href: '/shop?tag=uppababy' }
                 ]}
               />
 
               <Link
-                to="/about"
+                to="/shop?category=sale"
                 className="block py-2 font-inter text-sm font-semibold uppercase text-text-primary transition-colors hover:text-gray-600"
                 onClick={onClose}
               >
-                About Us
+                Sale
               </Link>
+
+              <AccordionItem
+                title="About"
+                isOpen={openAccordion === 'about'}
+                onToggle={() => toggleAccordion('about')}
+                onClose={onClose}
+                items={[
+                  { label: 'About Us', href: '/about' },
+                  { label: 'FAQs', href: '/faq' },
+                  {
+                    label: 'Blogs',
+                    href: '/blog'
+                  }
+                ]}
+              />
+
+              <AccordionItem
+                title="Helpful Links"
+                isOpen={openAccordion === 'help'}
+                onToggle={() => toggleAccordion('help')}
+                onClose={onClose}
+                items={[
+                  { label: 'Contact', href: '/contact' },
+                  { label: 'Terms and Conditions', href: '/terms' },
+                  { label: 'Privacy Policy', href: '/privacy' },
+                  { label: 'Shipping Policy', href: '/shipping' },
+                  { label: 'Refund and Return', href: '/returns' },
+                  { label: 'Wishlist', href: '/wishlist' }
+                ]}
+              />
+            </div>
+
+            <div className="absolute bottom-4 left-4 flex items-center justify-start gap-8 text-text-primary">
+              <a
+                href="https://www.facebook.com/MaisonBabyandKids/"
+                target="_blank"
+                rel="noreferrer"
+              >
+                <FacebookIcon />
+              </a>
+              <a
+                href="https://www.instagram.com/maisonbabyandkids/"
+                target="_blank"
+                rel="noreferrer"
+              >
+                <InstagramIcon />
+              </a>
+              <a
+                href="https://share.google/2vQ3lHDasPHhA6pn0"
+                target="_blank"
+                rel="noreferrer"
+              >
+                <MapPin />
+              </a>
             </div>
           </nav>
         </div>
@@ -148,7 +243,7 @@ function AccordionItem({
 
       <div
         className={`overflow-hidden transition-all duration-300 ease-in-out ${
-          isOpen ? 'max-h-40 opacity-100' : 'max-h-0 opacity-0'
+          isOpen ? 'max-h-auto opacity-100' : 'max-h-0 opacity-0'
         }`}
       >
         <div className="ml-4 mt-2 space-y-2">
@@ -156,7 +251,7 @@ function AccordionItem({
             <Link
               key={index}
               to={item.href}
-              className="block py-1 font-inter text-sm text-text-primary/70 transition-colors hover:text-text-primary"
+              className="block py-1 font-inter text-sm uppercase text-text-primary/70 transition-colors hover:text-text-primary"
               onClick={onClose}
             >
               {item.label}

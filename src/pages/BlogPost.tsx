@@ -278,7 +278,7 @@ function BlogPost() {
   // --- Handle Loading and Error States ---
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-cream flex justify-center items-center">
+      <div className="flex min-h-screen items-center justify-center bg-cream">
         <p className="font-rubik text-xl text-text-primary">
           Loading blog post...
         </p>
@@ -288,8 +288,8 @@ function BlogPost() {
 
   if (error || !blogPost || !displayInfo) {
     return (
-      <div className="min-h-screen bg-cream flex flex-col justify-center items-center text-center p-8">
-        <h1 className="font-rubik text-4xl font-bold text-red-600 mb-4">
+      <div className="flex min-h-screen flex-col items-center justify-center bg-cream p-8 text-center">
+        <h1 className="mb-4 font-rubik text-4xl font-bold text-red-600">
           Error Loading Article
         </h1>
         <p className="font-raleway text-lg text-gray-700">
@@ -308,8 +308,8 @@ function BlogPost() {
   return (
     <div className="min-h-screen bg-cream py-14">
       {/* Blog Hero Section */}
-      <div className="flex h-96 ">
-        <div className="w-1/2">
+      <div className="flex flex-col gap-2 lg:h-96 lg:flex-row">
+        <div className="h-64 w-auto lg:h-full lg:w-1/2">
           <img
             src={image}
             alt={blogPost.title}
@@ -317,7 +317,7 @@ function BlogPost() {
           />
         </div>
 
-        <div className="flex w-1/2 items-center bg-cream px-8 lg:px-12">
+        <div className="flex w-full items-center bg-cream px-6 py-8 lg:w-1/2 lg:px-12">
           <div className="w-full">
             <div className="mb-4 flex items-center gap-2">
               <div className="size-2 rounded-full bg-button-hover"></div>

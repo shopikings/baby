@@ -1,49 +1,37 @@
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import PostModal from './PostModal'
 
 function JoinMovementSlider() {
+  const [posts, setPosts] = useState<any[]>([])
   const [currentIndex, setCurrentIndex] = useState(0)
   const [selectedPost, setSelectedPost] = useState<number | null>(null)
   const sliderRef = useRef<HTMLDivElement>(null)
 
-  const posts = [
-    {
-      image: '/assets/images/join-moment-one.jpg',
-      title: 'Where Playtime Begins',
-      description:
-        'Discover our collection of carefully curated toys and essentials designed to inspire creativity and joy in your little ones. Every moment is precious, and we are here to make them magical.'
-    },
-    {
-      image: '/assets/images/join-moment-two.jpg',
-      title: 'Comfort & Style',
-      description:
-        'From cozy outfits to soft blankets, we bring you the finest baby essentials that combine comfort with timeless style. Your baby deserves the best.'
-    },
-    {
-      image: '/assets/images/join-moment-three.jpg',
-      title: 'Growing Together',
-      description:
-        'Join our community of parents who value quality, safety, and style. Share your moments with us and be part of the Maison Baby & Kids family.'
-    },
-    {
-      image: '/assets/images/join-moment-one.jpg',
-      title: 'Where Playtime Begins',
-      description:
-        'Discover our collection of carefully curated toys and essentials designed to inspire creativity and joy in your little ones. Every moment is precious, and we are here to make them magical.'
-    },
-    {
-      image: '/assets/images/join-moment-two.jpg',
-      title: 'Comfort & Style',
-      description:
-        'From cozy outfits to soft blankets, we bring you the finest baby essentials that combine comfort with timeless style. Your baby deserves the best.'
-    },
-    {
-      image: '/assets/images/join-moment-three.jpg',
-      title: 'Growing Together',
-      description:
-        'Join our community of parents who value quality, safety, and style. Share your moments with us and be part of the Maison Baby & Kids family.'
-    }
-  ]
+  const fetchPosts = async () => {
+    // const base = import.meta.env.VITE_INSTAGRAM_API
+    const resp = await fetch('https://dirtydogdesignz.com/api/instagram-baby', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ limit: 6 })
+    })
+
+    const data = await resp.json()
+
+    // Transform into required UI structure
+    const transformed = data.data.map((post: any) => ({
+      image: post.media_url,
+      title: post.caption?.slice(0, 50) || 'Instagram Post',
+      description: post.caption || ''
+    }))
+
+    setPosts(transformed)
+  }
+
+  useEffect(() => {
+    fetchPosts()
+  }, [])
 
   const scrollToIndex = (index: number) => {
     if (sliderRef.current) {
