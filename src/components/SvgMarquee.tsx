@@ -1,9 +1,14 @@
 function SvgMarquee() {
   const svgs = [
-    { name: 'Bazzar', src: '/assets/icons/bazzar.svg' },
-    { name: 'Dazed', src: '/assets/icons/dazed.svg' },
-    { name: 'Glamour', src: '/assets/icons/glamour.svg' },
-    { name: 'Vogue', src: '/assets/icons/vogue.svg' }
+    // { name: 'Bazzar', src: '/assets/icons/bazzar.svg' },
+    // { name: 'Dazed', src: '/assets/icons/dazed.svg' },
+    // { name: 'Glamour', src: '/assets/icons/glamour.svg' },
+    // { name: 'Vogue', src: '/assets/icons/vogue.svg' },
+    { name: 'Bazzar', src: '/assets/images/partners/baby-bugs.png' },
+    { name: 'baby talk', src: '/assets/images/partners/baby-talk.png' },
+    { name: 'Glamour', src: '/assets/images/partners/fit-pregenc.png' },
+    { name: 'Vogue', src: '/assets/images/partners/MArtha.png' },
+    { name: 'Vogue', src: '/assets/images/partners/paren.png' }
   ]
 
   const duplicatedSvgs = Array(8).fill(svgs).flat()

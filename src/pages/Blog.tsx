@@ -168,7 +168,7 @@ export default function BlogPage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-cream flex justify-center items-center">
+      <div className="flex min-h-screen items-center justify-center bg-cream">
         <p className="font-rubik text-xl text-text-primary">
           Loading blog posts...
         </p>
@@ -178,7 +178,7 @@ export default function BlogPage() {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-cream flex justify-center items-center">
+      <div className="flex min-h-screen items-center justify-center bg-cream">
         <p className="font-rubik text-xl text-red-600">Error: {error}</p>
       </div>
     )
@@ -224,7 +224,7 @@ export default function BlogPage() {
               />
             ))
           ) : (
-            <p className="col-span-full text-center py-10 text-xl text-gray-500">
+            <p className="col-span-full py-10 text-center text-xl text-gray-500">
               No blog posts found for "
               {activeTab === 'all'
                 ? 'All Posts'
@@ -241,7 +241,7 @@ export default function BlogPage() {
         <img
           src="/assets/images/blogMain.png"
           alt="Banner"
-          className="h-[600px] w-full object-cover"
+          className="h-[650px] w-full object-cover md:h-[600px]"
         />
         <div className="absolute inset-0 bg-black/40"></div>
         <div className="absolute inset-x-0 bottom-0 w-4/5 px-4 pb-12 md:px-8 md:pb-16">

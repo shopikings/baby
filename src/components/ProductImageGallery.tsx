@@ -39,13 +39,13 @@ function ProductImageGallery({
       <div className="rounded-lg bg-white p-4 shadow-sm">
         <div className="flex flex-col gap-3 lg:flex-row">
           {/* Thumbnail Container */}
-          <div className="flex flex-row gap-2 lg:flex-col">
+          <div className="scrollbar-hide flex flex-row gap-2 overflow-x-auto lg:flex-col lg:overflow-y-auto">
             {thumbnails.map((img, index) => (
               <button
                 key={index}
                 onClick={() => handleImageChange(index)}
                 // ⭐ Thumbnails are now explicitly square with 'size-20' (h-20 w-20)
-                className={`size-20 flex-shrink-0 overflow-hidden rounded-none border-2 transition-all hover:scale-105 ${
+                className={`size-20 shrink-0 overflow-hidden rounded-none border-2 transition-all hover:scale-105 ${
                   selectedIndex === index
                     ? 'border-text-primary'
                     : 'border-gray-300'
@@ -66,7 +66,7 @@ function ProductImageGallery({
             <img
               src={thumbnails[selectedIndex]}
               alt={productName}
-              className={`inset-0 h-full w-full aspect-square object-cover transition-opacity duration-200 ${
+              className={`inset-0 aspect-square size-full object-cover transition-opacity duration-200 ${
                 isTransitioning ? 'opacity-0' : 'opacity-100'
               }`}
             />
@@ -164,7 +164,7 @@ function ProductImageGallery({
               src={thumbnails[selectedIndex]}
               alt={productName}
               // ⭐ Fullscreen image also takes up its maximum available square space
-              className="max-h-[90vh] max-w-[90vw] object-contain aspect-square"
+              className="aspect-square max-h-[90vh] max-w-[90vw] object-contain"
               onClick={(e) => e.stopPropagation()}
             />
 

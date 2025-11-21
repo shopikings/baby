@@ -72,7 +72,7 @@ function ShopTheLook() {
         />
 
         <div className="absolute inset-0">
-          <div className="absolute left-[8%] top-[45%] hidden sm:block">
+          <div className="absolute left-[23%] top-[45%] hidden sm:block">
             <div className="relative">
               <img
                 src="/assets/icons/tilted-line-pointer.svg"
@@ -110,7 +110,7 @@ function ShopTheLook() {
             </div>
           </div>
 
-          <div className="absolute bottom-[15%] left-1/4 hidden sm:block">
+          <div className="absolute bottom-[15%] left-[57%] hidden sm:block">
             <div className="relative">
               <img
                 src="/assets/icons/straight-line-pointer.svg"
@@ -148,7 +148,7 @@ function ShopTheLook() {
             </div>
           </div>
 
-          <div className="absolute right-1/4 top-[40%] hidden sm:block">
+          <div className="absolute right-1/4 top-[10%] hidden sm:block">
             <div className="relative">
               <img
                 src="/assets/icons/straight-line-pointer.svg"

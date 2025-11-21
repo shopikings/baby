@@ -47,10 +47,10 @@ function Navigation({ onCollectionSelect }: NavigationProps) {
   ]
 
   const brandImages = [
-    { image: '/assets/images/join-moment-one.jpg', title: 'KIDS CLOTHS' },
-    { image: '/assets/images/join-moment-two.jpg', title: 'KIDS CLOTHS' },
-    { image: '/assets/images/join-moment-three.jpg', title: 'KIDS CLOTHS' },
-    { image: '/assets/images/join-moment-four.jpg', title: 'KIDS CLOTHS' }
+    { image: '/assets/images/kids.jpg', title: 'KIDS CLOTHS' },
+    { image: '/assets/images/01.jpg', title: 'KIDS CLOTHS' },
+    { image: '/assets/images/03.jpg', title: 'KIDS CLOTHS' }
+    // { image: '/assets/images/join-moment-four.jpg', title: 'KIDS CLOTHS' }
   ]
 
   const handleMouseEnter = (dropdown: string) => {
@@ -171,7 +171,7 @@ function Navigation({ onCollectionSelect }: NavigationProps) {
               : 'pointer-events-none -translate-y-2 opacity-0'
           }`}
         >
-          <div className="w-screen rounded-sm bg-cream shadow-lg">
+          <div className="w-full min-w-[1220px] overflow-hidden rounded-sm bg-cream shadow-lg">
             <div className="flex">
               <div className="w-1/4 border-r border-gray-200 py-4">
                 {brandItems.map((brand) => (
@@ -185,7 +185,7 @@ function Navigation({ onCollectionSelect }: NavigationProps) {
                 ))}
               </div>
               <div className="w-3/4 p-4">
-                <div className="grid grid-cols-4 gap-4 xl:gap-6">
+                <div className="grid grid-cols-3 gap-4 xl:gap-6">
                   {brandImages.map((item, index) => (
                     <div key={index} className="group cursor-pointer">
                       <div className="overflow-hidden rounded-lg">

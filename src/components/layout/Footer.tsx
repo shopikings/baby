@@ -214,7 +214,7 @@ function Footer() {
 
         <div className="mt-4 text-center text-xs">
           <p>© 2025 Maison Baby & Kids</p>
-          <p className="mt-1">
+          {/* <p className="mt-1">
             Powered By{' '}
             <a
               href="https://shopikings.com"
@@ -224,7 +224,7 @@ function Footer() {
             >
               Shopikings.com
             </a>
-          </p>
+          </p> */}
         </div>
       </div>
     </footer>
