@@ -59,7 +59,7 @@ function Navigation({ onCollectionSelect }: NavigationProps) {
   }
 
   const handleMouseLeave = () => {
-    timeoutRef.current = setTimeout(() => setActiveDropdown(null), 150)
+    // timeoutRef.current = setTimeout(() => setActiveDropdown(null), 150)
   }
 
   const handleShopClick = (slug: string) => {
