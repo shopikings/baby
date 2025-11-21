@@ -188,7 +188,7 @@ function Navigation({ onCollectionSelect }: NavigationProps) {
                 <div className="grid grid-cols-3 gap-4 xl:gap-6">
                   {brandImages.map((item, index) => (
                     <div key={index} className="group cursor-pointer">
-                      <div className="overflow-hidden rounded-lg">
+                      <div className="rounded-lg p-2">
                         <img
                           src={item.image}
                           alt={item.title}

@@ -20,7 +20,7 @@ function FAQSection() {
     {
       question: "WHAT'S YOUR RETURN POLICY?",
       answer:
-        'We accept returns of unused items within 30 days of when you received your order. Refunds cover only the cost of the merchandise, shipping charges are not refunded. You can read more at the Refund and Return page.'
+        'Please note, all sales are final on sale and holiday/seasonal items and can not be returned or exchanged. \n Please note, all sales for Uppababy Vista V2 and Mesa Max are final and can not be returned or exchanged.'
     }
   ]
 

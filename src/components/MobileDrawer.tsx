@@ -8,10 +8,7 @@ interface MobileDrawerProps {
 }
 
 function MobileDrawer({ isOpen, onClose }: MobileDrawerProps) {
-  const [shopAccordionOpen, setShopAccordionOpen] = useState(false)
-  const [brandsAccordionOpen, setBrandsAccordionOpen] = useState(false)
-  const [aboutAccordionOpen, setAboutAccordionopen] = useState(false)
-  const [helpAccordionOpen, setHelpAccordionopen] = useState(false)
+  const [openAccordion, setOpenAccordion] = useState<string | null>(null)
   const [isVisible, setIsVisible] = useState(false)
   const [isAnimating, setIsAnimating] = useState(false)
 
@@ -29,6 +26,10 @@ function MobileDrawer({ isOpen, onClose }: MobileDrawerProps) {
       return () => clearTimeout(timer)
     }
   }, [isOpen])
+
+  const toggleAccordion = (name: string) => {
+    setOpenAccordion((prev) => (prev === name ? null : name))
+  }
 
   if (!isVisible) return null
 
@@ -81,8 +82,8 @@ function MobileDrawer({ isOpen, onClose }: MobileDrawerProps) {
 
               <AccordionItem
                 title="Collections"
-                isOpen={shopAccordionOpen}
-                onToggle={() => setShopAccordionOpen(!shopAccordionOpen)}
+                isOpen={openAccordion === 'collections'}
+                onToggle={() => toggleAccordion('collections')}
                 onClose={onClose}
                 items={[
                   { label: 'Clothing', href: '/shop?category=clothing' },
@@ -99,7 +100,7 @@ function MobileDrawer({ isOpen, onClose }: MobileDrawerProps) {
                   { label: 'Bath Time', href: '/shop?category=bath-time' },
                   { label: 'Gear', href: '/shop?category=gear' },
                   { label: 'Gifts', href: '/shop?category=gifts' },
-                  { label: 'BOOKS', href: '/shop?category=books' },
+                  { label: 'Books', href: '/shop?category=books' },
                   { label: 'Maternity', href: '/shop?category=maternity' },
                   {
                     label: 'Nursing Favourite',
@@ -110,8 +111,8 @@ function MobileDrawer({ isOpen, onClose }: MobileDrawerProps) {
 
               <AccordionItem
                 title="Our Brands"
-                isOpen={brandsAccordionOpen}
-                onToggle={() => setBrandsAccordionOpen(!brandsAccordionOpen)}
+                isOpen={openAccordion === 'brands'}
+                onToggle={() => toggleAccordion('brands')}
                 onClose={onClose}
                 items={[
                   { label: 'JELLYCAT', href: '/shop?tag=jellycat' },
@@ -142,8 +143,8 @@ function MobileDrawer({ isOpen, onClose }: MobileDrawerProps) {
 
               <AccordionItem
                 title="About"
-                isOpen={aboutAccordionOpen}
-                onToggle={() => setAboutAccordionopen(!aboutAccordionOpen)}
+                isOpen={openAccordion === 'about'}
+                onToggle={() => toggleAccordion('about')}
                 onClose={onClose}
                 items={[
                   { label: 'About Us', href: '/about' },
@@ -157,8 +158,8 @@ function MobileDrawer({ isOpen, onClose }: MobileDrawerProps) {
 
               <AccordionItem
                 title="Helpful Links"
-                isOpen={helpAccordionOpen}
-                onToggle={() => setHelpAccordionopen(!helpAccordionOpen)}
+                isOpen={openAccordion === 'help'}
+                onToggle={() => toggleAccordion('help')}
                 onClose={onClose}
                 items={[
                   { label: 'Contact', href: '/contact' },
@@ -250,7 +251,7 @@ function AccordionItem({
             <Link
               key={index}
               to={item.href}
-              className="block py-1 font-inter text-sm text-text-primary/70 transition-colors hover:text-text-primary"
+              className="block py-1 font-inter text-sm uppercase text-text-primary/70 transition-colors hover:text-text-primary"
               onClick={onClose}
             >
               {item.label}
