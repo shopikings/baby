@@ -31,7 +31,7 @@ function Navigation({ onCollectionSelect }: NavigationProps) {
   const aboutItems = [
     { name: 'About Us', href: '/about' },
     { name: 'Reviews', href: '/reviews' },
-    { name: 'FAQs & Help', href: '/faqs' }
+    { name: 'FAQs & Help', href: '/faq' }
   ]
 
   const brandItems = [
