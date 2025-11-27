@@ -88,7 +88,7 @@ function ProductDetail() {
         product.reviews.length
       : 0,
     reviewCount: product.reviews ? product.reviews.length : 0,
-    price: product?.variants?.[0]?.price?.amount || '0.00',
+    price: product.price,
     originalPrice: Number(product?.variants?.[0]?.price?.amount || 0) + 10,
     colors: colorsList,
     sizes: sizesList,
