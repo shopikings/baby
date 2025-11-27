@@ -21,6 +21,7 @@ function ProductDetail() {
         const gid = `gid://shopify/Product/${cleanId}`
 
         const data = await fetchProductById(gid)
+        console.log('Fetched product:', data)
         setProduct(data)
       } catch (e) {
         setError('Failed to load product')
@@ -69,7 +70,7 @@ function ProductDetail() {
       }
 
       // COLORS
-      if (opt.name.toLowerCase().includes('color/pattern')) {
+      if (opt.name.toLowerCase().includes('color')) {
         if (!colorsList.includes(opt.value)) {
           colorsList.push(opt.value)
         }
@@ -78,7 +79,7 @@ function ProductDetail() {
   })
 
   if (colorsList.length === 0) colorsList = ['Default']
-  if (sizesList.length === 0) sizesList = ['S', 'M', 'L', 'XL']
+  if (sizesList.length === 0) sizesList = ['Default']
 
   const productData = {
     name: product.title,
@@ -113,8 +114,7 @@ function ProductDetail() {
             productName={productData.name}
           />
         </div>
-
-        {/* RIGHT PRODUCT INFO */}
+        RIGHT PRODUCT INFO
         <div className="lg:w-1/2 pt-5">
           <ProductInfo {...productData} />
 
@@ -124,9 +124,9 @@ function ProductDetail() {
             <p className="text-gray-700">{productData.description}</p>
 
             <ul className="mt-4 list-disc pl-4 text-gray-700">
-              {productData.productInfo.map((info, i) => (
+              {/* {productData.productInfo.map((info, i) => (
                 <li key={i}>{info}</li>
-              ))}
+              ))} */}
             </ul>
           </div>
         </div>

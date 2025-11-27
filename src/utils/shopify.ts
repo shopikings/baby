@@ -121,7 +121,9 @@ export async function fetchProducts({
             images: (n.images?.edges || [])
               .map((ie: any) => ie.node?.src)
               .filter(Boolean),
-            price: n.variants?.edges?.[0]?.node?.price?.amount || '0.00'
+            price: Number(n.variants?.edges?.[0]?.node?.price?.amount).toFixed(
+              2
+            )
           } as ShopifyProduct
         })
         .filter((p: ShopifyProduct) => p.images?.length && p.images.length > 0)
@@ -185,7 +187,9 @@ export async function fetchProducts({
             images: (n.images?.edges || [])
               .map((ie: any) => ie.node?.src)
               .filter(Boolean),
-            price: n.variants?.edges?.[0]?.node?.price?.amount || '0.00'
+            price: Number(
+              n.variants?.edges?.[0]?.node?.price?.amount || 0
+            ).toFixed(2)
           } as ShopifyProduct
         })
         .filter((p: ShopifyProduct) => p.images?.length && p.images.length > 0)
@@ -256,7 +260,9 @@ export async function fetchProducts({
             images: (n.images?.edges || [])
               .map((ie: any) => ie.node?.src)
               .filter(Boolean),
-            price: n.variants?.edges?.[0]?.node?.price?.amount || '0.00'
+            price: Number(
+              n.variants?.edges?.[0]?.node?.price?.amount || 0
+            ).toFixed(2)
           } as ShopifyProduct
         })
         .filter((p: ShopifyProduct) => p.images?.length && p.images.length > 0)
@@ -317,7 +323,9 @@ export async function fetchProducts({
           images: (n.images?.edges || [])
             .map((ie: any) => ie.node?.src)
             .filter(Boolean),
-          price: n.variants?.edges?.[0]?.node?.price?.amount || '0.00'
+          price: Number(
+            n.variants?.edges?.[0]?.node?.price?.amount || 0
+          ).toFixed(2)
         } as ShopifyProduct
       })
       .filter((p: ShopifyProduct) => p.images?.length && p.images.length > 0)
