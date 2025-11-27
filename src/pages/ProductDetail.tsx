@@ -121,7 +121,10 @@ function ProductDetail() {
           {/* DESCRIPTION */}
           <div className="mt-8 border-t border-gray-300 pt-6">
             <h2 className="text-lg font-semibold mb-3">Description</h2>
-            <p className="text-gray-700">{productData.description}</p>
+            <div
+              className="prose prose-gray max-w-none"
+              dangerouslySetInnerHTML={{ __html: productData.description }}
+            ></div>
 
             <ul className="mt-4 list-disc pl-4 text-gray-700">
               {/* {productData.productInfo.map((info, i) => (

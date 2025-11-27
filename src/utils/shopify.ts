@@ -343,7 +343,7 @@ export async function fetchProductById(id: string) {
       product(id: $id) {
         id
         title
-        description
+        descriptionHtml
         tags
         images(first: 10) {
           edges {
@@ -399,6 +399,8 @@ export async function fetchProductById(id: string) {
 
   return {
     ...product,
+    description: product.descriptionHtml,
+    price: Number(product.variants.edges[0].node.price.amount).toFixed(2),
     images: product.images.edges.map((e: any) => e.node),
     variants: product.variants.edges.map((e: any) => e.node)
   }
