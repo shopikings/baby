@@ -3,7 +3,7 @@ import Accordion from './Accordion'
 function FAQSection() {
   const faqItems = [
     {
-      question: 'WHAT MAKES ALL THINGS MAISON BABY & KIDS UNIQUE?',
+      question: 'WHAT MAKES MAISON BABY & KIDS UNIQUE?',
       answer:
         'Maison Baby and Kids stands out for its carefully curated collection of premium, stylish, and comfortable products designed for babies and kids. We focus on exceptional quality, safe materials, and modern designs that parents love.'
     },

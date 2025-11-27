@@ -20,6 +20,11 @@ function ModalContent({ children, onClose, isVisible }: ModalContentProps) {
           isVisible ? 'scale-100' : 'scale-95'
         }`}
         onClick={(e) => e.stopPropagation()}
+        style={{
+          maxHeight: '100dvh', // 🔥 Prevents modal from exceeding screen height
+          display: 'flex',
+          flexDirection: 'column'
+        }}
       >
         <button
           onClick={onClose}
@@ -40,7 +45,15 @@ function ModalContent({ children, onClose, isVisible }: ModalContentProps) {
           </svg>
         </button>
 
-        <div className="flex w-full flex-col md:flex-row">{children}</div>
+        <div
+          className="flex w-full flex-col md:flex-row"
+          style={{
+            overflowY: 'auto',
+            maxHeight: '100dvh'
+          }}
+        >
+          {children}
+        </div>
       </div>
     </div>
   )

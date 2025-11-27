@@ -48,7 +48,7 @@ function MobileDrawer({ isOpen, onClose }: MobileDrawerProps) {
         }`}
       >
         <div className="flex h-full flex-col bg-cream">
-          <div className="flex items-center justify-between border-gray-200 px-2 py-1">
+          <div className="absolute right-0 top-0 flex items-center justify-between border-gray-200 px-2 py-1">
             <h2 className="font-rubik text-lg font-semibold text-text-primary"></h2>
             <button
               onClick={onClose}
@@ -70,7 +70,7 @@ function MobileDrawer({ isOpen, onClose }: MobileDrawerProps) {
             </button>
           </div>
 
-          <nav className="flex-1 overflow-y-auto p-4">
+          <nav className="mt-4 flex-1 overflow-y-auto p-4">
             <div className="space-y-2">
               <Link
                 to="/shop?category=new-arrivals"
@@ -172,7 +172,7 @@ function MobileDrawer({ isOpen, onClose }: MobileDrawerProps) {
               />
             </div>
 
-            <div className="absolute bottom-4 left-4 flex items-center justify-start gap-8 text-text-primary">
+            <div className="absolute bottom-6 left-4 flex items-center justify-start gap-8 text-text-primary">
               <a
                 href="https://www.facebook.com/MaisonBabyandKids/"
                 target="_blank"
