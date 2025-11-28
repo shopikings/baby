@@ -114,7 +114,7 @@ function ProductDetail() {
             productName={productData.name}
           />
         </div>
-        RIGHT PRODUCT INFO
+        {/* RIGHT PRODUCT INFO */}
         <div className="lg:w-1/2 pt-5">
           <ProductInfo {...productData} />
 
