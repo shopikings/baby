@@ -106,7 +106,7 @@ function ProductInfo({
           ${price}
           {originalPrice && (
             <span className="ml-2 text-sm line-through text-gray-500">
-              ${originalPrice}
+              ${Number(originalPrice).toFixed(2)}
             </span>
           )}
         </span>
