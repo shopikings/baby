@@ -86,19 +86,19 @@ function MostPopular() {
     <div className="pt-10">
       <div className="mx-auto max-w-[90%] px-4 sm:px-6 lg:px-8">
         <div className="mb-6 flex items-center justify-between">
-          <h2 className="font-rubik text-2xl font-medium text-text-primary">
-            Most Popular
+          <h2 className="font-rubik text-2xl font-medium text-text-primary border-b-2  pb-3 border-[#444B59]">
+            You May Also Like
           </h2>
           <Link
             to="/shop"
-            className="font-inter text-sm font-medium text-text-primary hover:underline"
+            className="font-inter text-sm font-medium border p-3 border-black hover:bg-[#EFECDA] text-text-primary hover:underline"
           >
             View All
           </Link>
         </div>
       </div>
 
-      <div className="bg-white py-8">
+      <div className="bg-[#EFECDA] py-8 mx-20">
         <div className="relative">
           {canScrollLeft && (
             <button

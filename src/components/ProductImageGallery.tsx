@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 
 interface ProductImageGalleryProps {
   thumbnails: string[]
@@ -9,140 +9,87 @@ function ProductImageGallery({
   thumbnails,
   productName
 }: ProductImageGalleryProps) {
-  const [selectedIndex, setSelectedIndex] = useState(0)
-  const [isTransitioning, setIsTransitioning] = useState(false)
   const [isFullscreen, setIsFullscreen] = useState(false)
+  const [selectedIndex, setSelectedIndex] = useState(0)
+  const [showAll, setShowAll] = useState(false)
 
-  const handleImageChange = (index: number) => {
-    if (index === selectedIndex) return
-    setIsTransitioning(true)
-    setTimeout(() => {
-      setSelectedIndex(index)
-      setIsTransitioning(false)
-    }, 200)
-  }
-
-  const handlePrevious = () => {
-    const newIndex =
-      selectedIndex > 0 ? selectedIndex - 1 : thumbnails.length - 1
-    handleImageChange(newIndex)
-  }
-
-  const handleNext = () => {
-    const newIndex =
-      selectedIndex < thumbnails.length - 1 ? selectedIndex + 1 : 0
-    handleImageChange(newIndex)
-  }
+  const imagesToShow = showAll ? 16 : 4
 
   return (
     <>
-      <div className="rounded-lg bg-white p-4 shadow-sm">
-        <div className="flex flex-col gap-3 lg:flex-row">
-          {/* Thumbnail Container */}
-          <div className="scrollbar-hide flex flex-row gap-2 overflow-x-auto lg:flex-col lg:overflow-y-auto">
-            {thumbnails.map((img, index) => (
-              <button
-                key={index}
-                onClick={() => handleImageChange(index)}
-                // ⭐ Thumbnails are now explicitly square with 'size-20' (h-20 w-20)
-                className={`size-20 shrink-0 overflow-hidden rounded-none border-2 transition-all hover:scale-105 ${
-                  selectedIndex === index
-                    ? 'border-text-primary'
-                    : 'border-gray-300'
-                }`}
-              >
-                <img
-                  src={img}
-                  alt={`${productName} ${index + 1}`}
-                  className="size-full object-cover" // Ensures image covers the square area
-                />
-              </button>
-            ))}
-          </div>
-
-          {/* Main Image Container */}
-          <div className="relative flex-1 overflow-hidden rounded-none">
-            {/* ⭐ Main image now forces aspect-square and full height */}
-            <img
-              src={thumbnails[selectedIndex]}
-              alt={productName}
-              className={`inset-0 aspect-square size-full object-cover transition-opacity duration-200 ${
-                isTransitioning ? 'opacity-0' : 'opacity-100'
-              }`}
-            />
-
-            {thumbnails.length > 1 && (
-              <>
-                <button
-                  onClick={handlePrevious}
-                  className="absolute left-2 top-1/2 flex size-8 -translate-y-1/2 items-center justify-center rounded-full bg-white/90 text-text-primary shadow-md transition-all hover:scale-110 hover:bg-white"
-                >
-                  <svg
-                    className="size-5"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M15 19l-7-7 7-7"
-                    />
-                  </svg>
-                </button>
-
-                <button
-                  onClick={handleNext}
-                  className="absolute right-2 top-1/2 flex size-8 -translate-y-1/2 items-center justify-center rounded-full bg-white/90 text-text-primary shadow-md transition-all hover:scale-110 hover:bg-white"
-                >
-                  <svg
-                    className="size-5"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M9 5l7 7-7 7"
-                    />
-                  </svg>
-                </button>
-              </>
-            )}
-
-            <button
-              onClick={() => setIsFullscreen(true)}
-              className="absolute right-2 top-2 flex size-8 items-center justify-center rounded-full bg-white/90 text-text-primary shadow-md transition-all hover:scale-110 hover:bg-white"
+      {/* 2 Column Grid */}
+      <div className="grid grid-cols-2 gap-4">
+        {Array.from({ length: imagesToShow }).map((_, index) => (
+          thumbnails[index] && (
+            <div
+              key={index}
+              className="aspect-square bg-gray-200 rounded-lg overflow-hidden cursor-pointer hover:opacity-80 transition-opacity relative group"
+              onClick={() => {
+                setSelectedIndex(index)
+                setIsFullscreen(true)
+              }}
             >
-              <svg
-                className="size-5"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
+              <img
+                src={thumbnails[index]}
+                alt={`${productName} ${index + 1}`}
+                className="w-full h-full"
+              />
+              <button
+                onClick={(e) => {
+                  e.stopPropagation()
+                  setSelectedIndex(index)
+                  setIsFullscreen(true)
+                }}
+                className="absolute right-2 top-2 flex size-8 items-center justify-center rounded-full bg-white/90 text-gray-800 shadow-md opacity-0 group-hover:opacity-100 transition-opacity"
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"
-                />
-              </svg>
-            </button>
-          </div>
-        </div>
+                <svg
+                  className="size-5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"
+                  />
+                </svg>
+              </button>
+            </div>
+          )
+        ))}
       </div>
 
+      {/* View More Button */}
+      {!showAll && thumbnails.length > 4 && (
+        <button
+          onClick={() => setShowAll(true)}
+          className="mt-6 w-full lg:w-full lg:mx-auto py-3 text-white bg-[#E9908E] hover:border hover:border-black font-inter font-light rounded hover:bg-[#EFECDA] hover:text-black transition-colors"
+        >
+          VIEW MORE
+        </button>
+      )}
+
+      {/* View Less Button */}
+      {showAll && thumbnails.length > 4 && (
+        <button
+          onClick={() => setShowAll(false)}
+          className="mt-6 w-full lg:w-full lg:mx-auto py-3 text-white hover:border hover:border-black bg-[#E9908E] font-inter font-light rounded hover:bg-[#EFECDA] hover:text-black transition-colors"
+        >
+          VIEW LESS
+        </button>
+      )}
+
+      {/* Fullscreen Modal */}
       {isFullscreen && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/90"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/70"
           onClick={() => setIsFullscreen(false)}
         >
           <button
             onClick={() => setIsFullscreen(false)}
-            className="absolute right-4 top-4 flex size-10 items-center justify-center rounded-full bg-white text-text-primary transition-colors hover:bg-gray-100"
+            className="absolute right-4 top-4 flex size-10 items-center justify-center rounded-full bg-white text-gray-800 transition-colors hover:bg-gray-100"
           >
             <svg
               className="size-6"
@@ -160,60 +107,13 @@ function ProductImageGallery({
           </button>
 
           <div className="relative max-h-[90vh] max-w-[90vw]">
-            <img
-              src={thumbnails[selectedIndex]}
-              alt={productName}
-              // ⭐ Fullscreen image also takes up its maximum available square space
-              className="aspect-square max-h-[90vh] max-w-[90vw] object-contain"
-              onClick={(e) => e.stopPropagation()}
-            />
-
-            {thumbnails.length > 1 && (
-              <>
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation()
-                    handlePrevious()
-                  }}
-                  className="absolute left-4 top-1/2 flex size-12 -translate-y-1/2 items-center justify-center rounded-full bg-white/90 text-text-primary shadow-lg transition-all hover:scale-110 hover:bg-white"
-                >
-                  <svg
-                    className="size-6"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M15 19l-7-7 7-7"
-                    />
-                  </svg>
-                </button>
-
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation()
-                    handleNext()
-                  }}
-                  className="absolute right-4 top-1/2 flex size-12 -translate-y-1/2 items-center justify-center rounded-full bg-white/90 text-text-primary shadow-lg transition-all hover:scale-110 hover:bg-white"
-                >
-                  <svg
-                    className="size-6"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M9 5l7 7-7 7"
-                    />
-                  </svg>
-                </button>
-              </>
+            {thumbnails[selectedIndex] && (
+              <img
+                src={thumbnails[selectedIndex]}
+                alt={productName}
+                className="max-h-[90vh] max-w-[90vw] object-contain"
+                onClick={(e) => e.stopPropagation()}
+              />
             )}
           </div>
         </div>

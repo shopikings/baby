@@ -397,12 +397,71 @@ export async function fetchProductById(id: string) {
   const product = data?.product
   if (!product) throw new Error('Product not found')
 
+  // Add mock reviews as fallback
+  const mockReviews = [
+    {
+      id: 1,
+      author: 'Noa U',
+      rating: 5,
+      comment: 'long lasting color!!\nthe mauve muse one is a staple for me! it shows up as a deep warm brown and berry mix shade on my complexion',
+      date: '9/6/2025',
+      verified: true,
+      image: 'https://cdn.shopify.com/s/files/1/0672/6617/files/SR100A_Clever_Zip_Sleepsuit_3_Pack_white__17910_copy_480x480.jpg?v=1753282882'
+    },
+    {
+      id: 2,
+      author: 'Noa U',
+      rating: 5,
+      comment: 'great features\ni bought this last month and i love it so glad i bought it! definitely recommend',
+      date: '8/21/2025',
+      verified: true,
+      image: 'https://api.fastretailing.com/ugc/v1/uq/gl/OFFICIAL_IMAGES/1758765328_official_styling_150011281_c-300-400'
+    },
+    {
+      id: 3,
+      author: 'Sarah M',
+      rating: 5,
+      comment: 'perfect blending shade!\ni bought this a year ago and it brings my lip combo together every time! deffo recommend buying this.',
+      date: '7/15/2025',
+      verified: true,
+      image: 'https://media.vertbaudet.com/Pictures/vertbaudet/882973/3-piece-set-for-newborns-top-trousers-waistcoat.jpg?width=285'
+    },
+    {
+      id: 4,
+      author: 'Sarah M',
+      rating: 5,
+      comment: 'perfect blending shade!\ni bought this a year ago and it brings my lip combo together every time! deffo recommend buying this.',
+      date: '7/15/2025',
+      verified: true,
+      image: 'https://via.placeholder.com/150x150?text=Product+Review+3'
+    },
+    {
+      id: 5,
+      author: 'Sarah M',
+      rating: 5,
+      comment: 'perfect blending shade!\ni bought this a year ago and it brings my lip combo together every time! deffo recommend buying this.',
+      date: '7/15/2025',
+      verified: true,
+      image: 'https://via.placeholder.com/150x150?text=Product+Review+3'
+    },
+    {
+      id: 6,
+      author: 'Sarah M',
+      rating: 5,
+      comment: 'perfect blending shade!\ni bought this a year ago and it brings my lip combo together every time! deffo recommend buying this.',
+      date: '7/15/2025',
+      verified: true,
+      image: 'https://via.placeholder.com/150x150?text=Product+Review+3'
+    }
+  ]
+
   return {
     ...product,
     description: product.descriptionHtml,
     price: Number(product.variants.edges[0].node.price.amount).toFixed(2),
     images: product.images.edges.map((e: any) => e.node),
-    variants: product.variants.edges.map((e: any) => e.node)
+    variants: product.variants.edges.map((e: any) => e.node),
+    reviews: mockReviews
   }
 }
 
