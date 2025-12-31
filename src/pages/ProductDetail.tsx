@@ -7,6 +7,11 @@ import YouMayAlsoLike from '../components/YouMayAlsoLike'
 import { fetchProductById } from '../utils/shopify'
 import Marquee from 'components/Marquee'
 import CategoryNav from 'components/ProductDetail/CategoryNav'
+import Services from 'components/Services'
+import OurStorySection from 'components/OurStorySection'
+import StickyDiscountBanner from 'components/StickyDiscountBanner'
+import test1 from '../assets/test1.png'
+import test2 from '../assets/test2.png'
 
 function ProductDetail() {
   const { id } = useParams()
@@ -276,11 +281,12 @@ function ProductDetail() {
   }
 
   return (
-    <div className="bg-cream pb-8">
+    <div className="bg-cream">
+      <StickyDiscountBanner />
       <CategoryNav />
       <div className="bg-banner-lower py-1 md:py-2 mt-2 md:mt-3">
         <Marquee
-          text="New collections just released - Shop Now"
+          text="10% off on your first order when you sign up to newsletter."
           className="font-inter text-xs md:text-sm font-medium text-black"
         />
       </div>
@@ -312,7 +318,7 @@ function ProductDetail() {
           {/* Testimonial Card 1 */}
           <div className="relative rounded-lg overflow-hidden">
             <img
-              src="/assets/images/2.png"
+              src={test2}
               alt="Customer testimonial 1"
               className="w-full h-full object-cover"
             />
@@ -321,7 +327,7 @@ function ProductDetail() {
           {/* Testimonial Card 2 */}
           <div className="relative rounded-lg overflow-hidden">
             <img
-              src="/assets/images/1.png"
+              src={test1}
               alt="Customer testimonial 2"
               className="w-full h-full object-cover"
             />
@@ -329,54 +335,9 @@ function ProductDetail() {
         </div>
       </div>
 
-      {/* OUR STORY SECTION WITH OVERLAPPING IMAGES */}
-      <div className="bg-cream py-8 md:py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-[11em] items-center">
-            {/* LEFT SIDE - OVERLAPPING IMAGES */}
-            <div className="relative h-[300px] sm:h-[400px] md:h-[500px] lg:h-[600px] w-full flex items-center justify-center">
-              {/* Background Image - Larger, positioned left */}
-              <div className="absolute left-0 top-[60%] transform -translate-y-1/2 w-[200px] h-[280px] sm:w-[280px] sm:h-[380px] md:w-[320px] md:h-[420px] lg:w-[380px] lg:h-[500px] rounded-3xl overflow-hidden shadow-2xl z-50">
-                <img
-                  src="/assets/images/story2.png"
-                  alt="Story image 1"
-                  className="w-full h-full bg-gray-300"
-                  onError={(e) => {
-                    e.currentTarget.style.backgroundColor = '#D1D5DB'
-                  }}
-                />
-              </div>
+      <OurStorySection />
 
-              {/* Foreground Image - Smaller, positioned right and top */}
-              <div className="absolute -top-[30px] sm:-top-[40px] md:-top-[50px] right-0 w-[200px] h-[280px] sm:w-[280px] sm:h-[380px] md:w-[320px] md:h-[420px] lg:w-[380px] lg:h-[500px] rounded-3xl overflow-hidden shadow-2xl z-20">
-                <img
-                  src="/assets/images/story1.png"
-                  alt="Story image 2"
-                  className="w-full h-full bg-gray-300"
-                  onError={(e) => {
-                    e.currentTarget.style.backgroundColor = '#D1D5DB'
-                  }}
-                />
-              </div>
-            </div>
-
-            {/* RIGHT SIDE - TEXT CONTENT */}
-            <div className="space-y-2 md:space-y-3">
-              <h2 className="font-rubik text-2xl md:text-3xl lg:text-4xl font-bold uppercase text-text-primary">
-                OUR STORY
-              </h2>
-              
-              <p className="font-inter text-sm md:text-base text-gray-700 leading-relaxed">
-                At All Things Dylan, we don't just dress kids—we redefine what kidswear can be.
-              </p>
-
-              <p className="font-light text-xs md:text-sm text-gray-600 leading-relaxed">
-                Inspired by the real-life journey of founder Pamela and her son Dylan, we're a curated retailer spotlighting independent, women-owned labels that lead with sustainability, quality, and serious style. Every piece we carry pushes back against fast fashion—and celebrates kids being exactly who they are. Thoughtfully made, ethically sourced, and built to last, our collections help parents shop smarter and dress with purpose.
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
+      
 
       {/* <RecentlyViewed
         products={[
@@ -391,6 +352,7 @@ function ProductDetail() {
         ]}
       /> */}
       <YouMayAlsoLike />
+      <Services />
     </div>
   )
 }

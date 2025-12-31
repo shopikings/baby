@@ -5,10 +5,13 @@ import MobileDrawer from '../MobileDrawer'
 import Navigation from '../Navigation'
 import HeaderActions from '../HeaderActions'
 import CartDrawer from '../CartDrawer'
+import SearchModal from '../SearchModal'
+import Marquee2 from 'components/Marquee2'
 
 function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [isCartOpen, setIsCartOpen] = useState(false)
+  const [isSearchOpen, setIsSearchOpen] = useState(false)
   const navigate = useNavigate()
 
   // ✅ No UI change — these are for consistent category linking
@@ -20,14 +23,15 @@ function Header() {
     <>
       <header className="relative w-full border-b border-gray-200 bg-cream">
         <div className="bg-banner-lower py-2">
-          <Marquee
-            text="Join the VIP Club - 10% off first order"
+          <Marquee2
+            text1="Free Easy Returns within 90 days of purchase"
+            text2=" Free Shipping on all order above $70"
             className="font-inter text-sm font-medium text-black"
           />
         </div>
 
-        <div className="mx-auto flex max-w-7xl items-center px-4 py-5 sm:px-6 lg:px-8 lg:py-2">
-          {/* Mobile Menu Button */}
+        <div className="mx-auto flex max-w-7xl items-center px-4 py-5 sm:px-6 lg:px-8 lg:py-2 justify-between">
+          {/* Left - Mobile Menu Button */}
           <button
             onClick={() => setIsMobileMenuOpen(true)}
             className="mr-4 flex items-center justify-center transition-colors hover:text-gray-600 lg:hidden"
@@ -46,23 +50,27 @@ function Header() {
               />
             </svg>
           </button>
-
-          {/* Navigation */}
+          <div>
           <Navigation onCollectionSelect={handleCollectionSelect} />
-
-          {/* Logo */}
-          <div className="absolute left-1/2 -translate-x-1/2 lg:static lg:left-auto lg:translate-x-0">
-            <Link to="/">
-              <img
-                src="/assets/images/logo.png"
-                alt="Logo"
-                className="h-12 w-auto"
-              />
-            </Link>
           </div>
 
-          {/* Cart / Profile / Search */}
-          <HeaderActions onCartClick={() => setIsCartOpen(true)} />
+          {/* Left - Navigation */}
+<div>
+          <Link to="/" className="flex-shrink-0">
+            <img
+              src="/assets/images/logo.png"
+              alt="Logo"
+              className="h-10 w-auto"
+            />
+          </Link>
+</div>
+
+
+<div>
+          <HeaderActions onCartClick={() => setIsCartOpen(true)} onSearchClick={() => setIsSearchOpen(true)} />
+</div>
+          {/* Right - Icons */}
+
         </div>
       </header>
 
@@ -70,8 +78,8 @@ function Header() {
         isOpen={isMobileMenuOpen}
         onClose={() => setIsMobileMenuOpen(false)}
       />
-
       <CartDrawer isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
+      <SearchModal isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
     </>
   )
 }

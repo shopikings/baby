@@ -1,5 +1,5 @@
 import { Link, useNavigate } from 'react-router-dom'
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 
 interface NavigationProps {
   onCollectionSelect?: (slug: string) => void
@@ -7,8 +7,7 @@ interface NavigationProps {
 
 function Navigation({ onCollectionSelect }: NavigationProps) {
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null)
-  // const timeoutRef = useRef<NodeJS.Timeout | null>(null)
-  const timeoutRef = useRef<number | null>(null)
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const navigate = useNavigate()
 
   // ✅ Make sure slugs exactly match Shopify collection handles
@@ -30,7 +29,6 @@ function Navigation({ onCollectionSelect }: NavigationProps) {
 
   const aboutItems = [
     { name: 'About Us', href: '/about' },
-    { name: 'Reviews', href: '/reviews' },
     { name: 'FAQs & Help', href: '/faq' }
   ]
 
@@ -50,8 +48,14 @@ function Navigation({ onCollectionSelect }: NavigationProps) {
     { image: '/assets/images/kids.jpg', title: 'KIDS CLOTHS' },
     { image: '/assets/images/01.jpg', title: 'KIDS CLOTHS' },
     { image: '/assets/images/03.jpg', title: 'KIDS CLOTHS' }
-    // { image: '/assets/images/join-moment-four.jpg', title: 'KIDS CLOTHS' }
   ]
+
+  // Clear timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) clearTimeout(timeoutRef.current)
+    }
+  }, [])
 
   const handleMouseEnter = (dropdown: string) => {
     if (timeoutRef.current) clearTimeout(timeoutRef.current)
@@ -59,11 +63,12 @@ function Navigation({ onCollectionSelect }: NavigationProps) {
   }
 
   const handleMouseLeave = () => {
-    // timeoutRef.current = setTimeout(() => setActiveDropdown(null), 150)
+    timeoutRef.current = setTimeout(() => {
+      setActiveDropdown(null)
+    }, 200)
   }
 
   const handleShopClick = (slug: string) => {
-    // ✅ Ensure we use correct query param key
     const url = `/shop?category=${encodeURIComponent(slug)}`
     if (onCollectionSelect) {
       onCollectionSelect(slug)
@@ -74,8 +79,7 @@ function Navigation({ onCollectionSelect }: NavigationProps) {
   }
 
   const handleBrandClick = (brand: string) => {
-    const tag = brand.trim().toLowerCase() // Shopify tag must be lowercase
-
+    const tag = brand.trim().toLowerCase()
     navigate(`/shop?tag=${encodeURIComponent(tag)}`)
     setActiveDropdown(null)
   }
@@ -94,27 +98,23 @@ function Navigation({ onCollectionSelect }: NavigationProps) {
         >
           Shop
         </Link>
-        <div
-          className={`absolute left-0 top-full z-50 pt-2 transition-all duration-300 ${
-            activeDropdown === 'shop'
-              ? 'translate-y-0 opacity-100'
-              : 'pointer-events-none -translate-y-2 opacity-0'
-          }`}
-        >
-          <div className="w-48 rounded-sm bg-cream shadow-lg">
-            <div className="py-2">
-              {shopItems.map((item) => (
-                <button
-                  key={item.slug}
-                  onClick={() => handleShopClick(item.slug)}
-                  className="block w-full px-4 py-2 text-left font-inter text-sm uppercase text-black transition-colors hover:bg-gray-50 hover:text-gray-600"
-                >
-                  {item.name}
-                </button>
-              ))}
+        {activeDropdown === 'shop' && (
+          <div className="absolute left-0 top-full z-50 pt-2">
+            <div className="w-48 rounded-sm bg-cream shadow-lg">
+              <div className="py-2">
+                {shopItems.map((item) => (
+                  <button
+                    key={item.slug}
+                    onClick={() => handleShopClick(item.slug)}
+                    className="block w-full px-4 py-2 text-left font-inter text-sm uppercase text-black transition-colors hover:bg-gray-50 hover:text-gray-600"
+                  >
+                    {item.name}
+                  </button>
+                ))}
+              </div>
             </div>
           </div>
-        </div>
+        )}
       </div>
 
       {/* ABOUT DROPDOWN */}
@@ -129,27 +129,23 @@ function Navigation({ onCollectionSelect }: NavigationProps) {
         >
           About
         </Link>
-        <div
-          className={`absolute left-0 top-full z-50 pt-2 transition-all duration-300 ${
-            activeDropdown === 'about'
-              ? 'translate-y-0 opacity-100'
-              : 'pointer-events-none -translate-y-2 opacity-0'
-          }`}
-        >
-          <div className="w-48 rounded-sm bg-cream shadow-lg">
-            <div className="py-2">
-              {aboutItems.map((item) => (
-                <Link
-                  key={item.href}
-                  to={item.href}
-                  className="block px-4 py-2 font-inter text-sm uppercase text-black transition-colors hover:bg-gray-50 hover:text-gray-600"
-                >
-                  {item.name}
-                </Link>
-              ))}
+        {activeDropdown === 'about' && (
+          <div className="absolute left-0 top-full z-50 pt-2">
+            <div className="w-48 rounded-sm bg-cream shadow-lg">
+              <div className="py-2">
+                {aboutItems.map((item) => (
+                  <Link
+                    key={item.href}
+                    to={item.href}
+                    className="block px-4 py-2 font-inter text-sm uppercase text-black transition-colors hover:bg-gray-50 hover:text-gray-600"
+                  >
+                    {item.name}
+                  </Link>
+                ))}
+              </div>
             </div>
           </div>
-        </div>
+        )}
       </div>
 
       {/* OUR BRANDS DROPDOWN */}
@@ -164,49 +160,45 @@ function Navigation({ onCollectionSelect }: NavigationProps) {
         >
           Our Brands
         </Link>
-        <div
-          className={`absolute left-0 top-full z-50 pt-2 transition-all duration-300 ${
-            activeDropdown === 'brands'
-              ? 'translate-y-0 opacity-100'
-              : 'pointer-events-none -translate-y-2 opacity-0'
-          }`}
-        >
-          <div className="w-full min-w-[1220px] overflow-hidden rounded-sm bg-cream shadow-lg">
-            <div className="flex">
-              <div className="w-1/4 border-r border-gray-200 py-4">
-                {brandItems.map((brand) => (
-                  <button
-                    key={brand}
-                    onClick={() => handleBrandClick(brand)}
-                    className="block w-full px-6 py-2 text-left font-inter text-sm font-medium uppercase text-black transition-colors hover:bg-gray-50 hover:text-gray-600"
-                  >
-                    {brand}
-                  </button>
-                ))}
-              </div>
-              <div className="w-3/4 p-4">
-                <div className="grid grid-cols-3 gap-4 xl:gap-6">
-                  {brandImages.map((item, index) => (
-                    <div key={index} className="group cursor-pointer">
-                      <div className="w-full rounded-lg p-1">
-                        <img
-                          src={item.image}
-                          alt={item.title}
-                          className="h-40 w-full object-contain transition-transform duration-300 group-hover:scale-105 lg:h-48 xl:h-56 2xl:h-64"
-                        />
-                      </div>
-                      <div className="mt-4 text-center">
-                        <h4 className="font-inter text-xs font-semibold uppercase text-black">
-                          {item.title}
-                        </h4>
-                      </div>
-                    </div>
+        {activeDropdown === 'brands' && (
+          <div className="absolute left-0 top-full z-50 pt-2">
+            <div className="w-full min-w-[1220px] overflow-hidden rounded-sm bg-cream shadow-lg">
+              <div className="flex">
+                <div className="w-1/4 border-r border-gray-200 py-4">
+                  {brandItems.map((brand) => (
+                    <button
+                      key={brand}
+                      onClick={() => handleBrandClick(brand)}
+                      className="block w-full px-6 py-2 text-left font-inter text-sm font-medium uppercase text-black transition-colors hover:bg-gray-50 hover:text-gray-600"
+                    >
+                      {brand}
+                    </button>
                   ))}
+                </div>
+                <div className="w-3/4 p-4">
+                  <div className="grid grid-cols-3 gap-4 xl:gap-6">
+                    {brandImages.map((item, index) => (
+                      <div key={index} className="group cursor-pointer">
+                        <div className="w-full rounded-lg p-1">
+                          <img
+                            src={item.image}
+                            alt={item.title}
+                            className="h-40 w-full object-contain transition-transform duration-300 group-hover:scale-105 lg:h-48 xl:h-56 2xl:h-64"
+                          />
+                        </div>
+                        <div className="mt-4 text-center">
+                          <h4 className="font-inter text-xs font-semibold uppercase text-black">
+                            {item.title}
+                          </h4>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
+        )}
       </div>
     </nav>
   )

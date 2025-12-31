@@ -1,5 +1,5 @@
-import { useRef, useState, useEffect } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
+import { useState, useEffect, useRef } from 'react'
 import { fetchProducts } from '../utils/shopify'
 
 interface Product {
@@ -9,29 +9,18 @@ interface Product {
   image: string
 }
 
-function MostPopular() {
-  const scrollRef = useRef<HTMLDivElement>(null)
+function YouMayAlsoLike() {
   const [products, setProducts] = useState<Product[]>([])
   const [loading, setLoading] = useState(true)
-
-  const [canScrollLeft, setCanScrollLeft] = useState(false)
-  const [canScrollRight, setCanScrollRight] = useState(false)
-
-  const navigate = useNavigate() // ✅ ADDED
-
-  const checkScroll = () => {
-    if (scrollRef.current) {
-      const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current
-      setCanScrollLeft(scrollLeft > 0)
-      setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 10)
-    }
-  }
+  const [animatedIndices, setAnimatedIndices] = useState<number[]>([])
+  const sectionRef = useRef<HTMLDivElement>(null)
+  const navigate = useNavigate()
 
   useEffect(() => {
     const loadProducts = async () => {
       const { products } = await fetchProducts({
         tag: 'best-selling',
-        limit: 20
+        limit: 4
       })
 
       const formatted = products.map((p) => ({
@@ -43,34 +32,37 @@ function MostPopular() {
 
       setProducts(formatted)
       setLoading(false)
-      setTimeout(checkScroll, 200)
     }
 
     loadProducts()
   }, [])
 
   useEffect(() => {
-    const scrollEl = scrollRef.current
-    if (!scrollEl) return
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && animatedIndices.length === 0) {
+          // Trigger animations one by one
+          products.forEach((_, index) => {
+            setTimeout(() => {
+              setAnimatedIndices(prev => [...prev, index])
+            }, index * 150)
+          })
+        }
+      },
+      { threshold: 0.2 }
+    )
 
-    scrollEl.addEventListener('scroll', checkScroll)
-    window.addEventListener('resize', checkScroll)
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current)
+    }
 
     return () => {
-      scrollEl.removeEventListener('scroll', checkScroll)
-      window.removeEventListener('resize', checkScroll)
+      if (sectionRef.current) {
+        observer.unobserve(sectionRef.current)
+      }
     }
-  }, [])
+  }, [products, animatedIndices])
 
-  const scrollLeft = () => {
-    scrollRef.current?.scrollBy({ left: -300, behavior: 'smooth' })
-  }
-
-  const scrollRight = () => {
-    scrollRef.current?.scrollBy({ left: 300, behavior: 'smooth' })
-  }
-
-  // ✅ SAME CLEAN ID LOGIC AS ProductCard
   const openProduct = (shopifyId: string) => {
     const cleanId = shopifyId.includes('gid://shopify/Product/')
       ? shopifyId.split('/').pop()
@@ -83,100 +75,103 @@ function MostPopular() {
     return <p className="text-center py-10 text-gray-500">Loading...</p>
 
   return (
-    <div className="pt-10">
-      <div className="mx-auto max-w-[90%] px-4 sm:px-6 lg:px-8">
-        <div className="mb-6 flex items-center justify-between">
-          <h2 className="font-rubik text-2xl font-medium text-text-primary border-b-2  pb-3 border-[#444B59]">
+    <div ref={sectionRef} className="bg-cream py-12 md:py-16">
+      <style>{`
+        @keyframes slideInLeft {
+          from {
+            opacity: 0;
+            transform: translateX(-60px);
+          }
+          to {
+            opacity: 1;
+            transform: translateX(0);
+          }
+        }
+        
+        @keyframes slideInRight {
+          from {
+            opacity: 0;
+            transform: translateX(60px);
+          }
+          to {
+            opacity: 1;
+            transform: translateX(0);
+          }
+        }
+        
+        .animate-slide-left {
+          animation: slideInLeft 0.6s ease-out forwards;
+        }
+        
+        .animate-slide-right {
+          animation: slideInRight 0.6s ease-out forwards;
+        }
+      `}</style>
+      
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        {/* Header */}
+        <div className="mb-8 md:mb-12 text-center">
+          <h2 className="font-rubik text-2xl md:text-xl font-extralight text-gray-500">
             You May Also Like
           </h2>
-          <Link
-            to="/shop"
-            className="font-inter text-sm font-medium border p-3 border-black hover:bg-[#EFECDA] text-text-primary hover:underline"
-          >
-            View All
-          </Link>
         </div>
-      </div>
 
-      <div className="bg-[#EFECDA] py-8 mx-20">
-        <div className="relative">
-          {canScrollLeft && (
-            <button
-              onClick={scrollLeft}
-              className="absolute left-0 top-1/2 z-10 flex h-12 w-8 -translate-y-1/2 items-center justify-center border border-gray-200 bg-white text-text-primary shadow-lg transition-all hover:w-10 hover:bg-gray-50"
-            >
-              <svg
-                className="size-5"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M15 19l-7-7 7-7"
-                />
-              </svg>
-            </button>
-          )}
-
-          <div
-            ref={scrollRef}
-            className="flex gap-6 overflow-x-auto px-2 pb-4"
-            style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
-          >
-            {products.map((product) => (
+        {/* Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+          {products.map((product, index) => {
+            const isAnimated = animatedIndices.includes(index)
+            const isEven = index % 2 === 0
+            const animationClass = isAnimated 
+              ? (isEven ? 'animate-slide-left' : 'animate-slide-right')
+              : 'opacity-0'
+            
+            return (
               <div
                 key={product.id}
-                onClick={() => openProduct(product.id)} // ✅ CLICK HANDLER
-                className="w-[200px] shrink-0 cursor-pointer transition-all"
+                onClick={() => openProduct(product.id)}
+                className={`cursor-pointer group ${animationClass}`}
               >
-                <div className="h-48 overflow-hidden rounded-none bg-gray-100">
+                {/* Image Container */}
+                <div className="relative bg-white rounded-lg overflow-hidden mb-4 aspect-square">
                   <img
                     src={product.image}
                     alt={product.title}
-                    className="size-full object-cover transition-transform duration-300 hover:scale-105"
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                   />
+                  {/* Wishlist Icon */}
+                  <button className="absolute bottom-3 right-3 bg-white rounded-full p-2 shadow-md hover:shadow-lg transition-shadow opacity-0 group-hover:opacity-100">
+                    <svg
+                      className="w-5 h-5 text-text-primary"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={1.5}
+                        d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+                      />
+                    </svg>
+                  </button>
                 </div>
 
-                <div className="mt-4">
-                  <h3 className="line-clamp-2 font-inter text-sm font-medium text-text-primary">
+                {/* Product Info */}
+                <div>
+                  <h3 className="font-inter text-sm md:text-base font-normal text-text-primary line-clamp-2 mb-2">
                     {product.title}
                   </h3>
-
-                  <p className="mt-2 font-inter text-lg font-semibold text-text-primary">
-                    ${product.price}
+                  <p className="font-inter text-base md:text-lg font-normal text-text-primary">
+                    £{product.price}
                   </p>
                 </div>
               </div>
-            ))}
-          </div>
-
-          {canScrollRight && (
-            <button
-              onClick={scrollRight}
-              className="absolute right-0 top-1/2 z-10 flex h-12 w-8 -translate-y-1/2 items-center justify-center border border-gray-200 bg-white text-text-primary shadow-lg transition-all hover:w-10 hover:bg-gray-50"
-            >
-              <svg
-                className="size-5"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M9 5l7 7-7 7"
-                />
-              </svg>
-            </button>
-          )}
+            )
+          })}
         </div>
       </div>
     </div>
   )
 }
 
-export default MostPopular
+export default YouMayAlsoLike

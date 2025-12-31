@@ -1,3 +1,5 @@
+import { useState } from 'react'
+
 interface Review {
   id: number
   author: string
@@ -16,17 +18,32 @@ interface ProductReviewsProps {
   reviews: Review[]
 }
 
-import { useState } from 'react'
-
 function ProductReviews({
   overallRating,
   totalReviews,
   reviews
 }: ProductReviewsProps) {
   const [displayCount, setDisplayCount] = useState(3)
+  const [isReviewModalOpen, setIsReviewModalOpen] = useState(false)
+  const [formData, setFormData] = useState({
+    name: '',
+    tagLine: '',
+    review: '',
+    rating: 0
+  })
   const hasReviews = reviews && reviews.length > 0
   const displayedReviews = reviews.slice(0, displayCount)
   const hasMoreReviews = reviews.length > displayCount
+
+  const handleRatingClick = (rating: number) => {
+    setFormData({ ...formData, rating })
+  }
+
+  const handleSubmitReview = () => {
+    console.log('Review submitted:', formData)
+    setIsReviewModalOpen(false)
+    setFormData({ name: '', tagLine: '', review: '', rating: 0 })
+  }
 
   return (
     <div className="mt-8 md:mt-12 bg-cream py-8 md:py-16">
@@ -55,8 +72,11 @@ function ProductReviews({
           </div>
 
           {/* WRITE REVIEW BUTTON */}
-          <button className="border-2 border-gray-800 px-4 md:px-6 py-2 font-inter text-xs font-bold text-black hover:bg-[#E9908E] transition-colors">
-            WRITE A REVIEW
+          <button 
+            onClick={() => setIsReviewModalOpen(true)}
+            className="border rounded-md hover:border-0 hover:text-white border-gray-800 px-4 md:px-6 py-2 font-inter text-xs font-extralight text-black hover:bg-[#E9908E] transition-colors"
+          >
+            write a review
           </button>
         </div>
 
@@ -154,7 +174,7 @@ function ProductReviews({
               <div className="flex justify-center mt-6 md:mt-8">
                 <button
                   onClick={() => setDisplayCount(displayCount + 3)}
-                  className="border-2 border-gray-800 px-6 md:px-8 py-2 font-inter text-xs font-light text-black hover:bg-[#E9908E] transition-colors"
+                  className="border hover:border-0 hover:text-white rounded-md border-gray-800 px-6 md:px-8 py-2 font-inter text-xs font-extralight text-black hover:bg-[#E9908E] transition-colors"
                 >
                   Load More
                 </button>
@@ -170,6 +190,148 @@ function ProductReviews({
               No reviews yet. Be the first to review this product!
             </p>
           </div>
+        )}
+
+        {/* REVIEW MODAL */}
+        {isReviewModalOpen && (
+          <>
+            {/* Backdrop */}
+            <div 
+              className="fixed inset-0 bg-black/50 z-40"
+              onClick={() => setIsReviewModalOpen(false)}
+            />
+            
+            {/* Modal */}
+            <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+              <div className="bg-cream rounded-lg max-w-2xl w-full max-h-[75vh] overflow-y-auto">
+                {/* Header */}
+                <div className="relative p-6 md:px-8 md:pt-4">
+                  <button
+                    onClick={() => setIsReviewModalOpen(false)}
+                    className="absolute top-4 right-4 text-2xl font-bold text-gray-600 hover:text-black"
+                  >
+                    ✕
+                  </button>
+                  
+                  <h2 className="font-rubik text-2xl font-normal text-text-primary text-center mb-4">
+                    LEAVE A REVIEW
+                  </h2>
+                  
+                  {/* Stars Display */}
+                  <div className="flex items-center justify-center gap-2">
+                    <div className="flex gap-1">
+                      {[1, 2, 3, 4, 5].map((star) => (
+                        <svg
+                          key={star}
+                          className="size-5"
+                          fill={star <= Math.round(overallRating) ? '#444B59' : '#E5E7EB'}
+                          viewBox="0 0 24 24"
+                        >
+                          <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                        </svg>
+                      ))}
+                    </div>
+                    <span className="font-inter text-sm text-gray-600">({totalReviews})</span>
+                  </div>
+                </div>
+
+                {/* Form Content */}
+                <div className="p-6 md:p-8 md:px-20 space-y-2">
+                  {/* Name and Rating Row */}
+                  <div className="grid grid-cols-2 gap-10">
+                    {/* Name Field */}
+                    <div>
+                      <label className="block font-inter text-sm font-light text-text-primary mb-2">
+                        Name
+                      </label>
+                      <input
+                        type="text"
+                        value={formData.name}
+                        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                        className="w-full border border-gray-400 bg-cream rounded px-4 py-2 font-inter text-sm focus:outline-none focus:border-gray-800"
+                        placeholder=""
+                      />
+                    </div>
+
+                    {/* Rating Field */}
+                    <div>
+                      <label className="block font-inter text-sm font-light text-text-primary mb-3">
+                        Rating
+                      </label>
+                      <div className="flex gap-1">
+                        {[1, 2, 3, 4, 5].map((star) => (
+                          <button
+                            key={star}
+                            onClick={() => handleRatingClick(star)}
+                            className="focus:outline-none"
+                          >
+                            <svg
+                              className="size-5 cursor-pointer transition-colors"
+                              fill={star <= formData.rating ? '#444B59' : 'none'}
+                              stroke={star <= formData.rating ? '#444B59' : '#999'}
+                              strokeWidth="1.5"
+                              viewBox="0 0 24 24"
+                            >
+                              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                            </svg>
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Tag Line Field */}
+                  <div>
+                    <label className="block font-inter text-sm font-light text-text-primary mb-2">
+                      Tag Line
+                    </label>
+                    <input
+                      type="text"
+                      value={formData.tagLine}
+                      onChange={(e) => setFormData({ ...formData, tagLine: e.target.value })}
+                      className="w-full border border-gray-400 bg-cream rounded px-4 py-2 font-inter text-sm focus:outline-none focus:border-gray-800"
+                      placeholder=""
+                    />
+                  </div>
+
+                  {/* Review Text Area */}
+                  <div>
+                    <label className="block font-inter text-sm font-light text-text-primary mb-2">
+                      Write Your Review
+                    </label>
+                    <textarea
+                      value={formData.review}
+                      onChange={(e) => setFormData({ ...formData, review: e.target.value })}
+                      className="w-full border h-20 border-gray-400 bg-cream rounded px-4 py-2 font-inter text-sm focus:outline-none focus:border-gray-800 resize-none"
+                      rows={5}
+                      placeholder=""
+                    />
+                  </div>
+
+                  {/* Media Section */}
+                  <div>
+                    <label className="block font-inter text-sm font-light text-text-primary mb-2">
+                      Media
+                    </label>
+                    <p className="font-inter text-xs text-gray-600 mb-3">
+                      Reviews with media are found to be more helpful
+                    </p>
+                    <button className="w-20 h-20 border-2 border-dashed border-gray-300 mb-2 bg-gray-300 rounded flex items-center justify-center hover:border-gray-400 transition-colors">
+                      <span className="text-4xl text-gray-600">+</span>
+                    </button>
+                  </div>
+
+                  {/* Submit Button */}
+                  <button
+                    onClick={handleSubmitReview}
+                    className="w-full bg-[#E9908E] text-white py-3 rounded font-inter font-semibold text-sm transition-colors mt-6 tracking-extrawide hover:bg-cream hover:text-black border hover:border-black"
+                  >
+                    SUBMIT
+                  </button>
+                </div>
+              </div>
+            </div>
+          </>
         )}
       </div>
     </div>
