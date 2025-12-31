@@ -16,9 +16,22 @@ function TextReviewCard({
   location
 }: TextReviewCardProps) {
   const renderStars = (rating: number) => {
-    return Array.from({ length: 5 }).map((_, index) => (
-      <Star key={index} filled={index < rating} />
-    ))
+    return Array.from({ length: 5 }).map((_, index) => {
+      const fillPercentage = Math.min(Math.max(rating - index, 0), 1)
+      return (
+        <div key={index} className="relative inline-block">
+          <Star filled={false} />
+          {fillPercentage > 0 && (
+            <div
+              className="absolute inset-0 overflow-hidden"
+              style={{ width: `${fillPercentage * 100}%` }}
+            >
+              <Star filled={true} />
+            </div>
+          )}
+        </div>
+      )
+    })
   }
 
   return (

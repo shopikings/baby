@@ -20,6 +20,7 @@ function ReviewsSlider() {
     },
     {
       id: 2,
+      rating: 4.5,
       title: 'Love the clothes!',
       author: 'M.H',
       image: '/assets/images/reviews/new-1.png',
@@ -27,6 +28,7 @@ function ReviewsSlider() {
     },
     {
       id: 3,
+      rating: 4.4,
       title: 'Fast Shipping, Quality Service',
       review:
         'Speedy shipping and a smooth checkout; my order arrived in perfect condition.',
@@ -37,6 +39,7 @@ function ReviewsSlider() {
     },
     {
       id: 4,
+      rating: 4.5,
       title: 'Love it!',
       author: 'T.B',
       image: '/assets/images/reviews/new-2.png',
@@ -55,6 +58,7 @@ function ReviewsSlider() {
     },
     {
       id: 6,
+      rating: 4.5,
       title: 'Cute stuff!',
       author: 'P.H',
       image: '/assets/images/reviews/new-3.png',
@@ -62,13 +66,16 @@ function ReviewsSlider() {
     },
     {
       id: 7,
+      rating: 4.5,
       title: 'Great Quality Products',
       review:
         'A little pricey, but worth every penny for the craftsmanship and feel of the items.',
+      author: 'J.M',
       type: 'text'
     },
     {
       id: 8,
+      rating: 4.5,
       title: 'Very helpful!',
       author: 'M.H',
       image: '/assets/images/reviews/new-4.png',
@@ -76,14 +83,16 @@ function ReviewsSlider() {
     },
     {
       id: 9,
-      rating: 5,
+      rating: 4.5,
       title: 'Helpful Staff & Good Customer Service',
       review:
         'Customer service was super helpful and friendly when I had questions about sizing.',
+      author: 'S.K',
       type: 'text'
     },
     {
       id: 10,
+      rating: 4.5,
       title: 'Keeps my kid busy!',
       author: 'A.T',
       image: '/assets/images/reviews/new-5.png',

@@ -1,6 +1,9 @@
 import { useState } from 'react'
 import { useCart } from '../../contexts/CartContext'
 import toast from 'react-hot-toast'
+import box from "../../assets/box(black).svg"
+import truck from "../../assets/truck.svg"
+import email from "../../assets/email.svg"
 
 interface Color {
   name: string
@@ -193,37 +196,49 @@ function ProductInfo({
       {/* Shipping Info */}
       <div className="space-y-[2px] text-sm font-light text-gray-700 font-inter">
         <div className="flex items-start gap-1">
-          <svg className="w-5 h-5 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8" />
-          </svg>
+          <img src={truck}/>
           <span>Ships in 1-2 Days</span>
         </div>
         <div className="flex items-start gap-1">
-          <svg className="w-5 h-5 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-          </svg>
-          <span>Delivery From £4.25 or Free Over £50</span>
+         <img src={email}/>
+          <span>Delivery From $7 or Free Over $70</span>
         </div>
         <div className="flex items-start gap-1">
-          <svg className="w-5 h-5 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-          </svg>
-          <span>45 Days Easy Returns</span>
+          <img src={box}/>
+          <span>90 Days Easy Returns</span>
         </div>
          {/* Expandable Sections */}
       <div className="space-y-0">
-        {/* Shipping */}
+                {/* Features */}
         <button
-          onClick={() => toggleSection('shipping')}
+          onClick={() => toggleSection('features')}
           className="w-full flex items-center justify-between py-3 border-b border-black"
         >
           <span className="font-inter text-xs font-normal text-black tracking-wide">
-            FREE STANDARD SHIPPING - MORE DETAILS
+            PRODUCT FEATURES
           </span>
-          <svg className={`w-5 h-5 transition-transform ${expandedSections.shipping ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg className={`w-5 h-5 transition-transform ${expandedSections.features ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
           </svg>
         </button>
+
+        {/* Features Content */}
+        {expandedSections.features && description && (
+          <div className="py-3 px-0 border-b text-primary border-black text-sm font-light font-raleway">
+            <div 
+              dangerouslySetInnerHTML={{ __html: description }}
+              style={{ 
+                fontFamily: 'Raleway, sans-serif', 
+                fontSize: '0.875rem', 
+                fontWeight: 300, 
+                lineHeight: '1.6', 
+                color: '#444B59'
+              }}
+              className="[&_p]:mb-3 [&_ul]:mb-3 [&_ol]:mb-3 [&_li]:mb-1 [&_*]:font-raleway [&_*]:font-light [&_p]:font-raleway [&_li]:font-raleway [&_strong]:font-semibold [&_b]:font-semibold"
+            />
+          </div>
+        )}
+
 
         {/* Returns */}
         <button
@@ -241,47 +256,55 @@ function ProductInfo({
         {/* Returns Content */}
         {expandedSections.returns && (
           <div className="py-3 px-0 border-b border-black text-sm text-gray-700 font-inter leading-relaxed space-y-2">
-            <p className="font-semibold text-text-primary">To qualify for a return, your item must:</p>
             <ul className="space-y-2 ml-4">
               <li className="flex gap-2">
                 <span className="text-text-primary font-bold">•</span>
-                <span>Be in the same condition as when received.</span>
+                <span>Returns are accepted within go days of delivery for items that are new, unused, and in original packaging; used or opened baby gear items are not eligible for return due to safety reasons.</span>
               </li>
               <li className="flex gap-2">
                 <span className="text-text-primary font-bold">•</span>
-                <span>Be unworn or unused, with tags attached.</span>
+                <span>Maison Baby covers return shipping for defective, incorrect, or error-related orders; customers are responsible for return shipping in all other cases, with refunds issued within 48 hours of return delivery.</span>
               </li>
               <li className="flex gap-2">
                 <span className="text-text-primary font-bold">•</span>
-                <span>Be returned in its original packaging.</span>
-              </li>
-              <li className="flex gap-2">
-                <span className="text-text-primary font-bold">•</span>
-                <span>Include the receipt or proof of purchase.</span>
+                <span>All sale, holiday/seasonal items, and Uppababy Vista V2 and Mesa Max products are final sale and cannot be returned or exchanged.</span>
               </li>
             </ul>
           </div>
         )}
 
-        {/* Features */}
+              {/* Shipping */}
         <button
-          onClick={() => toggleSection('features')}
+          onClick={() => toggleSection('shipping')}
           className="w-full flex items-center justify-between py-3 border-b border-black"
         >
           <span className="font-inter text-xs font-normal text-black tracking-wide">
-            PRODUCT FEATURES
+            FAST SHIPPING 
           </span>
-          <svg className={`w-5 h-5 transition-transform ${expandedSections.features ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg className={`w-5 h-5 transition-transform ${expandedSections.shipping ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
           </svg>
         </button>
 
-        {/* Features Content */}
-        {expandedSections.features && description && (
-          <div className="py-3 px-0 border-b border-black text-sm text-gray-700 font-inter leading-relaxed">
-            <div dangerouslySetInnerHTML={{ __html: description }} />
+        {expandedSections.shipping && (
+          <div className="py-3 px-0 border-b border-black text-sm text-gray-700 font-inter leading-relaxed space-y-2">
+            <ul className="space-y-2 ml-4">
+              <li className="flex gap-2">
+                <span className="text-text-primary font-bold">•</span>
+                <span>Orders are typically processed within 1-3 business days (Monday to Friday, excluding U.S. federal holidays).</span>
+              </li>
+              <li className="flex gap-2">
+                <span className="text-text-primary font-bold">•</span>
+                <span>If we experience a high volume of orders (e.g., during seasonal sales), processing may take a little longer, we'll notify you via email if we expect a delay.</span>
+              </li>
+              <li className="flex gap-2">
+                <span className="text-text-primary font-bold">•</span>
+                <span>Once your order is processed and shipped, you will receive a shipping confirmation email with a tracking number.</span>
+              </li>
+            </ul>
           </div>
         )}
+
       </div>
       </div>
 

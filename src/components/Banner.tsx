@@ -49,9 +49,9 @@ function Banner() {
           className="absolute inset-0 size-full object-cover"
         />
         <div className="absolute inset-0 bg-black/40"></div>
-        <div className="relative z-10 flex h-full items-center justify-center">
+        <div className="relative z-10 flex h-full items-end pb-24 justify-center">
           <div className="text-center text-cream">
-            <h1 className="mb-4 font-rubik text-5xl font-semibold md:text-6xl">
+            <h1 className="mb-4 font-rubik text-5xl font-semibold md:text-6xl drop-shadow-lg">
               Always By Your
             </h1>
             <h1 className="mb-8 font-rubik text-5xl font-semibold md:text-6xl">
