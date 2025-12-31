@@ -28,6 +28,7 @@ function ProductReviews({
   const [formData, setFormData] = useState({
     name: '',
     tagLine: '',
+    email: '',
     review: '',
     rating: 0
   })
@@ -42,7 +43,7 @@ function ProductReviews({
   const handleSubmitReview = () => {
     console.log('Review submitted:', formData)
     setIsReviewModalOpen(false)
-    setFormData({ name: '', tagLine: '', review: '', rating: 0 })
+    setFormData({ name: '', tagLine: '', email:'', review: '', rating: 0 })
   }
 
   return (
@@ -203,7 +204,7 @@ function ProductReviews({
             
             {/* Modal */}
             <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-              <div className="bg-cream rounded-lg max-w-2xl w-full max-h-[75vh] overflow-y-auto">
+              <div className="bg-cream rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
                 {/* Header */}
                 <div className="relative p-6 md:px-8 md:pt-4">
                   <button
@@ -236,7 +237,7 @@ function ProductReviews({
                 </div>
 
                 {/* Form Content */}
-                <div className="p-6 md:p-8 md:px-20 space-y-2">
+                <div className="p-6 md:p-8 md:px-12 space-y-4">
                   {/* Name and Rating Row */}
                   <div className="grid grid-cols-2 gap-10">
                     {/* Name Field */}
@@ -289,6 +290,20 @@ function ProductReviews({
                       type="text"
                       value={formData.tagLine}
                       onChange={(e) => setFormData({ ...formData, tagLine: e.target.value })}
+                      className="w-full border border-gray-400 bg-cream rounded px-4 py-2 font-inter text-sm focus:outline-none focus:border-gray-800"
+                      placeholder=""
+                    />
+                  </div>
+
+                  {/* Email Field */}
+                  <div>
+                    <label className="block font-inter text-sm font-light text-text-primary mb-2">
+                      Email
+                    </label>
+                    <input
+                      type="email"
+                      value={formData.email}
+                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                       className="w-full border border-gray-400 bg-cream rounded px-4 py-2 font-inter text-sm focus:outline-none focus:border-gray-800"
                       placeholder=""
                     />

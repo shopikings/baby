@@ -195,15 +195,15 @@ function ProductInfo({
 
       {/* Shipping Info */}
       <div className="space-y-[2px] text-sm font-light text-gray-700 font-inter">
-        <div className="flex items-start gap-1">
+        <div className="flex items-start gap-2">
           <img src={truck}/>
           <span>Ships in 1-2 Days</span>
         </div>
-        <div className="flex items-start gap-1">
+        <div className="flex items-start gap-2">
          <img src={email}/>
           <span>Delivery From $7 or Free Over $70</span>
         </div>
-        <div className="flex items-start gap-1">
+        <div className="flex items-start gap-2">
           <img src={box}/>
           <span>90 Days Easy Returns</span>
         </div>
