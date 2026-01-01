@@ -122,7 +122,7 @@ function RecommendationsSlider({ bgWhite }: RecommendationsSliderProps) {
             </div> */}
 
             <Link to="/shop">
-              <button className="flex items-center justify-center gap-2 font-inter text-xs sm:text-base uppercase text-button-hover hover:text-button-hover/80">
+              <button className="flex items-center justify-center gap-2 font-raleway text-xs sm:text-base uppercase text-button-hover hover:text-button-hover/80">
                 SHOP ALL
                 <ArrowUpRight className="size-5 text-black" />
               </button>

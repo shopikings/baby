@@ -51,7 +51,7 @@ function OurStorySection() {
                 OUR STORY
               </h2>
               
-              <p className="font-inter text-lg md:text-md text-gray-700 leading-relaxed">
+              <p className="font-raleway text-lg md:text-md text-gray-700 leading-relaxed">
                 Maison Baby & Kids - Curated Comfort for Tiny Humans
               </p>
 

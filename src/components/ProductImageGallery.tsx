@@ -65,7 +65,7 @@ function ProductImageGallery({
       {!showAll && thumbnails.length > 4 && (
         <button
           onClick={() => setShowAll(true)}
-          className="mt-6 w-full lg:w-full lg:mx-auto py-3 text-white bg-[#E9908E] hover:border hover:border-black font-inter font-light rounded hover:bg-[#EFECDA] hover:text-black transition-colors"
+          className="mt-6 w-full lg:w-full lg:mx-auto py-3 text-white bg-[#E9908E] hover:border hover:border-black font-raleway font-light rounded hover:bg-[#EFECDA] hover:text-black transition-colors"
         >
           VIEW MORE
         </button>
@@ -75,7 +75,7 @@ function ProductImageGallery({
       {showAll && thumbnails.length > 4 && (
         <button
           onClick={() => setShowAll(false)}
-          className="mt-6 w-full lg:w-full lg:mx-auto py-3 text-white hover:border hover:border-black bg-[#E9908E] font-inter font-light rounded hover:bg-[#EFECDA] hover:text-black transition-colors"
+          className="mt-6 w-full lg:w-full lg:mx-auto py-3 text-white hover:border hover:border-black bg-[#E9908E] font-raleway font-light rounded hover:bg-[#EFECDA] hover:text-black transition-colors"
         >
           VIEW LESS
         </button>

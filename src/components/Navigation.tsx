@@ -94,7 +94,7 @@ function Navigation({ onCollectionSelect }: NavigationProps) {
       >
         <Link
           to="/shop"
-          className="font-inter text-xs font-semibold uppercase text-text-primary transition-colors hover:text-gray-600"
+          className="font-raleway text-xs font-semibold uppercase text-text-primary transition-colors hover:text-gray-600"
         >
           Shop
         </Link>
@@ -106,7 +106,7 @@ function Navigation({ onCollectionSelect }: NavigationProps) {
                   <button
                     key={item.slug}
                     onClick={() => handleShopClick(item.slug)}
-                    className="block w-full px-4 py-2 text-left font-inter text-sm uppercase text-black transition-colors hover:bg-gray-50 hover:text-gray-600"
+                    className="block w-full px-4 py-2 text-left font-raleway text-sm uppercase text-black transition-colors hover:bg-gray-50 hover:text-gray-600"
                   >
                     {item.name}
                   </button>
@@ -125,7 +125,7 @@ function Navigation({ onCollectionSelect }: NavigationProps) {
       >
         <Link
           to="/about"
-          className="font-inter text-xs font-semibold uppercase text-text-primary transition-colors hover:text-gray-600"
+          className="font-raleway text-xs font-semibold uppercase text-text-primary transition-colors hover:text-gray-600"
         >
           About
         </Link>
@@ -137,7 +137,7 @@ function Navigation({ onCollectionSelect }: NavigationProps) {
                   <Link
                     key={item.href}
                     to={item.href}
-                    className="block px-4 py-2 font-inter text-sm uppercase text-black transition-colors hover:bg-gray-50 hover:text-gray-600"
+                    className="block px-4 py-2 font-raleway text-sm uppercase text-black transition-colors hover:bg-gray-50 hover:text-gray-600"
                   >
                     {item.name}
                   </Link>
@@ -156,7 +156,7 @@ function Navigation({ onCollectionSelect }: NavigationProps) {
       >
         <Link
           to="/collection"
-          className="font-inter text-xs font-semibold uppercase text-text-primary transition-colors hover:text-gray-600"
+          className="font-raleway text-xs font-semibold uppercase text-text-primary transition-colors hover:text-gray-600"
         >
           Our Brands
         </Link>
@@ -169,7 +169,7 @@ function Navigation({ onCollectionSelect }: NavigationProps) {
                     <button
                       key={brand}
                       onClick={() => handleBrandClick(brand)}
-                      className="block w-full px-6 py-2 text-left font-inter text-sm font-medium uppercase text-black transition-colors hover:bg-gray-50 hover:text-gray-600"
+                      className="block w-full px-6 py-2 text-left font-raleway text-sm font-medium uppercase text-black transition-colors hover:bg-gray-50 hover:text-gray-600"
                     >
                       {brand}
                     </button>
@@ -187,7 +187,7 @@ function Navigation({ onCollectionSelect }: NavigationProps) {
                           />
                         </div>
                         <div className="mt-4 text-center">
-                          <h4 className="font-inter text-xs font-semibold uppercase text-black">
+                          <h4 className="font-raleway text-xs font-semibold uppercase text-black">
                             {item.title}
                           </h4>
                         </div>

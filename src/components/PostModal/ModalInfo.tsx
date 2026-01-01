@@ -9,7 +9,7 @@ function ModalInfo({ title, description }: ModalInfoProps) {
       <h2 className="font-rubik text-xl font-semibold text-text-primary sm:text-2xl md:text-3xl">
         {title}
       </h2>
-      <p className="mt-3 font-inter text-sm leading-relaxed text-gray-600 md:mt-4 md:text-base">
+      <p className="mt-3 font-raleway text-sm leading-relaxed text-gray-600 md:mt-4 md:text-base">
         {description}
       </p>
     </div>

@@ -39,7 +39,7 @@ function ReviewsSection({
                 </svg>
               ))}
             </div>
-            <p className="mt-1 font-inter text-sm text-gray-600">
+            <p className="mt-1 font-raleway text-sm text-gray-600">
               Based on {totalReviews} reviews
             </p>
           </div>
@@ -47,7 +47,7 @@ function ReviewsSection({
           <div className="flex-1">
             {[5, 4, 3, 2, 1].map((rating) => (
               <div key={rating} className="flex items-center gap-3">
-                <span className="font-inter text-sm text-gray-600">
+                <span className="font-raleway text-sm text-gray-600">
                   {rating}
                 </span>
                 <div className="h-2 flex-1 overflow-hidden rounded-full bg-gray-200">
@@ -67,12 +67,12 @@ function ReviewsSection({
           {reviews.map((review, index) => (
             <div key={index} className="border-t pt-6">
               <div className="flex items-start gap-4">
-                <div className="flex size-10 items-center justify-center rounded-full bg-gray-200 font-inter text-sm font-medium">
+                <div className="flex size-10 items-center justify-center rounded-full bg-gray-200 font-raleway text-sm font-medium">
                   {review.initials}
                 </div>
                 <div className="flex-1">
                   <div className="flex items-center gap-2">
-                    <span className="font-inter text-sm font-medium">
+                    <span className="font-raleway text-sm font-medium">
                       {review.author}
                     </span>
                     <div className="flex gap-1">
@@ -88,14 +88,14 @@ function ReviewsSection({
                       ))}
                     </div>
                   </div>
-                  <p className="mt-1 font-inter text-sm text-gray-600">
+                  <p className="mt-1 font-raleway text-sm text-gray-600">
                     {review.comment}
                   </p>
                   <div className="mt-2 flex gap-4">
-                    <button className="font-inter text-xs text-gray-500 hover:text-gray-700">
+                    <button className="font-raleway text-xs text-gray-500 hover:text-gray-700">
                       Helpful
                     </button>
-                    <button className="font-inter text-xs text-gray-500 hover:text-gray-700">
+                    <button className="font-raleway text-xs text-gray-500 hover:text-gray-700">
                       Report
                     </button>
                   </div>

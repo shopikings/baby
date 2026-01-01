@@ -63,7 +63,7 @@ function AccordionItem({
       >
         <div className="min-h-0">
           <div className="border-t border-text-primary/20 px-6 pb-6 pt-4">
-            <p className="font-inter text-sm leading-relaxed text-text-primary sm:text-sm">
+            <p className="font-raleway text-sm leading-relaxed text-text-primary sm:text-sm">
               {answer.split('\n').map((line, i) => (
                 <p key={i}>{line.trim()}</p>
               ))}

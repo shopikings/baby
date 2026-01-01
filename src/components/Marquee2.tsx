@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef } from 'react'
 
 interface MarqueeProps {
   text1?: string
@@ -21,25 +21,8 @@ function Marquee2({
 }: MarqueeProps) {
   const containerRef = useRef<HTMLDivElement>(null)
   const textRef = useRef<HTMLDivElement>(null)
-  const [translateX, setTranslateX] = useState(0)
-  const [direction, setDirection] = useState(1)
-  const [displayText, setDisplayText] = useState('')
   const animationRef = useRef<number>()
-
-  useEffect(() => {
-    // Use text1 and text2 if provided, otherwise fall back to text
-    const separator = '\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0'
-    const finalText = text1 && text2 ? `${text1}${separator}${text2}` : text || ''
-    
-    const processedText = clickableText
-      ? finalText.replace(clickableText, `<CLICKABLE>${clickableText}</CLICKABLE>`)
-      : finalText
-
-    const duplicatedText = Array(8)
-      .fill(processedText)
-      .join(separator)
-    setDisplayText(duplicatedText)
-  }, [text1, text2, text, clickableText])
+  const stateRef = useRef({ translateX: 0, direction: 1 })
 
   useEffect(() => {
     const animate = () => {
@@ -50,19 +33,18 @@ function Marquee2({
       const maxTranslate = Math.max(0, textWidth - containerWidth)
 
       if (maxTranslate > 0) {
-        setTranslateX((prev) => {
-          let newTranslateX = prev + (direction * speed) / 60
+        let newTranslateX = stateRef.current.translateX + (stateRef.current.direction * speed) / 60
 
-          if (newTranslateX >= maxTranslate) {
-            newTranslateX = maxTranslate
-            setDirection(-1)
-          } else if (newTranslateX <= 0) {
-            newTranslateX = 0
-            setDirection(1)
-          }
+        if (newTranslateX >= maxTranslate) {
+          newTranslateX = maxTranslate
+          stateRef.current.direction = -1
+        } else if (newTranslateX <= 0) {
+          newTranslateX = 0
+          stateRef.current.direction = 1
+        }
 
-          return newTranslateX
-        })
+        stateRef.current.translateX = newTranslateX
+        textRef.current.style.transform = `translateX(-${newTranslateX}px)`
       }
 
       animationRef.current = requestAnimationFrame(animate)
@@ -75,7 +57,18 @@ function Marquee2({
         cancelAnimationFrame(animationRef.current)
       }
     }
-  }, [direction, speed, displayText])
+  }, [speed])
+
+  const separator = '\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0'
+  const finalText = text1 && text2 ? `${text1}${separator}${text2}` : text || ''
+  
+  const processedText = clickableText
+    ? finalText.replace(clickableText, `<CLICKABLE>${clickableText}</CLICKABLE>`)
+    : finalText
+
+  const duplicatedText = Array(6)
+    .fill(processedText)
+    .join(separator)
 
   return (
     <div
@@ -84,11 +77,11 @@ function Marquee2({
     >
       <div
         ref={textRef}
-        className="inline-block font-raleway text-xs font-light uppercase transition-transform duration-75 ease-linear"
-        style={{ transform: `translateX(-${translateX}px)` }}
+        className="inline-block font-raleway text-xs font-light uppercase will-change-transform"
+        style={{ transform: 'translateX(0px)' }}
       >
         {clickableText
-          ? displayText.split('<CLICKABLE>').map((part, index) => {
+          ? duplicatedText.split('<CLICKABLE>').map((part, index) => {
               if (part.includes('</CLICKABLE>')) {
                 const [clickablePart, rest] = part.split('</CLICKABLE>')
                 return (
@@ -105,7 +98,7 @@ function Marquee2({
               }
               return part
             })
-          : displayText}
+          : duplicatedText}
       </div>
     </div>
   )

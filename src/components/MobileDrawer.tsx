@@ -74,7 +74,7 @@ function MobileDrawer({ isOpen, onClose }: MobileDrawerProps) {
             <div className="space-y-2">
               <Link
                 to="/shop?category=new-arrivals"
-                className="block py-2 font-inter text-sm font-semibold uppercase text-text-primary transition-colors hover:text-gray-600"
+                className="block py-2 font-raleway text-sm font-semibold uppercase text-text-primary transition-colors hover:text-gray-600"
                 onClick={onClose}
               >
                 New Arrivals
@@ -135,7 +135,7 @@ function MobileDrawer({ isOpen, onClose }: MobileDrawerProps) {
 
               <Link
                 to="/shop?category=sale"
-                className="block py-2 font-inter text-sm font-semibold uppercase text-text-primary transition-colors hover:text-gray-600"
+                className="block py-2 font-raleway text-sm font-semibold uppercase text-text-primary transition-colors hover:text-gray-600"
                 onClick={onClose}
               >
                 Sale
@@ -221,7 +221,7 @@ function AccordionItem({
     <div>
       <button
         onClick={onToggle}
-        className="flex w-full items-center justify-between py-2 font-inter text-sm font-semibold uppercase text-text-primary transition-colors hover:text-gray-600"
+        className="flex w-full items-center justify-between py-2 font-raleway text-sm font-semibold uppercase text-text-primary transition-colors hover:text-gray-600"
       >
         {title}
         <svg
@@ -251,7 +251,7 @@ function AccordionItem({
             <Link
               key={index}
               to={item.href}
-              className="block py-1 font-inter text-sm uppercase text-text-primary/70 transition-colors hover:text-text-primary"
+              className="block py-1 font-raleway text-sm uppercase text-text-primary/70 transition-colors hover:text-text-primary"
               onClick={onClose}
             >
               {item.label}

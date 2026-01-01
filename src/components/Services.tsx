@@ -48,7 +48,7 @@ function Services() {
               <h3 className="font-rubik text-xs sm:text-sm md:text-base lg:text-lg font-semibold text-white mb-1 sm:mb-2 text-center">
                 {service.title}
               </h3>
-              <p className="font-inter text-xs sm:text-xs md:text-sm text-gray-300 font-light leading-relaxed text-center">
+              <p className="font-raleway text-xs sm:text-xs md:text-sm text-gray-300 font-light leading-relaxed text-center">
                 {service.description}
               </p>
             </div>

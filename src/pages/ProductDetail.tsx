@@ -12,6 +12,7 @@ import OurStorySection from 'components/OurStorySection'
 import StickyDiscountBanner from 'components/StickyDiscountBanner'
 import test1 from '../assets/test1.png'
 import test2 from '../assets/test2.png'
+import StickyDiscountTag from 'components/StickyDiscountTag'
 
 function ProductDetail() {
   const { id } = useParams()
@@ -256,7 +257,7 @@ function ProductDetail() {
     return hex
   }
 
-  if (colorsList.length === 0) colorsList = [{ name: 'Default', hex: '#000000' }]
+  if (colorsList.length === 0) colorsList = []
   if (sizesList.length === 0) sizesList = ['Default']
 
   const productData = {
@@ -282,12 +283,11 @@ function ProductDetail() {
 
   return (
     <div className="bg-cream">
-      <StickyDiscountBanner />
       <CategoryNav />
       <div className="bg-banner-lower py-1 md:py-2 mt-2 md:mt-3">
         <Marquee
           text="10% off on your first order when you sign up to newsletter."
-          className="font-inter text-xs md:text-sm font-medium text-black"
+          className="font-raleway text-xs md:text-sm font-medium text-black"
         />
       </div>
 

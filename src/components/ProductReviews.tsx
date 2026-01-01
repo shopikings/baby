@@ -69,13 +69,13 @@ function ProductReviews({
                 </svg>
               ))}
             </div>
-            <span className="font-inter text-xs md:text-sm text-gray-600">({totalReviews})</span>
+            <span className="font-raleway text-xs md:text-sm text-gray-600">({totalReviews})</span>
           </div>
 
           {/* WRITE REVIEW BUTTON */}
           <button 
             onClick={() => setIsReviewModalOpen(true)}
-            className="border rounded-md hover:border-0 hover:text-white border-gray-800 px-4 md:px-6 py-2 font-inter text-xs font-extralight text-black hover:bg-[#E9908E] transition-colors"
+            className="border rounded-md hover:border-0 hover:text-white border-gray-800 px-4 md:px-6 py-2 font-raleway text-xs font-extralight text-black hover:bg-[#E9908E] transition-colors"
           >
             write a review
           </button>
@@ -104,7 +104,7 @@ function ProductReviews({
                     </div>
 
                     {/* TITLE */}
-                    <h3 className="font-inter text-base md:text-lg font-normal text-text-primary italic mb-2">
+                    <h3 className="font-raleway text-base md:text-lg font-normal text-text-primary italic mb-2">
                       {review.comment.split('\n')[0]}
                     </h3>
 
@@ -115,7 +115,7 @@ function ProductReviews({
 
                     {/* AUTHOR INFO */}
                     <div className="flex items-center gap-2 mb-2 flex-wrap">
-                      <span className="font-inter text-xs font-bold text-text-primary">
+                      <span className="font-raleway text-xs font-bold text-text-primary">
                         {review.author}
                       </span>
                       {review.verified && (
@@ -125,7 +125,7 @@ function ProductReviews({
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
                             </svg>
                           </div>
-                          <span className="font-inter text-xs text-gray-600">
+                          <span className="font-raleway text-xs text-gray-600">
                             Verified buyer
                           </span>
                         </div>
@@ -133,12 +133,12 @@ function ProductReviews({
                     </div>
 
                     {/* DATE */}
-                    <p className="font-light text-xs md:text-sm text-gray-600 mb-3 font-inter">
+                    <p className="font-light text-xs md:text-sm text-gray-600 mb-3 font-raleway">
                       {review.date}
                     </p>
 
                     {/* HELPFUL BUTTONS */}
-                    <div className="flex gap-4 md:gap-6 font-inter text-xs md:text-sm text-gray-600">
+                    <div className="flex gap-4 md:gap-6 font-raleway text-xs md:text-sm text-gray-600">
                       <button className="flex items-center gap-2 hover:text-text-primary transition-colors">
                         <span>0</span>
                          <svg className="w-4 h-4 md:w-5 md:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
@@ -175,7 +175,7 @@ function ProductReviews({
               <div className="flex justify-center mt-6 md:mt-8">
                 <button
                   onClick={() => setDisplayCount(displayCount + 3)}
-                  className="border hover:border-0 hover:text-white rounded-md border-gray-800 px-6 md:px-8 py-2 font-inter text-xs font-extralight text-black hover:bg-[#E9908E] transition-colors"
+                  className="border hover:border-0 hover:text-white rounded-md border-gray-800 px-6 md:px-8 py-2 font-raleway text-xs font-extralight text-black hover:bg-[#E9908E] transition-colors"
                 >
                   Load More
                 </button>
@@ -187,7 +187,7 @@ function ProductReviews({
         {/* NO REVIEWS */}
         {!hasReviews && (
           <div className="text-center py-10">
-            <p className="font-inter text-sm text-gray-600">
+            <p className="font-raleway text-sm text-gray-600">
               No reviews yet. Be the first to review this product!
             </p>
           </div>
@@ -232,7 +232,7 @@ function ProductReviews({
                         </svg>
                       ))}
                     </div>
-                    <span className="font-inter text-sm text-gray-600">({totalReviews})</span>
+                    <span className="font-raleway text-sm text-gray-600">({totalReviews})</span>
                   </div>
                 </div>
 
@@ -242,21 +242,21 @@ function ProductReviews({
                   <div className="grid grid-cols-2 gap-10">
                     {/* Name Field */}
                     <div>
-                      <label className="block font-inter text-sm font-light text-text-primary mb-2">
+                      <label className="block font-raleway text-sm font-light text-text-primary mb-2">
                         Name
                       </label>
                       <input
                         type="text"
                         value={formData.name}
                         onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                        className="w-full border border-gray-400 bg-cream rounded px-4 py-2 font-inter text-sm focus:outline-none focus:border-gray-800"
+                        className="w-full border border-gray-400 bg-cream rounded px-4 py-2 font-raleway text-sm focus:outline-none focus:border-gray-800"
                         placeholder=""
                       />
                     </div>
 
                     {/* Rating Field */}
                     <div>
-                      <label className="block font-inter text-sm font-light text-text-primary mb-3">
+                      <label className="block font-raleway text-sm font-light text-text-primary mb-3">
                         Rating
                       </label>
                       <div className="flex gap-1">
@@ -283,41 +283,41 @@ function ProductReviews({
 
                   {/* Tag Line Field */}
                   <div>
-                    <label className="block font-inter text-sm font-light text-text-primary mb-2">
+                    <label className="block font-raleway text-sm font-light text-text-primary mb-2">
                       Tag Line
                     </label>
                     <input
                       type="text"
                       value={formData.tagLine}
                       onChange={(e) => setFormData({ ...formData, tagLine: e.target.value })}
-                      className="w-full border border-gray-400 bg-cream rounded px-4 py-2 font-inter text-sm focus:outline-none focus:border-gray-800"
+                      className="w-full border border-gray-400 bg-cream rounded px-4 py-2 font-raleway text-sm focus:outline-none focus:border-gray-800"
                       placeholder=""
                     />
                   </div>
 
                   {/* Email Field */}
                   <div>
-                    <label className="block font-inter text-sm font-light text-text-primary mb-2">
+                    <label className="block font-raleway text-sm font-light text-text-primary mb-2">
                       Email
                     </label>
                     <input
                       type="email"
                       value={formData.email}
                       onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                      className="w-full border border-gray-400 bg-cream rounded px-4 py-2 font-inter text-sm focus:outline-none focus:border-gray-800"
+                      className="w-full border border-gray-400 bg-cream rounded px-4 py-2 font-raleway text-sm focus:outline-none focus:border-gray-800"
                       placeholder=""
                     />
                   </div>
 
                   {/* Review Text Area */}
                   <div>
-                    <label className="block font-inter text-sm font-light text-text-primary mb-2">
+                    <label className="block font-raleway text-sm font-light text-text-primary mb-2">
                       Write Your Review
                     </label>
                     <textarea
                       value={formData.review}
                       onChange={(e) => setFormData({ ...formData, review: e.target.value })}
-                      className="w-full border h-20 border-gray-400 bg-cream rounded px-4 py-2 font-inter text-sm focus:outline-none focus:border-gray-800 resize-none"
+                      className="w-full border h-20 border-gray-400 bg-cream rounded px-4 py-2 font-raleway text-sm focus:outline-none focus:border-gray-800 resize-none"
                       rows={5}
                       placeholder=""
                     />
@@ -325,10 +325,10 @@ function ProductReviews({
 
                   {/* Media Section */}
                   <div>
-                    <label className="block font-inter text-sm font-light text-text-primary mb-2">
+                    <label className="block font-raleway text-sm font-light text-text-primary mb-2">
                       Media
                     </label>
-                    <p className="font-inter text-xs text-gray-600 mb-3">
+                    <p className="font-raleway text-xs text-gray-600 mb-3">
                       Reviews with media are found to be more helpful
                     </p>
                     <button className="w-20 h-20 border-2 border-dashed border-gray-300 mb-2 bg-gray-300 rounded flex items-center justify-center hover:border-gray-400 transition-colors">
@@ -339,7 +339,7 @@ function ProductReviews({
                   {/* Submit Button */}
                   <button
                     onClick={handleSubmitReview}
-                    className="w-full bg-[#E9908E] text-white py-3 rounded font-inter font-semibold text-sm transition-colors mt-6 tracking-extrawide hover:bg-cream hover:text-black border hover:border-black"
+                    className="w-full bg-[#E9908E] text-white py-3 rounded font-raleway font-semibold text-sm transition-colors mt-6 tracking-extrawide hover:bg-cream hover:text-black border hover:border-black"
                   >
                     SUBMIT
                   </button>

@@ -84,7 +84,7 @@ function SearchModal({ isOpen, onClose }: SearchModalProps) {
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   autoFocus
-                  className="w-full px-4 py-2 border-[1px] border-gray-500 rounded-lg font-inter text-base focus:outline-none focus:border-gray-800 transition-all bg-cream"
+                  className="w-full px-4 py-2 border-[1px] border-gray-500 rounded-lg font-raleway text-base focus:outline-none focus:border-gray-800 transition-all bg-cream"
                 />
                 <button
                   type="submit"

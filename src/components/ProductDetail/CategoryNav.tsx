@@ -32,7 +32,7 @@ function CategoryNav() {
             <a
               key={category.id}
               href={`/shop?category=${category.id}`}
-              className="px-16 py-3 rounded-full font-inter tracking-wide text-xs border-black border font-light transition-all bg-[#E9908E] uppercase text-white hover:bg-[#d88d9a] flex-shrink-0 inline-block"
+              className="px-16 py-3 rounded-full font-raleway tracking-wide text-xs border-black border font-light transition-all bg-[#E9908E] uppercase text-white hover:bg-[#d88d9a] flex-shrink-0 inline-block"
             >
               {category.name}
             </a>

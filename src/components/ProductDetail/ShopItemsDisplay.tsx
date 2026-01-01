@@ -123,8 +123,8 @@ function ShopItemsDisplay() {
               </div>
               
               <div className="space-y-1">
-                <p className="text-xs text-gray-500 font-inter">{item.category}</p>
-                <h3 className="font-inter text-sm font-medium text-text-primary group-hover:text-[#E89FAC] transition-colors line-clamp-2">
+                <p className="text-xs text-gray-500 font-raleway">{item.category}</p>
+                <h3 className="font-raleway text-sm font-medium text-text-primary group-hover:text-[#E89FAC] transition-colors line-clamp-2">
                   {item.name}
                 </h3>
                 
