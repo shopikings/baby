@@ -27,14 +27,14 @@ function ColorDropdown({ colors, selectedColor, onColorChange }: ColorDropdownPr
   }, [])
 
   return (
-    <div className="relative w-[50%]" ref={dropdownRef}>
+    <div className="relative w-48" ref={dropdownRef}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full border border-gray-600 bg-[#EFECDA] rounded px-4 py-2 font-raleway text-sm font-normal text-text-primary focus:outline-none focus:border-gray-800 flex items-center justify-between"
+        className="w-full border border-gray-600 bg-[#EFECDA] rounded px-4 py-2 font-raleway text-sm font-normal text-text-primary focus:outline-none focus:border-gray-800 flex items-center justify-between gap-2"
       >
-        <span>{selectedColor || 'Select a color'}</span>
+        <span className="truncate">{selectedColor || 'Select a color'}</span>
         <svg 
-          className={`w-4 h-4 text-text-primary transition-transform ${isOpen ? 'rotate-180' : ''}`} 
+          className={`w-8 h-8 text-text-primary transition-transform ${isOpen ? 'rotate-180' : ''}`} 
           fill="none" 
           stroke="currentColor" 
           viewBox="0 0 24 24"
@@ -44,7 +44,7 @@ function ColorDropdown({ colors, selectedColor, onColorChange }: ColorDropdownPr
       </button>
 
       {isOpen && (
-        <div className="absolute top-full left-0 right-0 mt-1 bg-[#EFECDA] border border-gray-600 rounded shadow-lg z-50">
+        <div className="absolute top-full left-0 mt-1 bg-[#EFECDA] border border-gray-600 rounded shadow-lg z-50 w-48">
           <div className="max-h-64 overflow-y-auto">
             {colors.map((color) => (
               <button

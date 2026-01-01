@@ -27,7 +27,7 @@ function QuantityDropdown({ quantity, maxQuantity = 10, onQuantityChange }: Quan
     <div className="relative w-[30%]" ref={dropdownRef}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="w-1/2 border border-gray-600 bg-[#EFECDA] rounded px-4 py-2 font-raleway text-sm font-normal text-text-primary focus:outline-none focus:border-gray-800 flex items-center justify-between"
+        className="w-full border border-gray-600 bg-[#EFECDA] rounded px-4 py-2 font-raleway text-sm font-normal text-text-primary focus:outline-none focus:border-gray-800 flex items-center justify-between"
       >
         <span>{quantity}</span>
         <svg 
