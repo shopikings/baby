@@ -162,7 +162,7 @@ function YouMayAlsoLike() {
                     {product.title}
                   </h3>
                   <p className="font-raleway text-base md:text-lg font-normal text-text-primary">
-                    £{product.price}
+                    ${product.price}
                   </p>
                 </div>
               </div>

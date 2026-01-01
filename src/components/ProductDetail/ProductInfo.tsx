@@ -149,9 +149,9 @@ function ProductInfo({
       {/* Add to Cart Button */}
       <button
         onClick={handleAddToCart}
-        className="w-fit bg-[#E9908E] text-white py-3 px-6 rounded-lg font-raleway font-normal hover:bg-[#EFECDA] transition-colors text-sm hover:text-black hover:border hover:border-black"
+        className="w-full bg-[#E9908E] text-white py-3 px-6 rounded-lg font-raleway font-normal hover:bg-[#EFECDA] transition-colors text-sm hover:text-black hover:border hover:border-black"
       >
-        ADD TO CART • £{price}
+        ADD TO CART • ${price}
       </button>
 
  
