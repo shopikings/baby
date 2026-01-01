@@ -142,7 +142,7 @@ function Shop() {
       <div className="flex min-h-screen items-center justify-center bg-white">
         <div className="text-center">
           <div className="mb-4 inline-block size-12 animate-spin rounded-full border-4 border-solid border-button-hover border-r-transparent"></div>
-          <p className="font-inter text-lg text-gray-600">
+          <p className="font-raleway text-lg text-gray-600">
             Loading products...
           </p>
         </div>
@@ -177,7 +177,7 @@ function Shop() {
           <button
             onClick={loadMore}
             disabled={!hasNextPage || pageLoading}
-            className={`rounded-none px-8 py-3 font-inter text-sm font-medium uppercase text-white transition-colors ${
+            className={`rounded-none px-8 py-3 font-raleway text-sm font-medium uppercase text-white transition-colors ${
               !hasNextPage
                 ? 'bg-gray-400 cursor-not-allowed'
                 : 'bg-button-hover hover:bg-[#7d969a]'

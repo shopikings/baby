@@ -6,7 +6,7 @@ function SearchBar({ onSearchClick }: SearchBarProps) {
   return (
     <button
       onClick={onSearchClick}
-      className="hidden sm:flex items-center justify-center flex-1 max-w-xs px-3 py-2 border border-gray-400 rounded font-inter text-xs md:text-sm text-gray-600 hover:text-gray-800 hover:border-gray-800 transition-all bg-white gap-2"
+      className="hidden sm:flex items-center justify-center flex-1 max-w-xs px-3 py-2 border border-gray-400 rounded font-raleway text-xs md:text-sm text-gray-600 hover:text-gray-800 hover:border-gray-800 transition-all bg-white gap-2"
     >
       <svg
         className="w-4 h-4 md:w-5 md:h-5"

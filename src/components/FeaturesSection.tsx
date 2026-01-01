@@ -38,7 +38,7 @@ function FeaturesSection() {
               <h3 className="mb-1 font-raleway text-base font-medium text-button-hover">
                 {feature.title}
               </h3>
-              <p className="font-inter text-sm text-text-primary">
+              <p className="font-raleway text-sm text-text-primary">
                 {feature.subtitle}
               </p>
             </div>

@@ -58,7 +58,7 @@ function ShopTheLook() {
           <h3 className="mb-4 font-rubik text-3xl font-bold capitalize text-text-primary sm:text-4xl md:text-5xl lg:text-6xl">
             Shop the Look
           </h3>
-          <p className="font-inter text-lg text-text-primary/70 sm:text-xl">
+          <p className="font-raleway text-lg text-text-primary/70 sm:text-xl">
             Style made simple—curated looks for little originals.
           </p>
         </div>

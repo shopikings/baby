@@ -83,7 +83,7 @@ function ProductCard({
         <h3 className="font-rubik text-sm font-semibold leading-[18px] text-text-primary sm:text-lg sm:leading-[22px]">
           {title}
         </h3>
-        <p className="font-raleway text-lg font-semibold text-text-primary sm:text-base">
+        <p className="font-raleway text-lg font-medium text-text-primary sm:text-base">
           {price}
         </p>
       </div>

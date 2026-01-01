@@ -45,9 +45,9 @@ function TextReviewCard({
       <p className="mb-4 font-raleway text-base leading-relaxed">{review}</p>
 
       <div className="mb-[30%]">
-        <p className="font-inter text-sm font-semibold">{author}</p>
+        <p className="font-raleway text-sm font-semibold">{author}</p>
         {location && (
-          <p className="font-inter text-sm text-white/50">{location}</p>
+          <p className="font-raleway text-sm text-white/50">{location}</p>
         )}
       </div>
     </div>

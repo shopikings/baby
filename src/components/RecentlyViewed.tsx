@@ -28,7 +28,7 @@ function RecentlyViewed({ products }: RecentlyViewedProps) {
         </h2>
         <Link
           to="/shop"
-          className="font-inter text-xs font-bold text-[#2E2E2E] underline hover:underline"
+          className="font-raleway text-xs font-bold text-[#2E2E2E] underline hover:underline"
         >
           Clear History
         </Link>
@@ -56,10 +56,10 @@ function RecentlyViewed({ products }: RecentlyViewedProps) {
               />
             </div>
             <div className="p-4 text-center">
-              <p className="mb-4 font-inter text-sm font-medium text-text-primary">
+              <p className="mb-4 font-raleway text-sm font-medium text-text-primary">
                 {product.price} - $32
               </p>
-              <button className="mt-1 w-full cursor-pointer bg-white p-2 font-inter text-xs font-bold text-gray-600">
+              <button className="mt-1 w-full cursor-pointer bg-white p-2 font-raleway text-xs font-bold text-gray-600">
                 Today
               </button>
             </div>

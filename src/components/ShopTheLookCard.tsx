@@ -79,14 +79,14 @@ function ShopTheLookCard({
             <h3 className="mb-1 font-rubik text-xs font-semibold text-text-primary line-clamp-2">
               {product.name}
             </h3>
-            <p className="font-inter text-sm font-bold text-text-primary">
+            <p className="font-raleway text-sm font-bold text-text-primary">
               {product.price}
             </p>
           </div>
 
           <button
             onClick={handleQuickBuy}
-            className="mt-2 rounded-md bg-[#E8A5A5] px-3 py-1 font-inter text-xs font-medium text-white transition-colors hover:bg-[#E8A5A5]/90"
+            className="mt-2 rounded-md bg-[#E8A5A5] px-3 py-1 font-raleway text-xs font-medium text-white transition-colors hover:bg-[#E8A5A5]/90"
           >
             QUICK BUY
           </button>

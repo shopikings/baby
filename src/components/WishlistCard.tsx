@@ -34,14 +34,14 @@ function WishlistCard({
 
       <button
         onClick={() => onAddToCart(id)}
-        className="mt-3 w-full rounded-md border border-[#E8A5A5] bg-[#E8A5A5] px-3 py-2 font-inter text-xs font-medium text-white transition-colors hover:border-black hover:bg-transparent hover:text-black"
+        className="mt-3 w-full rounded-md border border-[#E8A5A5] bg-[#E8A5A5] px-3 py-2 font-raleway text-xs font-medium text-white transition-colors hover:border-black hover:bg-transparent hover:text-black"
       >
         add - {price}
       </button>
 
       <button
         onClick={() => onRemove(id)}
-        className="mt-2 w-full font-inter text-xs text-text-primary/60 transition-colors hover:text-text-primary"
+        className="mt-2 w-full font-raleway text-xs text-text-primary/60 transition-colors hover:text-text-primary"
       >
         remove from wishlist
       </button>

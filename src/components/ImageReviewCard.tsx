@@ -14,7 +14,7 @@ function ImageReviewCard({ image, title, author }: ImageReviewCardProps) {
         <h3 className="mb-2 font-rubik text-xl font-bold text-text-primary">
           {title}
         </h3>
-        <p className="font-inter text-sm font-medium text-text-primary">
+        <p className="font-raleway text-sm font-medium text-text-primary">
           {author}
         </p>
       </div>

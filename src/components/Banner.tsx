@@ -60,7 +60,7 @@ function Banner() {
 
             <Link
               to="/shop"
-              className={`inline-block rounded-md border-2 px-5 py-2 font-inter text-xs font-medium transition-all duration-300 ${
+              className={`inline-block rounded-md border-2 px-5 py-2 font-raleway text-xs font-medium transition-all duration-300 ${
                 isHovered
                   ? 'border-button-hover bg-button-hover text-white'
                   : 'border-white bg-transparent text-white hover:border-button-hover hover:bg-button-hover'
@@ -75,7 +75,7 @@ function Banner() {
       </div>
 
       <div className="flex items-center justify-center bg-banner-lower py-2">
-        <p className="font-inter text-xs font-medium text-text-primary">
+        <p className="font-raleway text-xs font-medium text-text-primary">
           NEW ARRIVALS IN -{' '}
           <Link
             to="/shop"

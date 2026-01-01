@@ -26,15 +26,15 @@ function Header() {
           <Marquee2
             text1="Free Easy Returns within 90 days of purchase"
             text2=" Free Shipping on all order above $70"
-            className="font-inter text-sm font-medium text-black"
+            className="font-raleway text-sm font-medium text-black"
           />
         </div>
 
-        <div className="mx-auto flex max-w-7xl items-center px-4 py-5 sm:px-6 lg:px-8 lg:py-2 justify-between">
+        <div className="mx-auto flex max-w-7xl items-center px-4 py-4 sm:px-6 lg:px-8 justify-between gap-4">
           {/* Left - Mobile Menu Button */}
           <button
             onClick={() => setIsMobileMenuOpen(true)}
-            className="mr-4 flex items-center justify-center transition-colors hover:text-gray-600 lg:hidden"
+            className="flex items-center justify-center transition-colors hover:text-gray-600 lg:hidden flex-shrink-0"
           >
             <svg
               className="size-6 text-text-primary"
@@ -50,27 +50,25 @@ function Header() {
               />
             </svg>
           </button>
-          <div>
-          <Navigation onCollectionSelect={handleCollectionSelect} />
+
+          {/* Left - Navigation (Desktop only) */}
+          <div className="hidden lg:block">
+            <Navigation onCollectionSelect={handleCollectionSelect} />
           </div>
 
-          {/* Left - Navigation */}
-<div>
-          <Link to="/" className="flex-shrink-0">
+          {/* Center - Logo */}
+          <Link to="/" className="flex-shrink-0 mx-auto mb-4 md:mb-0 lg:mx-0">
             <img
               src="/assets/images/logo.png"
               alt="Logo"
               className="h-10 w-auto"
             />
           </Link>
-</div>
 
-
-<div>
-          <HeaderActions onCartClick={() => setIsCartOpen(true)} onSearchClick={() => setIsSearchOpen(true)} />
-</div>
-          {/* Right - Icons */}
-
+          {/* Right - Header Actions */}
+          <div className="flex-shrink-0">
+            <HeaderActions onCartClick={() => setIsCartOpen(true)} onSearchClick={() => setIsSearchOpen(true)} />
+          </div>
         </div>
       </header>
 

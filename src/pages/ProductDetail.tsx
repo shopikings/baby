@@ -287,7 +287,7 @@ function ProductDetail() {
       <div className="bg-banner-lower py-1 md:py-2 mt-2 md:mt-3">
         <Marquee
           text="10% off on your first order when you sign up to newsletter."
-          className="font-inter text-xs md:text-sm font-medium text-black"
+          className="font-raleway text-xs md:text-sm font-medium text-black"
         />
       </div>
 

@@ -158,10 +158,10 @@ function YouMayAlsoLike() {
 
                 {/* Product Info */}
                 <div>
-                  <h3 className="font-inter text-sm md:text-base font-normal text-text-primary line-clamp-2 mb-2">
+                  <h3 className="font-raleway text-sm md:text-base font-normal text-text-primary line-clamp-2 mb-2">
                     {product.title}
                   </h3>
-                  <p className="font-inter text-base md:text-lg font-normal text-text-primary">
+                  <p className="font-raleway text-base md:text-lg font-normal text-text-primary">
                     £{product.price}
                   </p>
                 </div>

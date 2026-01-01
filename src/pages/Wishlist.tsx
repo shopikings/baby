@@ -69,7 +69,7 @@ function Wishlist() {
 
             <Link
               to="/shop"
-              className="rounded-md border border-text-primary bg-transparent px-8 py-3 font-inter text-sm font-medium text-text-primary transition-colors hover:bg-text-primary hover:text-cream"
+              className="rounded-md border border-text-primary bg-transparent px-8 py-3 font-raleway text-sm font-medium text-text-primary transition-colors hover:bg-text-primary hover:text-cream"
             >
               continue shopping
             </Link>
@@ -97,7 +97,7 @@ function Wishlist() {
               <div className="flex justify-center">
                 <button
                   onClick={handleAddAllToCart}
-                  className="rounded-md border border-[#E8A5A5] bg-[#E8A5A5] px-16 py-3 font-inter text-sm font-normal text-white transition-colors hover:border-black hover:bg-transparent hover:text-black"
+                  className="rounded-md border border-[#E8A5A5] bg-[#E8A5A5] px-16 py-3 font-raleway text-sm font-normal text-white transition-colors hover:border-black hover:bg-transparent hover:text-black"
                 >
                   add to cart all items - ${getTotalPrice()}
                 </button>

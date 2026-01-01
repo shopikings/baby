@@ -129,10 +129,10 @@ function CustomersAlsoBoughtSlider() {
               />
             </div>
             <div className="mt-2">
-              <h3 className="line-clamp-2 font-inter text-xs font-medium text-text-primary">
+              <h3 className="line-clamp-2 font-raleway text-xs font-medium text-text-primary">
                 {product.title}
               </h3>
-              <p className="mt-1 font-inter text-sm font-semibold text-text-primary">
+              <p className="mt-1 font-raleway text-sm font-semibold text-text-primary">
                 {product.price}
               </p>
             </div>
