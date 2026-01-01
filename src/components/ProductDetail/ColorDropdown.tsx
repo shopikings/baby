@@ -34,7 +34,7 @@ function ColorDropdown({ colors, selectedColor, onColorChange }: ColorDropdownPr
       >
         <span className="truncate">{selectedColor || 'Select a color'}</span>
         <svg 
-          className={`w-8 h-8 text-text-primary transition-transform ${isOpen ? 'rotate-180' : ''}`} 
+          className={`w-4 h-4 text-text-primary transition-transform ${isOpen ? 'rotate-180' : ''}`} 
           fill="none" 
           stroke="currentColor" 
           viewBox="0 0 24 24"
