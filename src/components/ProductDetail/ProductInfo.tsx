@@ -4,6 +4,8 @@ import toast from 'react-hot-toast'
 import box from "../../assets/box(black).svg"
 import truck from "../../assets/truck.svg"
 import email from "../../assets/email.svg"
+import ColorDropdown from './ColorDropdown'
+import QuantityDropdown from './QuantityDropdown'
 
 interface Color {
   name: string
@@ -72,7 +74,7 @@ function ProductInfo({
   }
 
   return (
-    <div className="space-y-4 md:space-y-7">
+    <div className="space-y-4 md:space-y-5">
       {/* Product Title */}
       <h1 className="font-raleway text-xl md:text-2xl font-bold uppercase text-text-primary flex flex-col">
         <span>
@@ -85,8 +87,8 @@ function ProductInfo({
          {/* Sizes */}
       {sizes.length > 0 && (
         <div>
-           <p className="text-xs md:text-sm text-gray-700 font-light">by Brands</p>
-          <h3 className="font-raleway text-xs font-light text-text-primary mb-2 md:mb-3 tracking-wide">
+           <p className="text-xs md:text-sm text-black font-normal font-raleway">by Brands</p>
+          <h3 className="font-raleway text-xs font-normal text-black mb-2 md:mb-3 tracking-wide">
             SIZE
           </h3>
           <div className="flex gap-2 flex-wrap">
@@ -114,53 +116,40 @@ function ProductInfo({
      
 
       {/* Colors */}
-      {colors.length > 0 && (
+      {colors.length > 0 ? (
         <div className='mb-3'>
-          <h3 className="font-raleway text-xs font-light text-text-primary mb-3 tracking-wide">
-            Colour: <span className="font-semibold">{selectedColor}</span>
+          <h3 className="font-raleway text-xs font-normal text-black mb-3 tracking-wide">
+            Colour: <span className='font-bold text-black'>{selectedColor}</span>
           </h3>
-          <div className="flex gap-3">
-            {colors.map((color) => (
-              <button
-                key={color.name}
-                onClick={() => setSelectedColor(color.name)}
-                className={`size-10 rounded border-2 transition-all ${
-                  selectedColor === color.name
-                    ? 'border-gray-800'
-                    : 'border-gray-300 hover:border-gray-400'
-                }`}
-                style={{ backgroundColor: color.hex }}
-                title={color.name}
-              />
-            ))}
-          </div>
+          <ColorDropdown 
+            colors={colors}
+            selectedColor={selectedColor}
+            onColorChange={setSelectedColor}
+          />
+        </div>
+      ) : (
+        <div className='mb-3'>
+          <h3 className="font-raleway text-xs font-normal text-black mb-3 tracking-wide">
+            Colour <span className='font-bold text-black'>Default</span>
+          </h3>
         </div>
       )}
 
       {/* Quantity */}
       <div>
-        <h3 className="text-xs font-light text-text-primary mb-3 tracking-wide">
+        <h3 className="text-xs font-raleway font-normal text-black mb-3 tracking-wide">
           QUANTITY
         </h3>
-        <div className="flex items-center gap-7 border border-gray-800 rounded-xl px-4 py-2 w-28">
-          <span className="font-raleway text-lg font0-light font-medium text-text-primary">
-            {quantity}
-          </span>
-          <button
-            onClick={() => setQuantity(quantity + 1)}
-            className="ml-4 hover:opacity-70 transition-opacity"
-          >
-            <svg className="w-5 h-5 text-text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
-            </svg>
-          </button>
-        </div>
+        <QuantityDropdown 
+          quantity={quantity}
+          onQuantityChange={setQuantity}
+        />
       </div>
 
       {/* Add to Cart Button */}
       <button
         onClick={handleAddToCart}
-        className="w-full bg-[#E9908E] text-white py-3 rounded-lg font-raleway font-normal hover:bg-[#EFECDA] transition-colors text-sm hover:text-black hover:border hover:border-black"
+        className="w-fit bg-[#E9908E] text-white py-3 px-6 rounded-lg font-raleway font-normal hover:bg-[#EFECDA] transition-colors text-sm hover:text-black hover:border hover:border-black"
       >
         ADD TO CART • £{price}
       </button>
