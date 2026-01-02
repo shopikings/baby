@@ -60,7 +60,7 @@ function ProductImageGallery({
       </div>
 
       {/* Thumbnail Strip */}
-      <div className="flex gap-2 overflow-x-auto pb-2">
+      <div className="flex gap-2 overflow-x-auto pb-2 w-full">
         {filteredThumbnails.map((thumbnail, index) => (
           <button
             key={index}
@@ -79,6 +79,29 @@ function ProductImageGallery({
           </button>
         ))}
       </div>
+
+      {/* Image Slider Bar */}
+      {filteredThumbnails.length > 1 && (
+        <div className="w-full max-w-md mt-6 px-2">
+          <input
+            type="range"
+            min="0"
+            max={filteredThumbnails.length - 1}
+            value={selectedIndex}
+            onChange={(e) => setSelectedIndex(parseInt(e.target.value))}
+            className="w-full h-2 bg-gray-300 rounded-lg appearance-none cursor-pointer accent-[#E9908E]"
+            style={{
+              background: `linear-gradient(to right, #E9908E 0%, #E9908E ${
+                (selectedIndex / (filteredThumbnails.length - 1)) * 100
+              }%, #d1d5db ${(selectedIndex / (filteredThumbnails.length - 1)) * 100}%, #d1d5db 100%)`
+            }}
+          />
+          <div className="flex justify-between text-xs text-gray-600 mt-2">
+            <span>{selectedIndex + 1}</span>
+            <span>{filteredThumbnails.length}</span>
+          </div>
+        </div>
+      )}
 
       {/* Fullscreen Modal */}
       {isFullscreen && (

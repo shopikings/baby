@@ -9,10 +9,8 @@ import Marquee from 'components/Marquee'
 import CategoryNav from 'components/ProductDetail/CategoryNav'
 import Services from 'components/Services'
 import OurStorySection from 'components/OurStorySection'
-import StickyDiscountBanner from 'components/StickyDiscountBanner'
 import test1 from '../assets/test1.png'
 import test2 from '../assets/test2.png'
-import StickyDiscountTag from 'components/StickyDiscountTag'
 
 function ProductDetail() {
   const { id } = useParams()
@@ -67,7 +65,7 @@ function ProductDetail() {
   console.log('Reviews passed to ProductReviews:', product.reviews)
 
   // Extract images - deduplicate them
-  const thumbnails = Array.from(new Set(product.images?.map((i: any) => i.url) || []))
+  const thumbnails: string[] = Array.from(new Set(product.images?.map((i: any) => i.url) || []))
 
   let sizesList: string[] = []
   let colorsList: { name: string; hex: string }[] = []
