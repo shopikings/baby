@@ -143,7 +143,7 @@ function ProductInfo({
         </div>
         <button
           onClick={() => setShowSizeChart(true)}
-          className="text-xs font-raleway text-black underline px-4 py-2 rounded hover:bg-[#E9908E] hover:text-white transition-colors whitespace-nowrap h-fit"
+          className="text-xs font-raleway text-[#E9908E] border border-[#E9908E] px-4 py-2 rounded hover:bg-[#E9908E] hover:text-white transition-colors whitespace-nowrap h-fit"
         >
           SIZE GUIDE
         </button>
@@ -187,20 +187,22 @@ function ProductInfo({
       {/* Shipping Info */}
       <div className="space-y-[2px] font-raleway text-sm font-light text-gray-700">
         <div className="flex items-start gap-2">
-          <img src={truck}/>
+          <img src={truck} alt="truck" />
           <span>Ships in 1-2 Days</span>
         </div>
         <div className="flex items-start gap-2">
-         <img src={email}/>
+          <img src={email} alt="email" />
           <span>Delivery From $7 or Free Over $70</span>
         </div>
         <div className="flex items-start gap-2">
-          <img src={box}/>
+          <img src={box} alt="box" />
           <span>90 Days Easy Returns</span>
         </div>
-         {/* Expandable Sections */}
+      </div>
+
+      {/* Expandable Sections */}
       <div className="space-y-0">
-                {/* Features */}
+        {/* Features */}
         <button
           onClick={() => toggleSection('features')}
           className="w-full flex items-center justify-between py-3 border-b border-black"
@@ -230,7 +232,6 @@ function ProductInfo({
           </div>
         )}
 
-
         {/* Returns */}
         <button
           onClick={() => toggleSection('returns')}
@@ -250,7 +251,7 @@ function ProductInfo({
             <ul className="space-y-2 ml-4">
               <li className="flex gap-2">
                 <span className="text-text-primary font-bold">•</span>
-                <span>Returns are accepted within go days of delivery for items that are new, unused, and in original packaging; used or opened baby gear items are not eligible for return due to safety reasons.</span>
+                <span>Returns are accepted within 90 days of delivery for items that are new, unused, and in original packaging; used or opened baby gear items are not eligible for return due to safety reasons.</span>
               </li>
               <li className="flex gap-2">
                 <span className="text-text-primary font-bold">•</span>
@@ -264,7 +265,7 @@ function ProductInfo({
           </div>
         )}
 
-              {/* Shipping */}
+        {/* Shipping */}
         <button
           onClick={() => toggleSection('shipping')}
           className="w-full flex items-center justify-between py-3 border-b border-black"
@@ -295,11 +296,7 @@ function ProductInfo({
             </ul>
           </div>
         )}
-
       </div>
-      </div>
-
-     
     </div>
   )
 }

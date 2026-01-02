@@ -24,7 +24,7 @@ function ProductCard({
   const navigate = useNavigate()
   const [isWishlisted, setIsWishlisted] = useState(false)
   const [showUndoButton, setShowUndoButton] = useState(false)
-  const [undoTimeout, setUndoTimeout] = useState<NodeJS.Timeout | null>(null)
+  const [undoTimeout, setUndoTimeout] = useState<ReturnType<typeof setTimeout> | null>(null)
 
   useEffect(() => {
     if (id) {
