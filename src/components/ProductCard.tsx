@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom'
-import { useCart } from 'contexts/CartContext'
+import { useWishlist } from 'contexts/WishlistContext'
+import { useState, useEffect } from 'react'
 import toast from 'react-hot-toast'
 
 interface ProductCardProps {
@@ -19,8 +20,17 @@ function ProductCard({
   price,
   className = ''
 }: ProductCardProps) {
-  const { addToCart } = useCart()
+  const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist()
   const navigate = useNavigate()
+  const [isWishlisted, setIsWishlisted] = useState(false)
+  const [showUndoButton, setShowUndoButton] = useState(false)
+  const [undoTimeout, setUndoTimeout] = useState<NodeJS.Timeout | null>(null)
+
+  useEffect(() => {
+    if (id) {
+      setIsWishlisted(isInWishlist(id.toString()))
+    }
+  }, [id, isInWishlist])
 
   const handleCardClick = () => {
     if (id) {
@@ -33,16 +43,42 @@ function ProductCard({
     }
   }
 
-  const handleAddToCart = (e: React.MouseEvent) => {
+  const handleAddToWishlist = (e: React.MouseEvent) => {
     e.stopPropagation()
-    addToCart({
-      id: id?.toString() || `product-${Date.now()}`,
+    const productId = id?.toString() || `product-${Date.now()}`
+    
+    addToWishlist({
+      id: productId,
       name: title,
       price: price,
       image: image
     })
-    toast.success(`${title} added to cart!`)
+    setIsWishlisted(true)
+    setShowUndoButton(true)
+    toast.success(`${title} added to wishlist!`)
+
+    // Auto-hide undo button after 5 seconds
+    if (undoTimeout) {
+      clearTimeout(undoTimeout)
+    }
+    const timeout = setTimeout(() => {
+      setShowUndoButton(false)
+    }, 5000)
+    setUndoTimeout(timeout)
   }
+
+  const handleUndo = (e: React.MouseEvent) => {
+    e.stopPropagation()
+    const productId = id?.toString() || `product-${Date.now()}`
+    removeFromWishlist(productId)
+    setIsWishlisted(false)
+    setShowUndoButton(false)
+    if (undoTimeout) {
+      clearTimeout(undoTimeout)
+    }
+    toast.success(`${title} removed from wishlist!`)
+  }
+
   return (
     <div
       className={`group cursor-pointer ${className}`}
@@ -63,17 +99,54 @@ function ProductCard({
             />
           )}
 
-          <div className="absolute bottom-3 right-3 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+          <div className="absolute bottom-3 right-3 flex flex-col gap-2 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+            {showUndoButton && (
+              <button
+                onClick={handleUndo}
+                className="rounded-lg bg-white p-2 transition-transform hover:scale-105"
+                style={{ boxShadow: '0 0 8px rgba(0, 0, 0, 0.15)' }}
+                title="Undo - Remove from wishlist"
+              >
+                <svg
+                  className="size-5"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M3 7v6h6" />
+                  <path d="M21 17v-6h-6" />
+                  <path d="M18 5c-1.5-1.5-3.5-2-5.5-2-5 0-9 4-9 9s4 9 9 9c4 0 7.5-2.5 8.5-6" />
+                </svg>
+              </button>
+            )}
             <button
-              onClick={handleAddToCart}
+              onClick={handleAddToWishlist}
               className="rounded-lg bg-white p-2 transition-transform hover:scale-105"
               style={{ boxShadow: '0 0 8px rgba(0, 0, 0, 0.15)' }}
             >
-              <img
-                src="/assets/icons/cart.svg"
-                alt="Add to cart"
-                className="size-5"
-              />
+              {isWishlisted ? (
+                <svg
+                  className="size-5"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                  style={{ color: '#ef4444' }}
+                >
+                  <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                </svg>
+              ) : (
+                <svg
+                  className="size-5"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                >
+                  <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                </svg>
+              )}
             </button>
           </div>
         </div>

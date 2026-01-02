@@ -1,85 +1,84 @@
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 
 interface ProductImageGalleryProps {
   thumbnails: string[]
   productName: string
+  selectedColor?: string
+  variants?: any[]
 }
 
 function ProductImageGallery({
   thumbnails,
-  productName
+  productName,
+  selectedColor = '',
+  variants = []
 }: ProductImageGalleryProps) {
   const [isFullscreen, setIsFullscreen] = useState(false)
   const [selectedIndex, setSelectedIndex] = useState(0)
-  const [showAll, setShowAll] = useState(false)
 
-  const imagesToShow = showAll ? 16 : 4
+  // Filter images based on selected color
+  const filteredThumbnails = useMemo(() => {
+    if (!selectedColor || variants.length === 0) {
+      return thumbnails
+    }
+
+    // Find the variant image that matches the selected color
+    let variantImage: string | null = null
+    variants.forEach((variant: any) => {
+      const colorOption = variant.selectedOptions?.find((opt: any) =>
+        opt.name.toLowerCase().includes('color')
+      )
+      if (colorOption?.value === selectedColor && variant.image?.url) {
+        variantImage = variant.image.url
+      }
+    })
+    
+    // If we found a variant-specific image, put it first, then add all other product images
+    if (variantImage) {
+      const otherImages = thumbnails.filter((img: string) => img !== variantImage)
+      return [variantImage, ...otherImages]
+    }
+    
+    return thumbnails
+  }, [selectedColor, variants, thumbnails])
 
   return (
-    <>
-      {/* 2 Column Grid */}
-      <div className="grid grid-cols-2 gap-4">
-        {Array.from({ length: imagesToShow }).map((_, index) => (
-          thumbnails[index] && (
-            <div
-              key={index}
-              className="aspect-square bg-gray-200 rounded-lg overflow-hidden cursor-pointer hover:opacity-80 transition-opacity relative group"
-              onClick={() => {
-                setSelectedIndex(index)
-                setIsFullscreen(true)
-              }}
-            >
-              <img
-                src={thumbnails[index]}
-                alt={`${productName} ${index + 1}`}
-                className="w-full h-full"
-              />
-              <button
-                onClick={(e) => {
-                  e.stopPropagation()
-                  setSelectedIndex(index)
-                  setIsFullscreen(true)
-                }}
-                className="absolute right-2 top-2 flex size-8 items-center justify-center rounded-full bg-white/90 text-gray-800 shadow-md opacity-0 group-hover:opacity-100 transition-opacity"
-              >
-                <svg
-                  className="size-5"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"
-                  />
-                </svg>
-              </button>
-            </div>
-          )
-        ))}
+    <div className='bg-cream flex flex-col items-center'>
+  
+      {/* Main Image */}
+      <div
+        className="w-full max-w-md aspect-square bg-gray-200 rounded-lg overflow-hidden cursor-pointer mb-4"
+        onClick={() => setIsFullscreen(true)}
+      >
+        {filteredThumbnails[selectedIndex] && (
+          <img
+            src={filteredThumbnails[selectedIndex]}
+            alt={`${productName} main`}
+            className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+          />
+        )}
       </div>
 
-      {/* View More Button */}
-      {!showAll && thumbnails.length > 4 && (
-        <button
-          onClick={() => setShowAll(true)}
-          className="mt-6 w-full lg:w-full lg:mx-auto py-3 text-white bg-[#E9908E] hover:border hover:border-black font-raleway font-light rounded hover:bg-[#EFECDA] hover:text-black transition-colors"
-        >
-          VIEW MORE
-        </button>
-      )}
-
-      {/* View Less Button */}
-      {showAll && thumbnails.length > 4 && (
-        <button
-          onClick={() => setShowAll(false)}
-          className="mt-6 w-full lg:w-full lg:mx-auto py-3 text-white hover:border hover:border-black bg-[#E9908E] font-raleway font-light rounded hover:bg-[#EFECDA] hover:text-black transition-colors"
-        >
-          VIEW LESS
-        </button>
-      )}
+      {/* Thumbnail Strip */}
+      <div className="flex gap-2 overflow-x-auto pb-2">
+        {filteredThumbnails.map((thumbnail, index) => (
+          <button
+            key={index}
+            onClick={() => setSelectedIndex(index)}
+            className={`flex-shrink-0 w-16 h-16 rounded-lg overflow-hidden border-2 transition-all bg-white flex items-center justify-center ${
+              selectedIndex === index
+                ? 'border-[#E9908E] shadow-md'
+                : 'border-gray-300 hover:border-gray-400'
+            }`}
+          >
+            <img
+              src={thumbnail}
+              alt={`${productName} ${index + 1}`}
+              className="w-full h-full object-contain"
+            />
+          </button>
+        ))}
+      </div>
 
       {/* Fullscreen Modal */}
       {isFullscreen && (
@@ -107,9 +106,9 @@ function ProductImageGallery({
           </button>
 
           <div className="relative max-h-[90vh] max-w-[90vw]">
-            {thumbnails[selectedIndex] && (
+            {filteredThumbnails[selectedIndex] && (
               <img
-                src={thumbnails[selectedIndex]}
+                src={filteredThumbnails[selectedIndex]}
                 alt={productName}
                 className="max-h-[90vh] max-w-[90vw] object-contain"
                 onClick={(e) => e.stopPropagation()}
@@ -118,7 +117,7 @@ function ProductImageGallery({
           </div>
         </div>
       )}
-    </>
+  </div>
   )
 }
 

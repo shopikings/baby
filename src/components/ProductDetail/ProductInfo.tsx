@@ -6,6 +6,7 @@ import truck from "../../assets/truck.svg"
 import email from "../../assets/email.svg"
 import ColorDropdown from './ColorDropdown'
 import QuantityDropdown from './QuantityDropdown'
+import SizeChartModal from './SizeChartModal'
 
 interface Color {
   name: string
@@ -21,6 +22,7 @@ interface ProductInfoProps {
   sizes?: string[]
   image: string
   description?: string
+  onColorChange?: (color: string) => void
 }
 
 function ProductInfo({
@@ -31,20 +33,14 @@ function ProductInfo({
   colors = [],
   sizes = [],
   image,
-  description = ''
+  description = '',
+  onColorChange
 }: ProductInfoProps) {
   const { addToCart } = useCart()
-  
-  // Console log only the color names coming from API
-  console.log('=== COLORS FROM API ===')
-  colors.forEach((color, index) => {
-    console.log(`${index + 1}. ${color.name}`)
-  })
-  console.log('=== END API COLORS ===')
-  
   const [selectedColor, setSelectedColor] = useState(colors[0]?.name || '')
   const [selectedSize, setSelectedSize] = useState(sizes[0] || '')
   const [quantity, setQuantity] = useState(1)
+  const [showSizeChart, setShowSizeChart] = useState(false)
   const [expandedSections, setExpandedSections] = useState<{ [key: string]: boolean }>({
     shipping: false,
     returns: false,
@@ -76,19 +72,20 @@ function ProductInfo({
   return (
     <div className="space-y-4 md:space-y-5">
       {/* Product Title */}
-      <h1 className="font-raleway text-xl md:text-2xl font-bold uppercase text-text-primary flex flex-col">
-        <span>
-             {name}
-        </span>
-     
-         <span className="font-raleway text-base md:text-lg font-normal mb-2 md:mb-3 text-text-primary">
-          ${price}
-        </span>
-         {/* Sizes */}
+      <h1 className="font-raleway text-xl md:text-2xl font-bold uppercase text-text-primary">
+        {name}
+      </h1>
+
+      {/* Price */}
+      <span className="font-raleway text-base md:text-lg font-normal text-text-primary">
+        ${price}
+      </span>
+
+      {/* Sizes */}
       {sizes.length > 0 && (
         <div>
-           <p className="text-xs md:text-sm text-black font-normal font-raleway">by Brands</p>
-          <h3 className="font-raleway text-xs font-normal text-black mb-2 md:mb-3 tracking-wide">
+          <p className="text-xs md:text-sm text-black font-normal font-raleway">by Brands</p>
+          <h3 className="font-raleway text-xs font-normal text-black mb-3 tracking-wide">
             SIZE
           </h3>
           <div className="flex gap-2 flex-wrap">
@@ -108,12 +105,6 @@ function ProductInfo({
           </div>
         </div>
       )}
-      </h1>
-
-  
-
-
-     
 
       {/* Colors */}
       {colors.length > 0 ? (
@@ -124,7 +115,11 @@ function ProductInfo({
           <ColorDropdown 
             colors={colors}
             selectedColor={selectedColor}
-            onColorChange={setSelectedColor}
+            onColorChange={(color) => {
+              console.log('Color changed to:', color)
+              setSelectedColor(color)
+              onColorChange?.(color)
+            }}
           />
         </div>
       ) : (
@@ -136,14 +131,22 @@ function ProductInfo({
       )}
 
       {/* Quantity */}
-      <div>
-        <h3 className="text-xs font-raleway font-normal text-black mb-3 tracking-wide">
-          QUANTITY
-        </h3>
-        <QuantityDropdown 
-          quantity={quantity}
-          onQuantityChange={setQuantity}
-        />
+      <div className='flex items-end gap-4'>
+        <div className="flex-1">
+          <h3 className="text-xs font-raleway font-normal text-black mb-3 tracking-wide">
+            QUANTITY
+          </h3>
+          <QuantityDropdown 
+            quantity={quantity}
+            onQuantityChange={setQuantity}
+          />
+        </div>
+        <button
+          onClick={() => setShowSizeChart(true)}
+          className="text-xs font-raleway text-black underline px-4 py-2 rounded hover:bg-[#E9908E] hover:text-white transition-colors whitespace-nowrap h-fit"
+        >
+          SIZE GUIDE
+        </button>
       </div>
 
       {/* Add to Cart Button */}
@@ -154,13 +157,15 @@ function ProductInfo({
         ADD TO CART • ${price}
       </button>
 
- 
+      {/* Size Chart Modal */}
+      <SizeChartModal isOpen={showSizeChart} onClose={() => setShowSizeChart(false)} />
 
       {/* Fit Large Section */}
-      <div className="space-y-3 bg-[#EFECDA] rounded">
+      <div className="space-y-3 bg-[#EFECDA] rounded p-4">
         <h3 className="font-raleway text-xs font-bold text-text-primary tracking-wide">
           FIT
-          <div className="space-y-3">
+        </h3>
+        <div className="space-y-3">
           {/* Visual Scale */}
           <div className="flex items-center gap-1">
             <div className="flex-1 h-[2px] bg-gray-400 rounded"></div>
@@ -177,9 +182,6 @@ function ProductInfo({
             <span>Large</span>
           </div>
         </div>
-        </h3>
-        
-        
       </div>
 
       {/* Shipping Info */}

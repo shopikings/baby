@@ -365,6 +365,9 @@ export async function fetchProductById(id: string) {
                 name
                 value
               }
+              image {
+                url
+              }
             }
           }
         }
