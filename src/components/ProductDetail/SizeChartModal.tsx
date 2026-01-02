@@ -82,7 +82,7 @@ function SizeChartModal({ isOpen, onClose }: SizeChartModalProps) {
             <div className="overflow-x-auto">
               <table className="w-full border-collapse">
                 <thead>
-                  <tr className="bg-[#8B3A3A]">
+                  <tr className="bg-[]">
                     <th className="border border-gray-600 px-4 py-3 text-white font-raleway font-bold">SIZE</th>
                     <th className="border border-gray-600 px-4 py-3 text-white font-raleway font-bold">EUR</th>
                     <th className="border border-gray-600 px-4 py-3 text-white font-raleway font-bold">US</th>
