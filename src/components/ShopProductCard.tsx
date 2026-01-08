@@ -3,6 +3,13 @@ import { useNavigate } from 'react-router-dom'
 import { useWishlist } from 'contexts/WishlistContext'
 import toast from 'react-hot-toast'
 
+interface VariantInfo {
+  id: string
+  price: string
+  image: string
+  title?: string
+}
+
 interface ShopProductCardProps {
   id?: number
   title: string
@@ -11,6 +18,31 @@ interface ShopProductCardProps {
   variantImages: string[]
   rating?: number
   className?: string
+  handle?: string
+  variants?: VariantInfo[]
+}
+
+interface ShopProductCardProps {
+  id?: number
+  title: string
+  price: string
+  mainImage: string
+  variantImages: string[]
+  rating?: number
+  className?: string
+  handle?: string
+  variants?: VariantInfo[]
+}
+
+interface WishlistItem {
+  id: string
+  name: string
+  price: string
+  image: string // default product image
+  variantId: string // first/default variant ID
+  variantTitle: string // e.g., "Red / Small"
+  variantImage?: string // optional, variant-specific image
+  quantity?: number
 }
 
 function ShopProductCard({
@@ -20,9 +52,12 @@ function ShopProductCard({
   mainImage,
   variantImages,
   rating = 0,
-  className = ''
+  className = '',
+  handle,
+  variants // Optional variant data
 }: ShopProductCardProps) {
   const [currentImage, setCurrentImage] = useState(mainImage)
+  const [currentPrice, setCurrentPrice] = useState(price)
   const [isTransitioning, setIsTransitioning] = useState(false)
   const navigate = useNavigate()
   const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist()
@@ -31,41 +66,55 @@ function ShopProductCard({
     id?.toString() || `product-${title.replace(/\s+/g, '-').toLowerCase()}`
   const isWishlisted = isInWishlist(productId)
 
-  const handleImageClick = (image: string, e: React.MouseEvent) => {
+  const handleImageClick = (
+    image: string,
+    index: number,
+    e: React.MouseEvent
+  ) => {
     e.stopPropagation()
     if (image === currentImage) return
 
     setIsTransitioning(true)
     setTimeout(() => {
       setCurrentImage(image)
+
+      // If we have variant data and the clicked image corresponds to a variant,
+      // update the price to match that variant
+      if (variants && variants[index]) {
+        setCurrentPrice(variants[index].price)
+      }
+
       setIsTransitioning(false)
     }, 200)
   }
 
   const handleCardClick = () => {
-    if (id) {
-      // Convert Shopify ID to plain number if needed
-      const cleanId = id.toString().includes('gid://shopify/Product/')
-        ? id.toString().split('/').pop()
-        : id.toString()
-
-      navigate(`/product/${cleanId}`)
+    if (handle) {
+      navigate(`/product/${handle}`)
     }
   }
 
   const handleWishlistClick = (e: React.MouseEvent) => {
     e.stopPropagation()
 
+    const defaultVariant = variants && variants.length > 0 ? variants[0] : null
+
+    if (!defaultVariant) return
+
+    const wishlistItem: WishlistItem = {
+      id: productId,
+      name: title,
+      price: defaultVariant.price,
+      image: defaultVariant.image,
+      variantId: defaultVariant.id,
+      quantity: 1,
+      variantTitle: defaultVariant.title || 'Default'
+    }
+
     if (isWishlisted) {
       removeFromWishlist(productId)
       toast.success('Removed from wishlist')
     } else {
-      const wishlistItem = {
-        id: productId,
-        name: title,
-        price: price,
-        image: currentImage
-      }
       addToWishlist(wishlistItem)
       toast.success('Added to wishlist')
     }
@@ -115,7 +164,7 @@ function ShopProductCard({
           {title}
         </h3>
         <p className="font-raleway text-sm font-bold text-text-primary">
-          {price}
+          {currentPrice}
         </p>
 
         <div className="flex items-center gap-0">
@@ -136,7 +185,7 @@ function ShopProductCard({
             {variantImages.map((image, index) => (
               <button
                 key={index}
-                onClick={(e) => handleImageClick(image, e)}
+                onClick={(e) => handleImageClick(image, index, e)}
                 className={`size-8 overflow-hidden rounded-md border-2 transition-all hover:scale-110 ${
                   currentImage === image
                     ? 'border-button-hover'

@@ -8,17 +8,20 @@ import BlogCommentForm from 'components/BlogCommentForm'
 import BlogReadMore from 'components/BlogReadMore'
 import { StoreCreditModal } from 'components/Blog'
 
-// ⚠️ IMPORTANT: Import the actual Shopify fetch function and types
-import { fetchBlogArticleByHandle, ShopifyBlogArticle } from '../utils/shopify' // Adjust this path!
-
-// --- 1. Define Structured Content Types (Internal Component Type) ---
-type ContentBlock =
-  | { type: 'paragraph'; content: string }
-  | { type: 'heading'; level: 1 | 2 | 3 | 4; content: string }
-  | { type: 'list'; items: string[] }
-  | { type: 'link'; text: string; url: string; external: boolean }
-
-// --- Helper Functions (Date, Read Time, and Content Transformation) ---
+export type ShopifyBlogArticle = {
+  id: string
+  title: string
+  handle: string
+  excerpt: string
+  content: string // ✅ HTML string
+  publishedAt: string
+  author?: string
+  tags: string[]
+  image: {
+    url: string
+    altText: string | null
+  }
+}
 
 const formatDate = (isoDate: string): string => {
   return new Date(isoDate)
@@ -30,69 +33,15 @@ const formatDate = (isoDate: string): string => {
     .toUpperCase()
 }
 
-const calculateReadTime = (htmlContent: string): string => {
+const calculateReadTime = (content: string): string => {
   const WORDS_PER_MINUTE = 200
-  // Remove HTML tags to get raw text
-  const text = htmlContent.replace(/<[^>]*>/g, '')
-  const wordCount = text.trim().split(/\s+/).length
+  const wordCount = content.trim().split(/\s+/).length
   const minutes = Math.ceil(wordCount / WORDS_PER_MINUTE)
   return `${minutes} min read`
 }
 
-/**
- * ⚠️ ADAPTATION LAYER: Transforms Shopify's raw HTML into the component's
- * structured ContentBlock array.
- * * NOTE: This is a massive simplification and highly error-prone.
- * The best practice for structured content from Shopify is to use a Headless CMS
- * or metafields to store content as JSON blocks, or to refactor the component
- * to render the raw HTML directly using `dangerouslySetInnerHTML`.
- * * I will use a simple placeholder structure since actual HTML parsing in React
- * is too complex for this file.
- */
-function mapShopifyArticleToStructuredContent(
-  article: ShopifyBlogArticle
-): ContentBlock[] {
-  // ⛔️ REPLACE THIS LOGIC with a real HTML-to-Block parser
-  // or refactor the component to use raw HTML.
-
-  if (!article.contentHtml) return []
-
-  // For now, we will just simulate a structured array based on the raw HTML length.
-  // In a real app, you'd use a library like 'html-react-parser' or similar
-  // to convert HTML into React elements, or a dedicated content model.
-  return [
-    {
-      type: 'paragraph',
-      content: `(Content loaded via Shopify: ${article.title})`
-    },
-    {
-      type: 'paragraph',
-      content:
-        article.contentHtml.substring(0, 150) +
-        '... (Actual content is HTML. This is a placeholder display.)'
-    },
-    { type: 'heading', level: 2, content: 'Product Features' },
-    {
-      type: 'list',
-      items: [
-        `Article ID: ${article.id.split('/').pop()}`,
-        `Published: ${article.publishedAt}`,
-        `Tags: ${article.tags.join(', ')}`
-      ]
-    },
-    {
-      type: 'paragraph',
-      content:
-        'Please adjust the mapShopifyArticleToStructuredContent function for proper HTML parsing, or switch to dangerouslySetInnerHTML.'
-    }
-  ]
-}
-
-// --- The React Component ---
-
 function BlogPost() {
   const { slug } = useParams<{ slug: string }>()
-  // Use the Shopify type directly in state
   const [blogPost, setBlogPost] = useState<ShopifyBlogArticle | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -101,23 +50,45 @@ function BlogPost() {
   const [isCreditModalOpen, setIsCreditModalOpen] = useState(false)
   const creditButtonRef = useRef<HTMLButtonElement>(null)
 
-  // 1. Fetch data based on the slug using the proper Shopify function
   useEffect(() => {
-    if (!slug) {
-      setError('Article slug is missing.')
-      setIsLoading(false)
-      return
-    }
-
-    const loadPost = async () => {
+    async function fetchBlogPost() {
       setIsLoading(true)
       setError(null)
+
       try {
-        const data = await fetchBlogArticleByHandle(slug) // Use the proper Shopify fetcher
-        if (data) {
-          setBlogPost(data)
+        const resp = await fetch(
+          import.meta.env.VITE_BACKEND_API_URL + `/blogs/article/${slug}`
+        )
+
+        if (!resp.ok) {
+          throw new Error(`HTTP error! status: ${resp.status}`)
+        }
+
+        const data = await resp.json()
+
+        // Check if we have the expected data structure
+        if (data && data.data) {
+          // console.log('Fetched blog post data:', data.data)
+
+          // Transform the API response
+          const transformedArticle: ShopifyBlogArticle = {
+            id: data.data.id,
+            title: data.data.title,
+            handle: data.data.handle,
+            excerpt: data.data.excerpt,
+            content: data.data.content, // 👈 HTML
+            publishedAt: data.data.publishedAt,
+            author: 'Maison Baby & Kids',
+            tags: [],
+            image: {
+              url: data.data.image?.url || '/assets/images/blogDefault.png',
+              altText: data.data.image?.altText || null
+            }
+          }
+
+          setBlogPost(transformedArticle)
         } else {
-          setError(`No blog post found for slug: "${slug}"`)
+          setError('No blog post data found')
         }
       } catch (e) {
         console.error('Fetching blog post failed:', e)
@@ -127,153 +98,23 @@ function BlogPost() {
       }
     }
 
-    loadPost()
-  }, [slug])
-
-  // Derive all display values using useMemo to ensure they recalculate only when the post changes
-  const structuredContent = useMemo(() => {
-    if (blogPost) {
-      // Use the helper to transform the fetched Shopify data structure
-      return mapShopifyArticleToStructuredContent(blogPost)
+    if (slug) {
+      fetchBlogPost()
+    } else {
+      setError('Article slug is missing.')
+      setIsLoading(false)
     }
-    return []
-  }, [blogPost])
+  }, [slug])
 
   const displayInfo = useMemo(() => {
     if (!blogPost) return null
     return {
       date: formatDate(blogPost.publishedAt),
-      readTime: calculateReadTime(blogPost.contentHtml),
+      readTime: calculateReadTime(blogPost.content),
       author: blogPost.author || 'Unknown Author',
-      image: blogPost.image || '/assets/images/blogDefault.png'
+      image: blogPost.image.url
     }
   }, [blogPost])
-
-  // Utility function remains the same
-  const parseRichText = (text: string) => {
-    const parts = text.split(/(\*\*.*?\*\*)/g)
-    return parts.map((part, index) => {
-      if (part.startsWith('**') && part.endsWith('**')) {
-        const boldText = part.slice(2, -2)
-        return (
-          <strong key={index} className="font-semibold text-text-primary">
-            {boldText}
-          </strong>
-        )
-      }
-      return part
-    })
-  }
-
-  // Utility function remains the same
-  const renderContentBlock = (block: ContentBlock, index: number) => {
-    switch (block.type) {
-      case 'paragraph':
-        return (
-          <p
-            key={index}
-            className="mb-4 font-raleway text-base leading-relaxed text-[#2E2E2E]"
-          >
-            {parseRichText(block.content || '')}
-          </p>
-        )
-      case 'heading': {
-        const contentBlock = block as {
-          type: 'heading'
-          level: number
-          content: string
-        }
-        const HeadingTag =
-          `h${contentBlock.level}` as keyof JSX.IntrinsicElements
-        const headingClasses = {
-          1: 'mb-6 mt-10 font-rubik text-5xl font-bold text-text-primary',
-          2: 'mb-4 mt-8 font-rubik text-4xl font-semibold text-text-primary',
-          3: 'mb-3 mt-6 font-rubik text-3xl font-semibold text-text-primary',
-          4: 'mb-3 mt-4 font-rubik text-lg font-semibold text-text-primary'
-        }
-        return (
-          <HeadingTag
-            key={index}
-            className={
-              headingClasses[
-                contentBlock.level as keyof typeof headingClasses
-              ] || headingClasses[1]
-            }
-          >
-            {contentBlock.content}
-          </HeadingTag>
-        )
-      }
-      case 'list':
-        const listBlock = block as { type: 'list'; items: string[] }
-        return (
-          <ul
-            key={index}
-            className="mb-6 ml-6 list-disc space-y-2 font-raleway text-base leading-relaxed text-[#2E2E2E]"
-          >
-            {listBlock?.items?.map((item: string, itemIndex: number) => (
-              <li key={itemIndex}>{parseRichText(item)}</li>
-            ))}
-          </ul>
-        )
-      case 'link':
-        const linkBlock = block as {
-          type: 'link'
-          text: string
-          url: string
-          external: boolean
-        }
-        return (
-          <div key={index} className="mb-4">
-            {linkBlock.external ? (
-              <a
-                href={linkBlock.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 font-raleway text-base font-medium text-button-hover underline hover:text-banner-lower"
-              >
-                {linkBlock.text}
-                <svg
-                  className="size-4"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-                  />
-                </svg>
-              </a>
-            ) : (
-              <a
-                href={linkBlock.url}
-                className="inline-flex items-center gap-2 font-raleway text-base font-medium text-button-hover underline hover:text-banner-lower"
-              >
-                {linkBlock.text}
-                <svg
-                  className="size-4"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M9 5l7 7-7 7"
-                  />
-                </svg>
-              </a>
-            )}
-          </div>
-        )
-      default:
-        return null
-    }
-  }
 
   // --- Handle Loading and Error States ---
   if (isLoading) {
@@ -299,12 +140,10 @@ function BlogPost() {
       </div>
     )
   }
-  // --- END Loading/Error Handlers ---
 
   // Use the calculated displayInfo
   const { date, readTime, author, image } = displayInfo
 
-  // --- Render with Live Data ---
   return (
     <div className="min-h-screen bg-cream py-14">
       {/* Blog Hero Section */}
@@ -322,25 +161,27 @@ function BlogPost() {
             <div className="mb-4 flex items-center gap-2">
               <div className="size-2 rounded-full bg-button-hover"></div>
               <span className=" font-rubik text-xs font-medium capitalize tracking-wide text-button-hover">
-                {date} {/* Dynamic date from Shopify data */}
+                {date}
               </span>
             </div>
             <h1 className="mb-6 font-rubik text-2xl font-bold leading-tight text-text-primary sm:text-3xl lg:text-4xl">
-              {blogPost.title} {/* Dynamic title from Shopify data */}
+              {blogPost.title}
             </h1>
             <p className="font-raleway text-sm text-[#2E2E2E]">
-              By **{author}** | {readTime} {/* Dynamic author/readTime */}
+              By **{author}** | {readTime}
             </p>
           </div>
         </div>
       </div>
 
-      <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
-        {/* Article Content - Now uses the structuredContent generated from Shopify's HTML */}
-        <article className="max-w-none">
-          {structuredContent.map((block, index) =>
-            renderContentBlock(block, index)
-          )}
+      <div className="mx-auto max-w-5xl px-4 py-12 sm:px-6 lg:px-8 font-raleway text-sm text-[#444b59]">
+        {/* Article Content */}
+        <article className="prose max-w-none prose-p:font-raleway prose-p:text-text-primary prose-h1:font-rubik prose-h1:text-3xl prose-h1:mt-8 prose-h2:font-rubik prose-h2:text-2xl prose-h3:font-rubik prose-h3:text-xl prose-hr:my-8 prose-strong:font-semibold">
+          <div
+            dangerouslySetInnerHTML={{
+              __html: blogPost.content
+            }}
+          />
         </article>
 
         <div className="mx-auto mt-14 max-w-xl">

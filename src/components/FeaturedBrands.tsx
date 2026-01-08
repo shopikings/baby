@@ -25,7 +25,7 @@ function FeaturedBrands() {
   // ✅ NEW FUNCTION (same logic as Navigation)
   const handleBrandClick = (brand: string) => {
     const tag = brand.trim().toLowerCase() // required format for Shopify tag
-    navigate(`/shop?tag=${encodeURIComponent(tag)}`)
+    navigate(`/shop?brand=${encodeURIComponent(tag)}`)
   }
 
   return (

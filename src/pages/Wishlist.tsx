@@ -4,9 +4,22 @@ import { useCart } from 'contexts/CartContext'
 import WishlistCard from 'components/WishlistCard'
 import toast from 'react-hot-toast'
 
+interface WishlistItem {
+  id: string
+  name: string
+  price: string
+  image: string // default product image
+  variantId: string // first/default variant ID
+  variantTitle: string // e.g., "Red / Small"
+  variantImage?: string // optional, variant-specific image
+  quantity?: number
+}
+
 function Wishlist() {
   const { wishlistItems, removeFromWishlist, clearWishlist } = useWishlist()
   const { addToCart } = useCart()
+
+  console.log(wishlistItems)
 
   const handleRemoveFromWishlist = (id: string) => {
     removeFromWishlist(id)
@@ -15,15 +28,19 @@ function Wishlist() {
 
   const handleAddToCart = (id: string) => {
     const item = wishlistItems.find((item) => item.id === id)
-    if (item) {
-      addToCart({
-        id: item.id,
-        name: item.name,
-        price: item.price,
-        image: item.image
-      })
-      toast.success('Added to cart')
-    }
+    if (!item) return
+
+    addToCart({
+      id: item.id,
+      name: item.name,
+      price: item.price,
+      image: item.variantImage || item.image, // use variant image if available
+      variantId: item.variantId, // required for checkout
+      variantTitle: item.variantTitle || 'Default'
+      // quantity: item.quantity || 1
+    })
+
+    toast.success('Added to cart')
   }
 
   const handleAddAllToCart = () => {
@@ -32,9 +49,13 @@ function Wishlist() {
         id: item.id,
         name: item.name,
         price: item.price,
-        image: item.image
+        image: item.variantImage || item.image,
+        variantId: item.variantId
+        // variantTitle: item.variantTitle || 'Default',
+        // quantity: item.quantity || 1
       })
     })
+
     toast.success(`Added ${wishlistItems.length} items to cart`)
     clearWishlist()
   }
@@ -82,7 +103,7 @@ function Wishlist() {
                   <WishlistCard
                     key={item.id}
                     id={item.id}
-                    image={item.image}
+                    image={item.variantImage || item.image}
                     title={item.name}
                     subtitle="default title"
                     price={item.price}

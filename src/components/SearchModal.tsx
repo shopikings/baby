@@ -9,6 +9,8 @@ interface SearchModalProps {
 function SearchModal({ isOpen, onClose }: SearchModalProps) {
   const [searchQuery, setSearchQuery] = useState('')
   const navigate = useNavigate()
+  const [loading, setLoading] = useState(true)
+  const [brands, setBrands] = useState<string[]>([])
 
   const brandItems = [
     'JELLYCAT',
@@ -23,6 +25,30 @@ function SearchModal({ isOpen, onClose }: SearchModalProps) {
   ]
 
   useEffect(() => {
+    async function fetchBrands() {
+      try {
+        setLoading(true)
+        const resp = await fetch(
+          import.meta.env.VITE_BACKEND_API_URL + `/brands`
+        )
+
+        const data = await resp.json()
+
+        if (data && data.data) {
+          setBrands(data.data)
+        }
+      } catch (err) {
+        console.error('Failed to load brands:', err)
+        // Fallback to hardcoded brands if API fails
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchBrands()
+  }, [])
+
+  useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = 'hidden'
     } else {
@@ -35,25 +61,25 @@ function SearchModal({ isOpen, onClose }: SearchModalProps) {
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault()
-    if (searchQuery.trim()) {
-      const matchedBrand = brandItems.find(
-        (brand) => brand.toLowerCase() === searchQuery.trim().toLowerCase()
-      )
-      if (matchedBrand) {
-        handleBrandClick(matchedBrand)
-      }
+
+    const match = brands.find(
+      (b) => b.toLowerCase() === searchQuery.trim().toLowerCase()
+    )
+
+    if (match) {
+      handleBrandClick(match)
     }
   }
 
   // Filter brands based on search query
   const filteredBrands = searchQuery.trim()
-    ? brandItems.filter((brand) =>
+    ? brands.filter((brand) =>
         brand.toLowerCase().includes(searchQuery.toLowerCase())
       )
-    : brandItems
+    : brands
 
   const handleBrandClick = (brand: string) => {
-    navigate(`/shop?tag=${encodeURIComponent(brand.toLowerCase())}`)
+    navigate(`/shop?brand=${encodeURIComponent(brand.toLowerCase())}`)
     setSearchQuery('')
     onClose()
   }

@@ -41,7 +41,8 @@ function Navigation({ onCollectionSelect }: NavigationProps) {
     'QUINCY MAE',
     'ENEWTON',
     'NUNA',
-    'UPPABABY'
+    'UPPABABY',
+    'View All'
   ]
 
   const brandImages = [
@@ -80,7 +81,13 @@ function Navigation({ onCollectionSelect }: NavigationProps) {
 
   const handleBrandClick = (brand: string) => {
     const tag = brand.trim().toLowerCase()
-    navigate(`/shop?tag=${encodeURIComponent(tag)}`)
+
+    if (tag == 'view all') {
+      navigate('/collection')
+      setActiveDropdown(null)
+      return
+    }
+    navigate(`/shop?brand=${encodeURIComponent(tag)}`)
     setActiveDropdown(null)
   }
 

@@ -10,7 +10,11 @@ interface WishlistItem {
   id: string
   name: string
   price: string
-  image: string
+  image: string // default product image
+  variantId: string // first/default variant ID
+  variantTitle: string // e.g., "Red / Small"
+  variantImage?: string // optional, variant-specific image
+  quantity?: number
 }
 
 interface WishlistContextType {

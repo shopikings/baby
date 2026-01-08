@@ -8,6 +8,8 @@ interface CartItemProps {
     price: string
     image: string
     quantity: number
+    color?: string
+    size?: string
   }
 }
 
@@ -47,11 +49,22 @@ function CartItem({ item }: CartItemProps) {
             className="size-full object-cover"
           />
         </div>
+
         <div className="flex-1">
           <h3 className="font-rubik text-xs font-semibold text-black">
             {item.name.toUpperCase()}
           </h3>
-          <p className="mt-1 font-rubik text-xs text-black">SIZE: 2T</p>
+
+          {/* ✅ Render color and size dynamically */}
+          {(item.color || item.size) && (
+            <p className="mt-1 font-rubik text-xs text-black">
+              {item.color && <span>Color: {item.color}</span>}
+              {/* {item.color && item.size && <span> • </span>} */}
+              <br />
+              {item.size && <span>Size: {item.size}</span>}
+            </p>
+          )}
+
           <div className="mt-2 flex items-center justify-between">
             <div className="relative" ref={quantityRef}>
               <button
@@ -96,6 +109,7 @@ function CartItem({ item }: CartItemProps) {
                 </div>
               )}
             </div>
+
             <button
               onClick={() => removeFromCart(item.id)}
               className="font-raleway text-sm text-black underline hover:text-text-primary"
@@ -104,6 +118,7 @@ function CartItem({ item }: CartItemProps) {
             </button>
           </div>
         </div>
+
         <div className="text-right">
           <p className="font-raleway text-sm font-medium text-black">
             {item.price}

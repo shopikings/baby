@@ -8,11 +8,9 @@ import {
 } from 'components/Blog'
 import { X } from 'lucide-react'
 import { motion } from 'framer-motion'
-// NOTE: Assuming this path for importing your function and types
-import { fetchBlogs, ShopifyBlogArticle } from '../utils/shopify'
 
 // --- Data Types for Component ---
-type TabType = 'all' | 'nutrition' | 'supplements' | 'training'
+type TabType = 'all' | 'news' | 'training-tips'
 
 // A simpler post type for the UI, derived from ShopifyBlogArticle
 type BlogPostType = {
@@ -27,54 +25,34 @@ type BlogPostType = {
 
 const tabs = [
   { id: 'all' as TabType, label: 'All posts' },
-  { id: 'nutrition' as TabType, label: 'Nutrition' },
-  { id: 'supplements' as TabType, label: 'Supplements' },
-  { id: 'training' as TabType, label: 'Training Tips' }
+  { id: 'news' as TabType, label: 'News' },
+  { id: 'training-tips' as TabType, label: 'Training Tips' }
 ]
 
-// --- Helper Functions for Data Transformation ---
-
-/**
- * Maps Shopify tags to the local TabType categories.
- * You should adjust this based on how you tag your Shopify articles.
- */
-const getCategoryFromTags = (tags: string[]): TabType => {
-  const lowerCaseTags = tags.map((tag) => tag.toLowerCase())
-
-  if (lowerCaseTags.some((tag) => ['nutrition', 'meals', 'diet'].includes(tag)))
-    return 'nutrition'
-  if (
-    lowerCaseTags.some((tag) =>
-      ['supplements', 'protein', 'creatine'].includes(tag)
-    )
-  )
-    return 'supplements'
-  if (
-    lowerCaseTags.some((tag) =>
-      ['training', 'workouts', 'lifting'].includes(tag)
-    )
-  )
-    return 'training'
-
-  return 'all'
+// Function to get category from blog handle
+const getCategoryFromBlogHandle = (blogHandle: string): TabType => {
+  if (blogHandle === 'news') return 'news'
+  if (blogHandle === 'training-tips') return 'training-tips'
+  return 'all' // Default fallback
 }
 
-/**
- * Transforms a Shopify article object into the simplified BlogPostType.
- */
+// Transform article function
 const transformArticleToBlogPost = (
-  article: ShopifyBlogArticle
+  article: any,
+  blogHandle: string
 ): BlogPostType => {
-  // 1. Extract Excerpt from contentHtml (safely get first text, max 150 chars)
-  const firstParagraphMatch = article.contentHtml.match(/<p[^>]*>([^<]+)<\/p>/i)
-  let excerptText = firstParagraphMatch ? firstParagraphMatch[1].trim() : ''
-  // Remove HTML and limit length
-  excerptText = excerptText.replace(/<[^>]*>/g, '').substring(0, 150)
-  if (excerptText.length === 150 && article.contentHtml.length > 150) {
-    excerptText += '...'
+  // 1. Extract Excerpt - use excerpt if available, otherwise extract from content
+  let excerptText = article.excerpt || ''
+  if (!excerptText && article.content) {
+    // Remove HTML tags and limit length
+    excerptText = article.content.replace(/<[^>]*>/g, '').substring(0, 150)
+    if (excerptText.length === 150 && article.content.length > 150) {
+      excerptText += '...'
+    }
   }
+
   if (!excerptText) {
-    excerptText = article.title // Fallback if contentHtml is empty
+    excerptText = article.title // Fallback to title
   }
 
   // 2. Format Date (SEP 20, 2025)
@@ -87,20 +65,16 @@ const transformArticleToBlogPost = (
     .toUpperCase()
     .replace(/\./g, '')
 
-  console.log('image 2 ', article.image)
-
   return {
     id: article.id,
-    image: article.image || '/assets/images/blogDefault.png', // Use a default image if null
+    image: article.image?.url || '/assets/images/blogDefault.png',
     date: formattedDate,
     title: article.title,
     excerpt: excerptText,
-    category: getCategoryFromTags(article.tags),
-    slug: article.handle // Use Shopify's handle for routing
+    category: getCategoryFromBlogHandle(blogHandle),
+    slug: article.handle
   }
 }
-
-// --- React Component ---
 
 export default function BlogPage() {
   const [activeTab, setActiveTab] = useState<TabType>('all')
@@ -115,38 +89,40 @@ export default function BlogPage() {
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
-  // Fetch data on component mount
   useEffect(() => {
-    async function loadPosts() {
-      setIsLoading(true)
-      setError(null)
+    async function loadBlogPosts() {
       try {
-        // Fetch up to 10 blogs and their articles (adjust limit as needed)
-        const blogsData = await fetchBlogs({ limit: 10 })
+        setIsLoading(true)
+        setError(null)
+
+        const resp = await fetch(
+          import.meta.env.VITE_BACKEND_API_URL + `/blogs`
+        )
+
+        if (!resp.ok) {
+          throw new Error(`HTTP error! status: ${resp.status}`)
+        }
+
+        const data = await resp.json()
 
         // Flatten all articles from all blogs into one list
-        const articles = blogsData.flatMap((blog) => blog.articles)
-
-        // Transform and store the posts
-        const transformedPosts: BlogPostType[] = articles.map(
-          transformArticleToBlogPost
+        const allArticles: BlogPostType[] = data.data.flatMap((blog: any) =>
+          blog.articles.map((article: any) =>
+            transformArticleToBlogPost(article, blog.handle)
+          )
         )
 
-        // NOTE: If you need to include the dummy data for a full view,
-        // you would merge them here. For live data, you should remove the static array.
-        setFetchedPosts(transformedPosts)
-      } catch (e) {
-        console.error('Failed to fetch blog posts:', e)
-        setError(
-          'Failed to load blog posts. Check the GraphQL client and network connection.'
-        )
+        setFetchedPosts(allArticles)
+      } catch (error) {
+        console.error('Failed to fetch blog posts:', error)
+        setError('Failed to load blog posts. Please try again later.')
       } finally {
         setIsLoading(false)
       }
     }
 
-    loadPosts()
-  }, [])
+    loadBlogPosts()
+  }, []) // Empty dependency array means this runs once on mount
 
   // Reset pagination when the active tab changes
   useEffect(() => {
@@ -155,9 +131,10 @@ export default function BlogPage() {
 
   // Memoize filtered posts for performance
   const filteredPosts = useMemo(() => {
-    return activeTab === 'all'
-      ? fetchedPosts
-      : fetchedPosts.filter((post) => post.category === activeTab)
+    if (activeTab === 'all') {
+      return fetchedPosts
+    }
+    return fetchedPosts.filter((post) => post.category === activeTab)
   }, [activeTab, fetchedPosts])
 
   // Pagination calculation
@@ -216,7 +193,7 @@ export default function BlogPage() {
             currentPosts.map((post) => (
               <BlogCard
                 key={post.id}
-                image={post.image || '/assets/images/blogOne.png'} // Use a default image if the fetched one is null
+                image={post.image || '/assets/images/palceholder.webp'} // Use a default image if the fetched one is null
                 date={post.date}
                 title={post.title}
                 excerpt={post.excerpt}
@@ -234,8 +211,6 @@ export default function BlogPage() {
           )}
         </div>
       </div>
-
-      {/* ... (Banner Section remains the same, but the BlogCard iteration needs to be updated too) */}
 
       <div className="relative mb-8 w-full lg:px-0 2xl:mx-auto 2xl:max-w-[1400px]">
         <img

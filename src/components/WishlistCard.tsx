@@ -27,9 +27,9 @@ function WishlistCard({
         <h3 className="font-rubik text-sm font-semibold text-text-primary md:text-base">
           {title}
         </h3>
-        <p className="font-rubik text-sm text-text-primary md:text-base">
+        {/* <p className="font-rubik text-sm text-text-primary md:text-base">
           {subtitle}
-        </p>
+        </p> */}
       </div>
 
       <button

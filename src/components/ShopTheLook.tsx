@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import ShopTheLookCard from './ShopTheLookCard'
 
 interface Product {
@@ -7,35 +7,48 @@ interface Product {
   price: string
   image: string
   buttonText: string
+  handle?: string
 }
 
 function ShopTheLook() {
+  const [products, setProducts] = useState<Product[]>([])
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null)
   const [cardPosition, setCardPosition] = useState({ top: 0, left: 0 })
 
-  const products = [
-    {
-      id: 1,
-      name: 'Boys Outdoor Multi-Stripe Long Sleeve Hoodie',
-      price: '$40.00',
-      image: '/assets/images/blogOne.png',
-      buttonText: 'Boys Outdoor Multi-Stripe Long Sleeve Hoodie'
-    },
-    {
-      id: 2,
-      name: 'Boys JAY Cotton Twill Trousers in Charcoal Grey',
-      price: '$35.00',
-      image: '/assets/images/blogOne.png',
-      buttonText: 'Boys JAY Cotton Twill Trousers in Charcoal Grey'
-    },
-    {
-      id: 3,
-      name: 'Kids No-Logo Trucker Hat in Olive & Black',
-      price: '$25.00',
-      image: '/assets/images/blogOne.png',
-      buttonText: 'Kids No-Logo Trucker Hat in Olive & Black'
+  useEffect(() => {
+    async function fetchProductsByHandles(handles: string) {
+      const resp = await fetch(
+        import.meta.env.VITE_BACKEND_API_URL +
+          `/products/by-handles?handles=${handles}`
+      )
+
+      const data = await resp.json()
+
+      if (data.success) {
+        const transformedProducts = data.data.map((p: any) => {
+          const firstVariant = p.variants.edges[0]?.node
+          const firstImage = p.images.edges[0]?.node.url
+
+          return {
+            id: p.id, // keep as string or convert to number if needed
+            name: p.title,
+            handle: p.handle,
+            price: firstVariant
+              ? `$${parseFloat(firstVariant.price.amount).toFixed(2)}`
+              : '',
+            image: firstImage ? firstImage : '/assets/images/placeholder.webp', // fallback image
+            buttonText: p.title
+          }
+        })
+
+        setProducts(transformedProducts)
+      }
     }
-  ]
+
+    fetchProductsByHandles(
+      'time-concept-garden, petite-spinner-bay-horse, ad-171-f25-bbu-parent'
+    )
+  }, [])
 
   const handleProductClick = (product: Product, event: React.MouseEvent) => {
     const rect = event.currentTarget.getBoundingClientRect()
@@ -90,7 +103,7 @@ function ShopTheLook() {
               >
                 <div className="flex items-center gap-2">
                   <p className="text-xs font-medium text-text-primary">
-                    {products[0].buttonText}
+                    {products[0]?.buttonText}
                   </p>
                   <svg
                     className="size-3"
@@ -128,7 +141,7 @@ function ShopTheLook() {
               >
                 <div className="flex items-center gap-2">
                   <p className="text-xs font-medium text-text-primary">
-                    {products[1].buttonText}
+                    {products[1]?.buttonText}
                   </p>
                   <svg
                     className="size-3"
@@ -166,7 +179,7 @@ function ShopTheLook() {
               >
                 <div className="flex items-center gap-2">
                   <p className="text-xs font-medium text-text-primary">
-                    {products[2].buttonText}
+                    {products[2]?.buttonText}
                   </p>
                   <svg
                     className="size-3"

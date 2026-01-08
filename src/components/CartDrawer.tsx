@@ -9,7 +9,6 @@ interface CartDrawerProps {
 
 function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
   const { cartItems, getTotalItems, getTotalPrice } = useCart()
-
   const [isOrderNotesOpen, setIsOrderNotesOpen] = useState(false)
   const [isGiftNoteOpen, setIsGiftNoteOpen] = useState(false)
   const [orderNotes, setOrderNotes] = useState('')
@@ -26,20 +25,52 @@ function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
     (currentTotal / freeShippingThreshold) * 100
   )
 
-  const handleCheckout = () => {
+  const handleCheckout = async () => {
     if (cartItems.length === 0) return
-    console.log('CartDrawer - Initiating checkout with items:', cartItems)
-    // Shopify expects variantId:quantity pairs
-    // For example: https://maison-drake.myshopify.com/cart/1234567890:2,9876543210:1
-    const cartQuery = cartItems
-      .map((item) => `${item.variantId}:${item.quantity}`)
-      .join(',')
 
-    const shopifyCartUrl = `https://maison-drake.myshopify.com/cart/${cartQuery}`
+    // Prepare payload
+    const payload = {
+      items: cartItems.map((item) => ({
+        variantId: item.variantId,
+        quantity: item.quantity
+      }))
+    }
 
-    console.log('Redirecting to:', shopifyCartUrl)
+    // console.log('CartDrawer - Sending checkout payload:', payload)
 
-    window.location.href = shopifyCartUrl
+    try {
+      const response = await fetch(
+        import.meta.env.VITE_BACKEND_API_URL + `/checkout/create`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(payload)
+        }
+      )
+
+      if (!response.ok) {
+        throw new Error(
+          `Checkout request failed with status ${response.status}`
+        )
+      }
+
+      const data = await response.json()
+      // console.log('Checkout response:', data)
+
+      // Assuming your backend returns a URL to redirect to Shopify checkout
+      if (data.checkoutUrl) {
+        window.location.href = data.checkoutUrl
+      } else {
+        console.error('No checkout URL returned from backend.')
+      }
+    } catch (err) {
+      console.error('Error during checkout:', err)
+      alert(
+        'Something went wrong while creating your checkout. Please try again.'
+      )
+    }
   }
 
   return (

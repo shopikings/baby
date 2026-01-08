@@ -3,6 +3,13 @@ import { useWishlist } from 'contexts/WishlistContext'
 import { useState, useEffect } from 'react'
 import toast from 'react-hot-toast'
 
+interface VariantInfo {
+  id: string
+  price: string
+  image: string
+  title?: string
+}
+
 interface ProductCardProps {
   image: string
   hoverImage?: string
@@ -10,6 +17,8 @@ interface ProductCardProps {
   price: string
   className?: string
   id?: string
+  handle?: string
+  variants?: VariantInfo[]
 }
 
 function ProductCard({
@@ -18,13 +27,17 @@ function ProductCard({
   hoverImage,
   title,
   price,
-  className = ''
+  className = '',
+  handle,
+  variants
 }: ProductCardProps) {
   const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist()
   const navigate = useNavigate()
   const [isWishlisted, setIsWishlisted] = useState(false)
   const [showUndoButton, setShowUndoButton] = useState(false)
-  const [undoTimeout, setUndoTimeout] = useState<ReturnType<typeof setTimeout> | null>(null)
+  const [undoTimeout, setUndoTimeout] = useState<ReturnType<
+    typeof setTimeout
+  > | null>(null)
 
   useEffect(() => {
     if (id) {
@@ -33,26 +46,28 @@ function ProductCard({
   }, [id, isInWishlist])
 
   const handleCardClick = () => {
-    if (id) {
-      // Convert Shopify ID to plain number if needed
-      const cleanId = id.toString().includes('gid://shopify/Product/')
-        ? id.toString().split('/').pop()
-        : id.toString()
-
-      navigate(`/product/${cleanId}`)
+    if (handle) {
+      navigate(`/product/${handle}`)
     }
   }
 
   const handleAddToWishlist = (e: React.MouseEvent) => {
     e.stopPropagation()
     const productId = id?.toString() || `product-${Date.now()}`
-    
-    addToWishlist({
+    const defaultVariant = variants && variants.length > 0 ? variants[0] : null
+
+    const wishlistItem = {
       id: productId,
       name: title,
-      price: price,
-      image: image
-    })
+      price: defaultVariant ? defaultVariant.price : price,
+      image: defaultVariant ? defaultVariant.image : image,
+      variantId: defaultVariant ? defaultVariant.id : productId,
+      variantTitle: defaultVariant
+        ? defaultVariant.title || 'Default'
+        : 'Default'
+    }
+
+    addToWishlist(wishlistItem)
     setIsWishlisted(true)
     setShowUndoButton(true)
     toast.success(`${title} added to wishlist!`)
@@ -81,6 +96,7 @@ function ProductCard({
 
   return (
     <div
+      // href={`/product/${handle}`}
       className={`group cursor-pointer ${className}`}
       onClick={handleCardClick}
     >

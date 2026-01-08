@@ -1,15 +1,36 @@
 import { useNavigate } from 'react-router-dom'
 import { useState, useEffect, useRef } from 'react'
-import { fetchProducts } from '../utils/shopify'
+// import { fetchProducts } from '../utils/shopify'
 
 interface Product {
   id: string
   title: string
   price: string
   image: string
+  handle: string
 }
 
-function YouMayAlsoLike() {
+interface YouMayAlsoLikeProps {
+  brandName: string
+}
+
+function transformProduct(p: any) {
+  const firstAvailableVariant =
+    p.variants?.find((v: any) => v.available) || p.variants?.[0]
+
+  return {
+    id: p.id,
+    title: p.title,
+    handle: p.handle,
+    price: firstAvailableVariant?.price ?? '0',
+    image:
+      p.images?.[0]?.url ||
+      firstAvailableVariant?.image?.url ||
+      '/assets/images/placeholder.webp'
+  }
+}
+
+function YouMayAlsoLike({ brandName }: YouMayAlsoLikeProps) {
   const [products, setProducts] = useState<Product[]>([])
   const [loading, setLoading] = useState(true)
   const [animatedIndices, setAnimatedIndices] = useState<number[]>([])
@@ -17,25 +38,35 @@ function YouMayAlsoLike() {
   const navigate = useNavigate()
 
   useEffect(() => {
-    const loadProducts = async () => {
-      const { products } = await fetchProducts({
-        tag: 'best-selling',
-        limit: 4
-      })
+    async function fetchProductsByBrand() {
+      try {
+        setLoading(true)
 
-      const formatted = products.map((p) => ({
-        id: p.id,
-        title: p.title,
-        price: p.price,
-        image: p.images[0] || '/no-image.png'
-      }))
+        const resp = await fetch(
+          import.meta.env.VITE_BACKEND_API_URL +
+            `/brands/${brandName}/products/random`
+        )
 
-      setProducts(formatted)
-      setLoading(false)
+        if (!resp.ok) {
+          throw new Error(`HTTP error! status: ${resp.status}`)
+        }
+
+        const data = await resp.json()
+
+        const formatted = data.data.map(transformProduct)
+
+        setProducts(formatted)
+      } catch (err) {
+        console.error(err)
+      } finally {
+        setLoading(false)
+      }
     }
 
-    loadProducts()
-  }, [])
+    if (brandName) {
+      fetchProductsByBrand()
+    }
+  }, [brandName])
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -44,7 +75,7 @@ function YouMayAlsoLike() {
           // Trigger animations one by one
           products.forEach((_, index) => {
             setTimeout(() => {
-              setAnimatedIndices(prev => [...prev, index])
+              setAnimatedIndices((prev) => [...prev, index])
             }, index * 150)
           })
         }
@@ -107,7 +138,7 @@ function YouMayAlsoLike() {
           animation: slideInRight 0.6s ease-out forwards;
         }
       `}</style>
-      
+
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="mb-8 md:mb-12 text-center">
@@ -121,14 +152,17 @@ function YouMayAlsoLike() {
           {products.map((product, index) => {
             const isAnimated = animatedIndices.includes(index)
             const isEven = index % 2 === 0
-            const animationClass = isAnimated 
-              ? (isEven ? 'animate-slide-left' : 'animate-slide-right')
+            const animationClass = isAnimated
+              ? isEven
+                ? 'animate-slide-left'
+                : 'animate-slide-right'
               : 'opacity-0'
-            
+
             return (
-              <div
+              <a
+                href={`/product/${product.handle}`}
                 key={product.id}
-                onClick={() => openProduct(product.id)}
+                // onClick={() => openProduct(product.id)}
                 className={`cursor-pointer group ${animationClass}`}
               >
                 {/* Image Container */}
@@ -165,7 +199,7 @@ function YouMayAlsoLike() {
                     ${product.price}
                   </p>
                 </div>
-              </div>
+              </a>
             )
           })}
         </div>

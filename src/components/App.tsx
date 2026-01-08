@@ -33,7 +33,7 @@ function App() {
             <Route path="/blog" element={<BlogPage />} />
             <Route path="/blog/:slug" element={<BlogPost />} />
             <Route path="/wishlist" element={<Wishlist />} />
-            <Route path="/product/:id" element={<ProductDetail />} />
+            <Route path="/product/:handle" element={<ProductDetail />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/about" element={<About />} />
             <Route path="/shipping" element={<Shipping />} />

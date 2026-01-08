@@ -11,13 +11,20 @@ interface ColorDropdownProps {
   onColorChange: (color: string) => void
 }
 
-function ColorDropdown({ colors, selectedColor, onColorChange }: ColorDropdownProps) {
+function ColorDropdown({
+  colors,
+  selectedColor,
+  onColorChange
+}: ColorDropdownProps) {
   const [isOpen, setIsOpen] = useState(false)
   const dropdownRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
         setIsOpen(false)
       }
     }
@@ -26,6 +33,11 @@ function ColorDropdown({ colors, selectedColor, onColorChange }: ColorDropdownPr
     return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [])
 
+  const handleColorClick = (color: Color) => {
+    console.log('ColorDropdown - color clicked:', color.name)
+    onColorChange(color.name)
+  }
+
   return (
     <div className="relative w-48" ref={dropdownRef}>
       <button
@@ -33,13 +45,20 @@ function ColorDropdown({ colors, selectedColor, onColorChange }: ColorDropdownPr
         className="w-full border border-gray-600 bg-[#EFECDA] rounded px-4 py-2 font-raleway text-sm font-normal text-text-primary focus:outline-none focus:border-gray-800 flex items-center justify-between gap-2"
       >
         <span className="truncate">{selectedColor || 'Select a color'}</span>
-        <svg 
-          className={`w-4 h-4 text-text-primary transition-transform ${isOpen ? 'rotate-180' : ''}`} 
-          fill="none" 
-          stroke="currentColor" 
+        <svg
+          className={`w-4 h-4 text-text-primary transition-transform ${
+            isOpen ? 'rotate-180' : ''
+          }`}
+          fill="none"
+          stroke="currentColor"
           viewBox="0 0 24 24"
         >
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M19 14l-7 7m0 0l-7-7m7 7V3"
+          />
         </svg>
       </button>
 

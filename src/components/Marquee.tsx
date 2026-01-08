@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 interface MarqueeProps {
   text: string
@@ -29,7 +29,9 @@ function Marquee({
       const maxTranslate = Math.max(0, textWidth - containerWidth)
 
       if (maxTranslate > 0) {
-        let newTranslateX = stateRef.current.translateX + (stateRef.current.direction * speed) / 60
+        let newTranslateX =
+          stateRef.current.translateX +
+          (stateRef.current.direction * speed) / 60
 
         if (newTranslateX >= maxTranslate) {
           newTranslateX = maxTranslate
@@ -59,10 +61,9 @@ function Marquee({
     ? text.replace(clickableText, `<CLICKABLE>${clickableText}</CLICKABLE>`)
     : text
 
-  const separator = '\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0'
-  const duplicatedText = Array(6)
-    .fill(processedText)
-    .join(separator)
+  const separator =
+    '\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0'
+  const duplicatedText = Array(6).fill(processedText).join(separator)
 
   return (
     <div

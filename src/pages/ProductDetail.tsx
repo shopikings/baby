@@ -4,7 +4,6 @@ import ProductImageGallery from '../components/ProductImageGallery'
 import ProductInfo from '../components/ProductDetail/ProductInfo'
 import ProductReviews from '../components/ProductReviews'
 import YouMayAlsoLike from '../components/YouMayAlsoLike'
-import { fetchProductById } from '../utils/shopify'
 import Marquee from 'components/Marquee'
 import CategoryNav from 'components/ProductDetail/CategoryNav'
 import Services from 'components/Services'
@@ -13,33 +12,191 @@ import test1 from '../assets/test1.png'
 import test2 from '../assets/test2.png'
 
 function ProductDetail() {
-  const { id } = useParams()
+  const { handle } = useParams()
   const [loading, setLoading] = useState(true)
   const [product, setProduct] = useState<any>(null)
   const [error, setError] = useState<string | null>(null)
   const [selectedColor, setSelectedColor] = useState<string>('')
+  const [selectedVariant, setSelectedVariant] = useState<any>(null)
+
+  // Function to transform Shopify API response to your component's expected format
+  const transformShopifyProduct = (shopifyProduct: any) => {
+    if (!shopifyProduct) return null
+
+    // Extract images - deduplicate them
+    const thumbnails: string[] = Array.from(
+      new Set(shopifyProduct.images?.map((i: any) => i.url) || [])
+    )
+
+    let sizesList: string[] = []
+    let colorsList: { name: string; hex: string }[] = []
+    let hasMultipleVariants = shopifyProduct.variants?.length > 1
+    let hasColorVariants = false
+    let hasSizeVariants = false
+
+    // Analyze variants to determine what type of options exist
+    shopifyProduct.variants?.forEach((v: any) => {
+      v.selectedOptions?.forEach((opt: any) => {
+        // SIZES
+        if (opt.name.toLowerCase().includes('size')) {
+          hasSizeVariants = true
+          if (!sizesList.includes(opt.value)) {
+            sizesList.push(opt.value)
+          }
+        }
+
+        // COLORS
+        if (opt.name.toLowerCase().includes('color')) {
+          hasColorVariants = true
+          const colorName = opt.value
+          if (!colorsList.find((c) => c.name === colorName)) {
+            colorsList.push({
+              name: colorName,
+              hex: '#CCCCCC' // You might want to get actual color hex from metafields
+            })
+          }
+        }
+      })
+    })
+
+    // For products with variants but no explicit color/size options
+    if (hasMultipleVariants && !hasColorVariants && !hasSizeVariants) {
+      // Check if variants have different titles (like "Pink/White", "Red" in your example)
+      const variantTitles = shopifyProduct.variants.map((v: any) => v.title)
+      if (variantTitles.length > 1) {
+        // Treat these as colors if they sound like colors
+        variantTitles.forEach((title: string) => {
+          const colorName = title
+          if (!colorsList.find((c) => c.name === colorName)) {
+            colorsList.push({
+              name: colorName,
+              hex: '#CCCCCC'
+            })
+          }
+        })
+      }
+    }
+
+    // If no colors detected but we have multiple variants, create a default list
+    if (colorsList.length === 0 && hasMultipleVariants) {
+      shopifyProduct.variants?.forEach((v: any, index: number) => {
+        colorsList.push({
+          name: v.title || `Option ${index + 1}`,
+          hex: '#CCCCCC'
+        })
+      })
+    }
+
+    if (colorsList.length === 0) colorsList = []
+    if (sizesList.length === 0) sizesList = ['Default']
+
+    // Find the first available variant for default price and availability
+    const firstAvailableVariant =
+      shopifyProduct.variants?.find((v: any) => v.available) ||
+      shopifyProduct.variants?.[0]
+
+    // Calculate overall availability - product is available if ANY variant is available
+    const overallAvailable =
+      shopifyProduct.variants?.some((v: any) => v.available) || false
+
+    // Get price range if multiple variants
+    let price = firstAvailableVariant?.price || 0
+    let priceRange = price
+    if (shopifyProduct.variants?.length > 1) {
+      const prices = shopifyProduct.variants.map((v: any) => v.price)
+      const minPrice = Math.min(...prices)
+      const maxPrice = Math.max(...prices)
+      if (minPrice !== maxPrice) {
+        priceRange = `$${minPrice} - $${maxPrice}`
+        price = minPrice // Set to min price for display
+      }
+    }
+
+    // Find default variant (first available or first variant)
+    const defaultVariant =
+      shopifyProduct.variants?.find((v: any) => v.available) ||
+      shopifyProduct.variants?.[0]
+
+    // Transform the product to match your component's structure
+    return {
+      // Original Shopify fields (kept for compatibility)
+      ...shopifyProduct,
+
+      // Your component's expected fields
+      title: shopifyProduct.title,
+      description: shopifyProduct.description,
+      productType: shopifyProduct.productType,
+      vendor: shopifyProduct.vendor,
+      tags: shopifyProduct.tags || [],
+      images: shopifyProduct.images || [],
+      variants: shopifyProduct.variants || [],
+
+      // Required fields for ProductInfo component
+      price: price,
+      priceRange: priceRange, // For displaying price range
+
+      // Reviews
+      reviews: shopifyProduct.reviews || [],
+
+      // Calculated fields for your components
+      thumbnails,
+      sizesList,
+      colorsList,
+
+      // Additional fields that might be needed
+      id: shopifyProduct.id,
+      handle: shopifyProduct.handle,
+      available: overallAvailable, // Use overall availability
+      instock: overallAvailable,
+      compareAtPrice: firstAvailableVariant?.compareAtPrice || null,
+      currency: firstAvailableVariant?.currency || 'USD',
+
+      // Helper fields
+      hasMultipleVariants,
+      hasColorVariants,
+      hasSizeVariants,
+      defaultVariantId: firstAvailableVariant?.id,
+      defaultVariant
+    }
+  }
 
   useEffect(() => {
-    const load = async () => {
+    async function fetchProduct() {
       try {
         setLoading(true)
+        setError(null)
 
-        const cleanId = id?.replace('gid://shopify/Product/', '')
-        const gid = `gid://shopify/Product/${cleanId}`
+        const resp = await fetch(
+          import.meta.env.VITE_BACKEND_API_URL + `/product/${handle}`
+        )
 
-        const data = await fetchProductById(gid)
-    
-        setProduct(data)
-      } catch (e) {
-        console.error('Error loading product:', e)
+        if (!resp.ok) {
+          throw new Error(`HTTP error! status: ${resp.status}`)
+        }
+
+        const data = await resp.json()
+
+        // Transform the Shopify API response
+        const transformedProduct = transformShopifyProduct(data.data)
+        setProduct(transformedProduct)
+
+        // Set initial selected variant
+        if (transformedProduct?.defaultVariant) {
+          setSelectedVariant(transformedProduct.defaultVariant)
+        }
+      } catch (err) {
+        console.error('Failed to load product:', err)
         setError('Failed to load product')
+        setProduct(null)
       } finally {
         setLoading(false)
       }
     }
 
-    if (id) load()
-  }, [id])
+    if (handle) {
+      fetchProduct()
+    }
+  }, [handle])
 
   if (loading)
     return (
@@ -62,58 +219,59 @@ function ProductDetail() {
       </div>
     )
 
-  console.log('Reviews passed to ProductReviews:', product.reviews)
+  const handleColorChange = (color: string) => {
+    console.log('ProductDetail - onColorChange called with:', color)
+    setSelectedColor(color)
 
-  // Extract images - deduplicate them
-  const thumbnails: string[] = Array.from(new Set(product.images?.map((i: any) => i.url) || []))
+    // Find variant that matches the selected color
+    if (product?.variants) {
+      const matchingVariant = product.variants.find((v: any) => {
+        // Check variant title
+        if (v.title === color) return true
 
-  let sizesList: string[] = []
-  let colorsList: { name: string; hex: string }[] = []
-
-  product.variants?.forEach((v: any) => {
-    v.selectedOptions?.forEach((opt: any) => {
-      // SIZES
-      if (opt.name.toLowerCase().includes('size')) {
-        if (!sizesList.includes(opt.value)) {
-          sizesList.push(opt.value)
+        // Check selectedOptions
+        if (v.selectedOptions) {
+          return v.selectedOptions.some(
+            (opt: any) =>
+              (opt.name.toLowerCase().includes('color') ||
+                opt.name.toLowerCase().includes('option')) &&
+              opt.value === color
+          )
         }
-      }
 
-      // COLORS
-      if (opt.name.toLowerCase().includes('color')) {
-        const colorName = opt.value
-        if (!colorsList.find(c => c.name === colorName)) {
-          colorsList.push({
-            name: colorName,
-            hex: '#CCCCCC'
-          })
-        }
-      }
-    })
-  })
+        return false
+      })
 
-  if (colorsList.length === 0) colorsList = []
-  if (sizesList.length === 0) sizesList = ['Default']
+      if (matchingVariant) {
+        setSelectedVariant(matchingVariant)
+      }
+    }
+  }
 
   const productData = {
-    name: product.title,
-    rating: product.reviews
+    name: product?.title || '',
+    rating: product?.reviews
       ? product.reviews.reduce((acc: number, r: any) => acc + r.rating, 0) /
         product.reviews.length
       : 0,
-    reviewCount: product.reviews ? product.reviews.length : 0,
-    price: product.price,
-    originalPrice: Number(product?.variants?.[0]?.price?.amount || 0) + 10,
-    colors: colorsList,
-    sizes: sizesList,
-    variantId: product?.variants?.[0]?.id,
-    description: product.description,
+    reviewCount: product?.reviews ? product.reviews.length : 0,
+    price: selectedVariant?.price || product?.price || 0,
+    originalPrice:
+      Number(selectedVariant?.compareAtPrice || product?.price || 0) + 10,
+    colors: product?.colorsList || [],
+    sizes: product?.sizesList || ['Default'],
+    variantId: selectedVariant?.id,
+    description: product?.description || '',
     productInfo: [
       'Material: 100% Cotton',
       'Care: Machine wash cold, tumble dry low',
       'Made in USA'
     ],
-    image: thumbnails[0] || ''
+    image: product?.thumbnails?.[0] || '',
+    brand: product?.vendor,
+    variants: product?.variants || [],
+    selectedVariant: selectedVariant,
+    available: selectedVariant?.available || product?.available || false
   }
 
   return (
@@ -130,20 +288,18 @@ function ProductDetail() {
         {/* LEFT IMAGES */}
         <div className="lg:w-1/2">
           <ProductImageGallery
-            thumbnails={thumbnails}
+            thumbnails={product.thumbnails || []}
             productName={productData.name}
             selectedColor={selectedColor}
-            variants={product.variants}
+            variants={product.variants || []}
           />
         </div>
         {/* RIGHT PRODUCT INFO */}
         <div className="lg:w-[42%] pt-4 md:pt-5">
-          <ProductInfo 
+          <ProductInfo
             {...productData}
-            onColorChange={(color) => {
-              console.log('ProductDetail - onColorChange called with:', color)
-              setSelectedColor(color)
-            }}
+            onColorChange={handleColorChange}
+            onVariantChange={(variant) => setSelectedVariant(variant)}
           />
         </div>
       </div>
@@ -179,22 +335,7 @@ function ProductDetail() {
       </div>
 
       <OurStorySection />
-
-      
-
-      {/* <RecentlyViewed
-        products={[
-          {
-            id: 5,
-            title: 'Brown jacket',
-            price: '$60',
-            mainImage: '/assets/images/product5.png',
-            variantImages: ['/assets/images/product5.png'],
-            rating: 5
-          }
-        ]}
-      /> */}
-      <YouMayAlsoLike />
+      <YouMayAlsoLike brandName={productData?.brand} />
       <Services />
     </div>
   )

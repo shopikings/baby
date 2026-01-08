@@ -1,15 +1,23 @@
-// --- inside FilterSection.tsx ---
+import { X } from 'lucide-react'
 import { useState, useEffect } from 'react'
+import { useLocation } from 'react-router-dom'
 
 interface FilterSectionProps {
   filters: Record<string, string | boolean>
   onFilterChange?: (filters: Record<string, string | boolean>) => void
+  hideCategory?: boolean
+  hideBrand?: boolean
+  brandOptions?: string[]
 }
 
-// NOTE: We'll simplify FilterState to just use the main filters object type
-// export type FilterState = { ... }
-
-function FilterSection({ filters, onFilterChange }: FilterSectionProps) {
+function FilterSection({
+  filters,
+  onFilterChange,
+  hideCategory = false,
+  hideBrand = false,
+  brandOptions = []
+}: FilterSectionProps) {
+  const location = useLocation()
   const [showMoreFilters, setShowMoreFilters] = useState(false)
   const [openDropdown, setOpenDropdown] = useState<string | null>(null)
 
@@ -34,17 +42,17 @@ function FilterSection({ filters, onFilterChange }: FilterSectionProps) {
     'Outerwear',
     'Accessories'
   ]
-  const brandOptions = [
-    'JELLY CAT',
-    'RYLE + CRU',
-    'BAREFOOT DREAMS',
-    'KYTE BABY',
-    'MAGNETIC ME',
-    'QUINCY MAE',
-    'ENEWTON',
-    'NUNA',
-    'UPPABABY'
-  ]
+  // const brandOptions = [
+  //   'JELLY CAT',
+  //   'RYLE + CRU',
+  //   'BAREFOOT DREAMS',
+  //   'KYTE BABY',
+  //   'MAGNETIC ME',
+  //   'QUINCY MAE',
+  //   'ENEWTON',
+  //   'NUNA',
+  //   'UPPABABY'
+  // ]
   const sortOptions = ['Price: Low to High', 'Price: High to Low']
   const colourOptions = [
     'Red',
@@ -232,88 +240,102 @@ function FilterSection({ filters, onFilterChange }: FilterSectionProps) {
               </div>
             )}
           </div>
+
           {/* Category */}
-          <div className="relative">
-            <button
-              onClick={() => toggleDropdown('category')}
-              className="group relative flex min-w-[120px] items-center justify-between gap-2 overflow-hidden rounded-md border border-[#949494] bg-white px-4 py-2.5 font-raleway text-sm text-black transition-all hover:border-gray-400"
-            >
-              <div className="absolute left-0 top-0 h-0.5 w-full scale-x-0 bg-button-hover transition-transform duration-300 group-hover:scale-x-100" />
-              <span>{getDropdownDisplay('category', 'Category')}</span>
-              <svg
-                className={`size-4 transition-transform ${
-                  openDropdown === 'category' ? 'rotate-180' : ''
-                }`}
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
+          {!hideCategory && location.search === '?category=clothing' && (
+            <div className="relative">
+              <button
+                onClick={() => toggleDropdown('category')}
+                className="group relative flex min-w-[120px] items-center justify-between gap-2 overflow-hidden rounded-md border border-[#949494] bg-white px-4 py-2.5 font-raleway text-sm text-black transition-all hover:border-gray-400"
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M19 9l-7 7-7-7"
-                />
-              </svg>
-            </button>
+                <div className="absolute left-0 top-0 h-0.5 w-full scale-x-0 bg-button-hover transition-transform duration-300 group-hover:scale-x-100" />
+                <span>{getDropdownDisplay('category', 'Category')}</span>
+                <svg
+                  className={`size-4 transition-transform ${
+                    openDropdown === 'category' ? 'rotate-180' : ''
+                  }`}
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M19 9l-7 7-7-7"
+                  />
+                </svg>
+              </button>
 
-            {openDropdown === 'category' && (
-              <div className="absolute left-0 top-full z-10 mt-2 min-w-[120px] rounded-lg border border-gray-300 bg-white shadow-lg">
-                {categoryOptions.map((option) => (
-                  <button
-                    key={option}
-                    onClick={() => handleDropdownChange('category', option)}
-                    className={`block w-full px-4 py-2 text-left font-raleway text-sm text-black first:rounded-t-lg last:rounded-b-lg hover:bg-gray-50 ${
-                      filters.category === option ? 'bg-gray-200 font-bold' : ''
-                    }`}
-                  >
-                    {option}
-                  </button>
-                ))}
-              </div>
-            )}
-          </div>
+              {openDropdown === 'category' && (
+                <div className="absolute left-0 top-full z-10 mt-2 min-w-[120px] rounded-lg border border-gray-300 bg-white shadow-lg">
+                  {categoryOptions.map((option) => (
+                    <button
+                      key={option}
+                      onClick={() => handleDropdownChange('category', option)}
+                      className={`block w-full px-4 py-2 text-left font-raleway text-sm text-black first:rounded-t-lg last:rounded-b-lg hover:bg-gray-50 ${
+                        filters.category === option
+                          ? 'bg-gray-200 font-bold'
+                          : ''
+                      }`}
+                    >
+                      {option}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
           {/* Brand */}
-          <div className="relative">
-            <button
-              onClick={() => toggleDropdown('brand')}
-              className="group relative flex min-w-[120px] items-center justify-between gap-2 overflow-hidden rounded-md border border-[#949494] bg-white px-4 py-2.5 font-raleway text-sm text-black transition-all hover:border-gray-400"
-            >
-              <div className="absolute left-0 top-0 h-0.5 w-full scale-x-0 bg-button-hover transition-transform duration-300 group-hover:scale-x-100" />
-              <span>{getDropdownDisplay('brand', 'Brand')}</span>
-              <svg
-                className={`size-4 transition-transform ${
-                  openDropdown === 'brand' ? 'rotate-180' : ''
-                }`}
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
+          {!hideBrand && brandOptions.length > 0 && (
+            <div className="relative">
+              <button
+                onClick={() => toggleDropdown('brand')}
+                className="group relative flex min-w-[140px] items-center justify-between gap-2 overflow-hidden rounded-md border border-[#949494] bg-white px-4 py-2.5 font-raleway text-sm text-black transition-all hover:border-gray-400"
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M19 9l-7 7-7-7"
-                />
-              </svg>
-            </button>
+                <div className="absolute left-0 top-0 h-0.5 w-full scale-x-0 bg-button-hover transition-transform duration-300 group-hover:scale-x-100" />
+                <span>{getDropdownDisplay('brand', 'Brand')}</span>
+                <svg
+                  className={`size-4 transition-transform ${
+                    openDropdown === 'brand' ? 'rotate-180' : ''
+                  }`}
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M19 9l-7 7-7-7"
+                  />
+                </svg>
+              </button>
 
-            {openDropdown === 'brand' && (
-              <div className="absolute left-0 top-full z-10 mt-2 min-w-[120px] rounded-lg border border-gray-300 bg-white shadow-lg">
-                {brandOptions.map((option) => (
-                  <button
-                    key={option}
-                    onClick={() => handleDropdownChange('brand', option)}
-                    className={`block w-full px-4 py-2 text-left font-raleway text-sm text-black first:rounded-t-lg last:rounded-b-lg hover:bg-gray-50 ${
-                      filters.brand === option ? 'bg-gray-200 font-bold' : ''
-                    }`}
-                  >
-                    {option}
-                  </button>
-                ))}
-              </div>
-            )}
-          </div>
+              {openDropdown === 'brand' && (
+                <div className="absolute left-0 top-full z-10 mt-2 max-h-64 min-w-[180px] overflow-auto rounded-lg border border-gray-300 bg-white shadow-lg">
+                  {brandOptions.map((option) => (
+                    <button
+                      key={option}
+                      onClick={() => handleDropdownChange('brand', option)}
+                      className={`block w-full px-4 py-2 text-left font-raleway text-sm hover:bg-gray-50 ${
+                        filters.brand === option ? 'bg-gray-200 font-bold' : ''
+                      }`}
+                    >
+                      {filters.brand === option ? (
+                        <div className="flex items-center justify-between">
+                          {option} <X className="size-4 text-red-600" />
+                        </div>
+                      ) : (
+                        option
+                      )}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+
           {/* Sort */}
           <div className="relative">
             <button

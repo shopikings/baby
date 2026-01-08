@@ -9,7 +9,7 @@ function JoinMovementSlider() {
 
   const fetchPosts = async () => {
     // const base = import.meta.env.VITE_INSTAGRAM_API
-    const resp = await fetch('https://dirtydogdesignz.com/api/instagram-baby', {
+    const resp = await fetch(import.meta.env.VITE_BACKEND_API_URL + `/insta`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

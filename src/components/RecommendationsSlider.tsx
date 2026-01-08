@@ -2,52 +2,86 @@ import { useState, useRef, useEffect } from 'react'
 import ProductCard from './ProductCard'
 import { Link } from 'react-router-dom'
 import { ArrowUpRight } from 'lucide-react'
-import { fetchProducts, ShopifyProduct } from '../utils/shopify'
 
 interface RecommendationsSliderProps {
   bgWhite?: boolean
 }
 
-const CATEGORY_TO_COLLECTION: Record<string, string> = {
-  toys: 'toys',
-  clothing: 'clothing',
-  gifts: 'gifts'
+interface ProductImage {
+  url: string
+}
+
+interface ImageEdge {
+  node: ProductImage
+}
+
+interface ProductImageConnection {
+  edges: ImageEdge[]
+}
+
+interface ProductPrice {
+  amount: string
+}
+
+interface ProductVariantNode {
+  price: ProductPrice
+}
+
+interface ProductVariantEdge {
+  node: ProductVariantNode
+}
+
+interface ProductVariantConnection {
+  edges: ProductVariantEdge[]
+}
+
+interface Product {
+  id: string
+  title: string
+  handle: string
+  price?: string
+  images?: ProductImageConnection
+  variants?: ProductVariantConnection
 }
 
 function RecommendationsSlider({ bgWhite }: RecommendationsSliderProps) {
-  const [activeCategory, setActiveCategory] = useState('toys')
-  const [products, setProducts] = useState<ShopifyProduct[]>([])
+  const [products, setProducts] = useState([])
   const [currentIndex, setCurrentIndex] = useState(0)
   const [loading, setLoading] = useState(true)
 
   const sliderRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    loadProducts(activeCategory)
-  }, [activeCategory])
+    async function fetchSaleProducts() {
+      try {
+        setLoading(true)
 
-  const loadProducts = async (category: string) => {
-    try {
-      setLoading(true)
+        const resp = await fetch(
+          import.meta.env.VITE_BACKEND_API_URL +
+            `/collections/best-selling/products/random`
+        )
 
-      const collectionHandle = CATEGORY_TO_COLLECTION[category]
+        const data = await resp.json()
 
-      const { products } = await fetchProducts({
-        collectionHandle,
-        tag: 'best-selling',
-        limit: 20
-      })
-
-      setProducts(products)
-    } catch (err) {
-      console.error('Failed to load products:', err)
-      setProducts([])
-    } finally {
-      setLoading(false)
-      setCurrentIndex(0)
-      sliderRef.current?.scrollTo({ left: 0 })
+        if (data?.success && Array.isArray(data.data)) {
+          // console.log(data.data)
+          setProducts(data.data)
+        } else {
+          console.warn('No products returned:', data)
+          setProducts([])
+        }
+      } catch (err) {
+        console.error('Failed to load sale products:', err)
+        setProducts([])
+      } finally {
+        setLoading(false)
+        setCurrentIndex(0)
+        sliderRef.current?.scrollTo({ left: 0 })
+      }
     }
-  }
+
+    fetchSaleProducts()
+  }, [])
 
   const scrollToIndex = (index: number) => {
     if (sliderRef.current) {
@@ -81,10 +115,6 @@ function RecommendationsSlider({ bgWhite }: RecommendationsSliderProps) {
 
   const prevSlide = () => {
     if (currentIndex > 0) scrollToIndex(currentIndex - 1)
-  }
-
-  const handleCategoryChange = (category: string) => {
-    setActiveCategory(category)
   }
 
   return (
@@ -142,20 +172,29 @@ function RecommendationsSlider({ bgWhite }: RecommendationsSliderProps) {
               className="flex gap-4 overflow-x-auto sm:gap-6"
               style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
             >
-              {products.map((product) => (
-                <div
-                  key={product.id}
-                  className="min-w-[280px] sm:min-w-[320px]"
-                >
-                  <ProductCard
-                    id={product.id}
-                    image={product.images?.[0]}
-                    hoverImage={product.images?.[1] || product.images?.[0]}
-                    title={product.title}
-                    price={`$${product.price}`}
-                  />
-                </div>
-              ))}
+              {products.map((product: Product) => {
+                return (
+                  <div
+                    key={product.id}
+                    className="min-w-[280px] sm:min-w-[320px]"
+                  >
+                    <ProductCard
+                      id={product.id}
+                      image={
+                        product.images?.edges[0]?.node?.url ||
+                        '/assets/images/placeholder.webp'
+                      }
+                      hoverImage={product.images?.edges[1]?.node?.url}
+                      title={product.title}
+                      price={`$${
+                        product.price ||
+                        product?.variants?.edges[0]?.node?.price?.amount
+                      }`}
+                      handle={product.handle}
+                    />
+                  </div>
+                )
+              })}
             </div>
           )}
 

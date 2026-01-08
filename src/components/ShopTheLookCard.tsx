@@ -9,6 +9,7 @@ interface ShopTheLookCardProps {
     name: string
     price: string
     image: string
+    handle?: string
   }
   position: {
     top: number
@@ -24,18 +25,19 @@ function ShopTheLookCard({
 }: ShopTheLookCardProps) {
   const { addToCart } = useCart()
 
-  const handleQuickBuy = () => {
-    const cartItem = {
-      id: product.id?.toString() || `shop-look-${Date.now()}`,
-      name: product.name,
-      price: product.price,
-      image: product.image
-    }
-    console.log('Adding to cart:', cartItem)
-    addToCart(cartItem)
-    toast.success(`${product.name} added to cart!`)
-    onClose()
-  }
+  // const handleQuickBuy = () => {
+  //   const cartItem = {
+  //     id: product.id?.toString() || `shop-look-${Date.now()}`,
+  //     name: product.name,
+  //     price: product.price,
+  //     image: product.image
+  //   }
+  //   console.log('Adding to cart:', cartItem)
+  //   addToCart(cartItem)
+  //   toast.success(`${product.name} added to cart!`)
+  //   onClose()
+  // }
+
   if (!isOpen) return null
 
   return (
@@ -84,12 +86,12 @@ function ShopTheLookCard({
             </p>
           </div>
 
-          <button
-            onClick={handleQuickBuy}
-            className="mt-2 rounded-md bg-[#E8A5A5] px-3 py-1 font-raleway text-xs font-medium text-white transition-colors hover:bg-[#E8A5A5]/90"
+          <a
+            href={`/product/${product.handle}`}
+            className="mt-2 text-center uppercase rounded-md bg-[#E8A5A5] px-3 py-1 font-raleway text-xs font-medium text-white transition-colors hover:bg-[#E8A5A5]/90"
           >
-            QUICK BUY
-          </button>
+            Buy Now
+          </a>
         </div>
       </div>
     </div>
