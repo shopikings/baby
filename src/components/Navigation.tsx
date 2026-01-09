@@ -34,7 +34,7 @@ function Navigation({ onCollectionSelect }: NavigationProps) {
 
   const brandItems = [
     'JELLYCAT',
-    'RYLE + CRU',
+    'RYLEE + CRU',
     'BAREFOOT DREAMS',
     'KYTE BABY',
     'MAGNETIC ME',
@@ -161,12 +161,12 @@ function Navigation({ onCollectionSelect }: NavigationProps) {
         onMouseEnter={() => handleMouseEnter('brands')}
         onMouseLeave={handleMouseLeave}
       >
-        <Link
-          to="/collection"
+        <div
+          // to="/collection"
           className="font-raleway text-xs font-semibold uppercase text-text-primary transition-colors hover:text-gray-600"
         >
           Our Brands
-        </Link>
+        </div>
         {activeDropdown === 'brands' && (
           <div className="absolute left-0 top-full z-50 pt-2">
             <div className="w-full min-w-[1220px] overflow-hidden rounded-sm bg-cream shadow-lg">
