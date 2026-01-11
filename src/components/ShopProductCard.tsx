@@ -32,6 +32,7 @@ interface ShopProductCardProps {
   className?: string
   handle?: string
   variants?: VariantInfo[]
+  defaultVariant?: VariantInfo
 }
 
 interface WishlistItem {
@@ -54,7 +55,8 @@ function ShopProductCard({
   rating = 0,
   className = '',
   handle,
-  variants // Optional variant data
+  variants, // Optional variant data
+  defaultVariant
 }: ShopProductCardProps) {
   const [currentImage, setCurrentImage] = useState(mainImage)
   const [currentPrice, setCurrentPrice] = useState(price)
@@ -96,8 +98,6 @@ function ShopProductCard({
 
   const handleWishlistClick = (e: React.MouseEvent) => {
     e.stopPropagation()
-
-    const defaultVariant = variants && variants.length > 0 ? variants[0] : null
 
     if (!defaultVariant) return
 

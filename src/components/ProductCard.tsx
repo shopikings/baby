@@ -5,8 +5,13 @@ import toast from 'react-hot-toast'
 
 interface VariantInfo {
   id: string
-  price: string
-  image: string
+  price: {
+    amount: string
+  }
+  image: {
+    url: string
+  }
+  availableForSale?: boolean
   title?: string
 }
 
@@ -54,17 +59,18 @@ function ProductCard({
   const handleAddToWishlist = (e: React.MouseEvent) => {
     e.stopPropagation()
     const productId = id?.toString() || `product-${Date.now()}`
-    const defaultVariant = variants && variants.length > 0 ? variants[0] : null
+
+    const variantNodes = variants || []
+    const defaultVariant =
+      variantNodes.find((v) => v.availableForSale) || variantNodes[0] || null
 
     const wishlistItem = {
       id: productId,
       name: title,
-      price: defaultVariant ? defaultVariant.price : price,
-      image: defaultVariant ? defaultVariant.image : image,
+      price: defaultVariant ? defaultVariant.price.amount : price,
+      image: defaultVariant ? defaultVariant.image.url : image,
       variantId: defaultVariant ? defaultVariant.id : productId,
-      variantTitle: defaultVariant
-        ? defaultVariant.title || 'Default'
-        : 'Default'
+      variantTitle: defaultVariant?.title || 'Default'
     }
 
     addToWishlist(wishlistItem)
@@ -173,7 +179,7 @@ function ProductCard({
           {title}
         </h3>
         <p className="font-raleway text-lg font-medium text-text-primary sm:text-base">
-          {price}
+          ${parseFloat(price).toFixed(2)}
         </p>
       </div>
     </div>

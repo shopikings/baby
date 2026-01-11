@@ -207,7 +207,7 @@ function FilterSection({
               className="group relative flex min-w-[120px] items-center justify-between gap-2 overflow-hidden rounded-md border border-[#949494] bg-white px-4 py-2.5 font-raleway text-sm text-black transition-all hover:border-gray-400"
             >
               <div className="absolute left-0 top-0 h-0.5 w-full scale-x-0 bg-button-hover transition-transform duration-300 group-hover:scale-x-100" />
-              <span>{getDropdownDisplay('size', 'Size')}</span>
+              <span>{getDropdownDisplay('size', 'Age Group')}</span>
               <svg
                 className={`size-4 transition-transform ${
                   openDropdown === 'size' ? 'rotate-180' : ''

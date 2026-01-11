@@ -53,7 +53,8 @@ interface ShopProductCardProps {
   tags?: any[]
   brand?: string
   category?: string
-  variants?: any[]
+  variants?: VariantInfo[]
+  defaultVariant?: VariantInfo
 }
 
 function Shop() {
@@ -71,6 +72,8 @@ function Shop() {
   const [pageLoading, setPageLoading] = useState<boolean>(false)
 
   const isBrandPage = Boolean(brand)
+
+  const [totalProducts, setTotalProducts] = useState()
 
   // Transform Shopify product to ShopProductCardProps format
   const mapShopifyToCardProps = (
@@ -127,6 +130,10 @@ function Shop() {
         ? variantImageUrls
         : productImages.map((img) => img.url)
 
+    const defaultVariant =
+      shopifyProduct.variants.find((v) => v.available) ||
+      shopifyProduct.variants[0]
+
     const mappedVariants: VariantInfo[] = shopifyProduct.variants.map((v) => ({
       id: v.id,
       price: `$${v.price}`,
@@ -134,6 +141,16 @@ function Shop() {
         v.image?.url || productImages[0]?.url || '/assets/images/product1.png',
       title: v.title
     }))
+
+    const defaultVariantProp: VariantInfo = {
+      id: defaultVariant.id,
+      price: `$${defaultVariant.price}`,
+      image:
+        defaultVariant.image?.url ||
+        shopifyProduct.images[0]?.url ||
+        '/assets/images/product1.png',
+      title: defaultVariant.title
+    }
 
     return {
       id: numericId,
@@ -150,7 +167,8 @@ function Shop() {
       tags: shopifyProduct.tags,
       brand: shopifyProduct.vendor,
       category: shopifyProduct.metafields?.category,
-      variants: mappedVariants
+      variants: mappedVariants,
+      defaultVariant: defaultVariantProp
     }
   }
 
@@ -268,6 +286,8 @@ function Shop() {
     }
 
     const response = await resp.json()
+
+    setTotalProducts(response.total)
 
     // Apply client-side filtering if needed
     if (filters) {
@@ -496,9 +516,12 @@ function Shop() {
           <h1 className="text-center font-rubik text-xl font-bold uppercase text-text-primary">
             {getHeading()}
           </h1>
-          <p className="text-center font-raleway text-sm text-gray-600 mt-2">
-            Showing {products.length} products
-          </p>
+          {totalProducts && (
+            <p className="text-center font-raleway text-sm text-gray-600 mt-2">
+              {/* Showing {products.length} products */}
+              Showing {totalProducts} products
+            </p>
+          )}
         </div>
 
         <FilterSection
@@ -522,6 +545,7 @@ function Shop() {
                 <ShopProductCard
                   key={product.id}
                   {...product}
+                  defaultVariant={product.defaultVariant}
                   className="scale-90"
                 />
               ))}

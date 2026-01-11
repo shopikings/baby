@@ -221,12 +221,11 @@ export default function BlogPage() {
         <div className="absolute inset-0 bg-black/40"></div>
         <div className="absolute inset-x-0 bottom-0 w-4/5 px-4 pb-12 md:px-8 md:pb-16">
           <h2 className="mb-4 font-rubik text-6xl font-semibold text-white">
-            The Hidden Benefits of Collagen for Athletes
+            Everything Your Little One Needs, All in One Happy Place
           </h2>
           <p className="font-raleway text-base font-normal text-white">
-            How collagen works in your body When you drink a scoop of collagen,
-            it breaks down into tiny peptide fragments that show up in your
-            bloodstream within 1–2 hours. Your body then uses those fragments...
+            From adorable outfits to everyday essentials and strollers, we bring
+            together comfort, quality, and care for every stage of childhood.
           </p>
         </div>
       </div>

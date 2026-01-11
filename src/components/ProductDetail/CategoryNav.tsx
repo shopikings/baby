@@ -11,8 +11,24 @@ type ShopifyCollection = {
 
 // Collections to exclude (like internal/technical collections)
 const EXCLUDE_COLLECTIONS = [
-  'globofilter-best-selling-products-index', // This looks like a technical collection
-  'rylee-cru-quincy-mae-noralee' // This has "Smart Filter" in title
+  'globofilter-best-selling-products-index',
+  'rylee-cru-quincy-mae-noralee',
+  'rylee-cru',
+  'accessories',
+  'best-selling',
+  'christmas',
+  'hanukkah',
+  'bath-time',
+  'veer',
+  'kyte-baby',
+  'barefoot-dreams',
+  'birdie-bean',
+  'magnetic-mee',
+  'nuna-baby',
+  'breathable-organics',
+  'uppa-baby',
+  'toys',
+  'sale'
 ]
 
 function CategoryNav() {

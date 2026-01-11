@@ -154,7 +154,7 @@ function ProductInfo({
 
       {/* Price */}
       <span className="font-raleway text-base md:text-lg font-normal text-text-primary">
-        ${displayPrice}
+        ${parseFloat(displayPrice).toFixed(2)}
         {selectedVariant?.compareAtPrice &&
           selectedVariant.compareAtPrice > price && (
             <span className="ml-2 line-through text-gray-500">
@@ -165,7 +165,7 @@ function ProductInfo({
 
       {brand && (
         <p className="text-xs md:text-sm text-black font-normal font-raleway">
-          by {brand}
+          by <span className="uppercase">{brand}</span>
         </p>
       )}
 
@@ -250,30 +250,6 @@ function ProductInfo({
         isOpen={showSizeChart}
         onClose={() => setShowSizeChart(false)}
       />
-
-      {/* Fit Large Section */}
-      <div className="space-y-3 bg-[#EFECDA] rounded p-4">
-        <h3 className="font-raleway text-xs font-bold text-text-primary tracking-wide">
-          FIT
-        </h3>
-        <div className="space-y-3">
-          {/* Visual Scale */}
-          <div className="flex items-center gap-1">
-            <div className="flex-1 h-[2px] bg-gray-400 rounded"></div>
-            <div className="flex-1 h-[2px] bg-gray-400 rounded"></div>
-            <div className="flex-1 h-[4px] bg-gray-800 rounded"></div>
-            <div className="flex-1 h-[2px] bg-gray-400 rounded"></div>
-            <div className="flex-1 h-[2px] bg-gray-400 rounded"></div>
-          </div>
-
-          {/* Labels */}
-          <div className="flex justify-between text-xs text-gray-700 font-raleway">
-            <span>Small</span>
-            <span>True to size</span>
-            <span>Large</span>
-          </div>
-        </div>
-      </div>
 
       {/* Shipping Info */}
       <div className="space-y-[2px] font-raleway text-sm font-light text-gray-700">

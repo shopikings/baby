@@ -19,7 +19,7 @@ function AnimatedLoader({
   const letters = websiteName.split('')
 
   useEffect(() => {
-    const animationDuration = letters.length * 100 + 500
+    const animationDuration = letters.length * 90 + 500
 
     const animationTimer = setTimeout(() => {
       setAnimationComplete(true)

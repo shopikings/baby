@@ -31,7 +31,7 @@ function Wishlist() {
     if (!item) return
 
     addToCart({
-      id: item.id,
+      id: item.variantId,
       name: item.name,
       price: item.price,
       image: item.variantImage || item.image, // use variant image if available
@@ -46,7 +46,7 @@ function Wishlist() {
   const handleAddAllToCart = () => {
     wishlistItems.forEach((item) => {
       addToCart({
-        id: item.id,
+        id: item.variantId,
         name: item.name,
         price: item.price,
         image: item.variantImage || item.image,
@@ -62,8 +62,8 @@ function Wishlist() {
 
   const getTotalPrice = () => {
     return wishlistItems.reduce((total, item) => {
-      const price = parseInt(item.price.replace('$', ''))
-      return total + price
+      const price = Number(item.price)
+      return total + (isNaN(price) ? 0 : price)
     }, 0)
   }
 

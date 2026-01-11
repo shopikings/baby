@@ -14,7 +14,7 @@ function HeaderActions({ onCartClick, onSearchClick }: HeaderActionsProps) {
     <div className="flex items-center justify-end gap-4 md:gap-6 font-light">
       <button
         onClick={onSearchClick}
-        className="text-text-primary transition-colors hover:text-gray-800 p-1"
+        className="text-text-primary transition-colors hover:text-gray-800 p-1 md:block hidden"
       >
         <Search className="size-5 md:size-6" strokeWidth={1.5} />
       </button>

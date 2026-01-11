@@ -121,7 +121,7 @@ function CartItem({ item }: CartItemProps) {
 
         <div className="text-right">
           <p className="font-raleway text-sm font-medium text-black">
-            {item.price}
+            ${item.price}
           </p>
         </div>
       </div>

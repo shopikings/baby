@@ -129,7 +129,8 @@ function MobileDrawer({ isOpen, onClose }: MobileDrawerProps) {
                     href: '/shop?tag=enewton'
                   },
                   { label: 'NUNA', href: '/shop?tag=nuna' },
-                  { label: 'UPPABABY', href: '/shop?tag=uppababy' }
+                  { label: 'UPPABABY', href: '/shop?tag=uppababy' },
+                  { label: 'VIEW ALL', href: '/collection' }
                 ]}
               />
 

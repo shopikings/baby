@@ -44,6 +44,18 @@ interface Product {
   variants?: ProductVariantConnection
 }
 
+interface VariantInfo {
+  id: string
+  price: {
+    amount: string
+  }
+  image: {
+    url: string
+  }
+  availableForSale?: boolean
+  title?: string
+}
+
 function RecommendationsSlider({ bgWhite }: RecommendationsSliderProps) {
   const [products, setProducts] = useState([])
   const [currentIndex, setCurrentIndex] = useState(0)
@@ -173,6 +185,23 @@ function RecommendationsSlider({ bgWhite }: RecommendationsSliderProps) {
               style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
             >
               {products.map((product: Product) => {
+                // Convert GraphQL connection to VariantInfo[]
+                const variants: VariantInfo[] | undefined =
+                  product.variants?.edges.map((edge) => ({
+                    id: (edge.node as any).id || product.id, // fallback to product id if missing
+                    price: {
+                      amount: edge.node.price.amount
+                    },
+                    image: {
+                      url:
+                        (edge.node as any).image?.url ||
+                        '/assets/images/placeholder.webp'
+                    },
+                    availableForSale:
+                      (edge.node as any).availableForSale || true, // default true
+                    title: (edge.node as any).title
+                  }))
+
                 return (
                   <div
                     key={product.id}
@@ -186,11 +215,12 @@ function RecommendationsSlider({ bgWhite }: RecommendationsSliderProps) {
                       }
                       hoverImage={product.images?.edges[1]?.node?.url}
                       title={product.title}
-                      price={`$${
+                      price={`${
                         product.price ||
-                        product?.variants?.edges[0]?.node?.price?.amount
+                        product.variants?.edges[0]?.node?.price?.amount
                       }`}
                       handle={product.handle}
+                      variants={variants}
                     />
                   </div>
                 )

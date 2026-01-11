@@ -33,7 +33,9 @@ function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
       items: cartItems.map((item) => ({
         variantId: item.variantId,
         quantity: item.quantity
-      }))
+      })),
+      orderNote: orderNotes || null, // 📝 Order notes
+      giftMessage: giftNote || null // 🎁 Gift message
     }
 
     // console.log('CartDrawer - Sending checkout payload:', payload)

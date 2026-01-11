@@ -2,7 +2,7 @@ function AboutBanner() {
   return (
     <section className="relative h-96 w-full overflow-hidden sm:h-[500px] lg:h-[600px]">
       <img
-        src="/assets/images/about-banner.jpg"
+        src="/assets/images/about-banner.webp"
         alt="Children playing with toys - Our Story"
         className="size-full object-cover"
       />
