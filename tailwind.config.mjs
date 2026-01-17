@@ -6,7 +6,7 @@ export default {
   theme: {
     extend: {
       colors: {
-        cream: '#EFECDA',
+        cream: '#FFFFFF',
         'text-primary': '#444B59',
         'footer-bg': '#E68B8F',
         'banner-upper': '#B3B1A4',

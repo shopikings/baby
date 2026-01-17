@@ -10,6 +10,21 @@ interface MarqueeProps {
   onClickableClick?: () => void
 }
 
+const renderWithNumberFont = (text: string) => {
+  return text.split(/(\d+)/).map((part, index) => {
+    // If part is a number
+    if (/^\d+$/.test(part)) {
+      return (
+        <span key={index} className="font-rubik">
+          {part}
+        </span>
+      )
+    }
+
+    return <span key={index}>{part}</span>
+  })
+}
+
 function Marquee2({
   text1,
   text2,
@@ -33,7 +48,9 @@ function Marquee2({
       const maxTranslate = Math.max(0, textWidth - containerWidth)
 
       if (maxTranslate > 0) {
-        let newTranslateX = stateRef.current.translateX + (stateRef.current.direction * speed) / 60
+        let newTranslateX =
+          stateRef.current.translateX +
+          (stateRef.current.direction * speed) / 60
 
         if (newTranslateX >= maxTranslate) {
           newTranslateX = maxTranslate
@@ -59,16 +76,18 @@ function Marquee2({
     }
   }, [speed])
 
-  const separator = '\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0'
+  const separator =
+    '\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0'
   const finalText = text1 && text2 ? `${text1}${separator}${text2}` : text || ''
-  
+
   const processedText = clickableText
-    ? finalText.replace(clickableText, `<CLICKABLE>${clickableText}</CLICKABLE>`)
+    ? finalText.replace(
+        clickableText,
+        `<CLICKABLE>${clickableText}</CLICKABLE>`
+      )
     : finalText
 
-  const duplicatedText = Array(6)
-    .fill(processedText)
-    .join(separator)
+  const duplicatedText = Array(6).fill(processedText).join(separator)
 
   return (
     <div
@@ -84,21 +103,24 @@ function Marquee2({
           ? duplicatedText.split('<CLICKABLE>').map((part, index) => {
               if (part.includes('</CLICKABLE>')) {
                 const [clickablePart, rest] = part.split('</CLICKABLE>')
+
                 return (
                   <span key={index}>
                     <button
                       onClick={onClickableClick}
                       className="cursor-pointer underline hover:opacity-80"
                     >
-                      {clickablePart}
+                      {renderWithNumberFont(clickablePart)}
                     </button>
-                    {rest}
+
+                    {renderWithNumberFont(rest)}
                   </span>
                 )
               }
-              return part
+
+              return <span key={index}>{renderWithNumberFont(part)}</span>
             })
-          : duplicatedText}
+          : renderWithNumberFont(duplicatedText)}
       </div>
     </div>
   )

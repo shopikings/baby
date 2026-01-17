@@ -47,7 +47,7 @@ function ProductImageGallery({
     <div className="bg-cream flex flex-col items-center">
       {/* Main Image */}
       <div
-        className="w-full max-w-md aspect-square bg-gray-200 rounded-lg overflow-hidden cursor-pointer mb-4"
+        className="w-full p-2 rounded-lg overflow-hidden cursor-pointer mb-4"
         onClick={() => setIsFullscreen(true)}
       >
         <img

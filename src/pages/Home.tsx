@@ -15,6 +15,7 @@ import JoinMovementSlider from 'components/JoinMovementSlider'
 import InfoBanner from 'components/InfoBanner'
 import StickyDiscountTag from 'components/StickyDiscountTag'
 import NewsletterModal from 'components/NewsletterModal'
+import CategoryNav from 'components/ProductDetail/CategoryNav'
 
 function Home() {
   const navigate = useNavigate()
@@ -46,6 +47,8 @@ function Home() {
       >
         <StickyDiscountTag />
       </div>
+
+      <CategoryNav />
       <Banner />
       <FeaturesSection />
 

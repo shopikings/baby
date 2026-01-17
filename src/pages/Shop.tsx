@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback, useMemo } from 'react'
 import { useParams, useSearchParams } from 'react-router-dom'
 import FilterSection from 'components/FilterSection'
 import ShopProductCard from 'components/ShopProductCard'
+import CategoryNav from 'components/ProductDetail/CategoryNav'
 
 interface VariantInfo {
   id: string
@@ -507,10 +508,10 @@ function Shop() {
     )
   }
 
-  console.log(products)
-
   return (
     <div className="relative bg-white">
+      <CategoryNav />
+
       <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
         <div className="mb-6">
           <h1 className="text-center font-rubik text-xl font-bold uppercase text-text-primary">
