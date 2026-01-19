@@ -61,7 +61,7 @@ function Contact() {
                 name="name"
                 value={formData.name}
                 onChange={handleChange}
-                className="mt-1 w-full rounded-md bg-white px-3 py-2 font-raleway text-sm text-gray-900 focus:outline-none"
+                className="mt-1 w-full rounded-md bg-white px-3 py-2 font-raleway text-sm text-gray-900 border border-black focus:outline-black"
                 required
               />
             </div>
@@ -79,7 +79,7 @@ function Contact() {
                 name="email"
                 value={formData.email}
                 onChange={handleChange}
-                className="mt-1 w-full rounded-md bg-white px-3 py-2 font-raleway text-sm text-gray-900 focus:outline-none"
+                className="mt-1 w-full rounded-md bg-white px-3 py-2 font-raleway text-sm text-gray-900 border border-black focus:outline-black"
                 required
               />
             </div>
@@ -98,7 +98,7 @@ function Contact() {
                 name="helpType"
                 value={formData.helpType}
                 onChange={handleChange}
-                className="w-full appearance-none rounded-md bg-white px-3 py-2 pr-8 font-raleway text-sm text-gray-900 focus:outline-none"
+                className="w-full appearance-none rounded-md bg-white px-3 py-2 pr-8 font-raleway text-sm text-gray-900 border border-black focus:outline-black"
               >
                 <option value="product questions or issues">
                   product questions or issues
@@ -147,7 +147,7 @@ function Contact() {
               value={formData.message}
               onChange={handleChange}
               rows={5}
-              className="mt-1 w-full resize-none rounded-md bg-white px-3 py-2 font-raleway text-sm text-gray-900 focus:outline-none"
+              className="mt-1 w-full resize-none rounded-md bg-white px-3 py-2 font-raleway text-sm text-gray-900 border border-black focus:outline-black"
               required
             />
           </div>

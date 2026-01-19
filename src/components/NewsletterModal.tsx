@@ -38,15 +38,7 @@ function NewsletterModal({ isOpen, onClose }: NewsletterModalProps) {
               onClick={onClose}
               className="absolute right-4 top-4 z-10 flex size-8 cursor-pointer items-center justify-center"
             >
-              <img
-                src="/assets/icons/close-outline.svg"
-                alt="Close"
-                className="size-5"
-                onError={(e) => {
-                  e.currentTarget.innerHTML = '×'
-                  e.currentTarget.className = 'text-xl font-bold text-gray-600'
-                }}
-              />
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-x-icon lucide-x text-white"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
             </div>
 
             <div className="flex flex-col md:flex-row">
@@ -61,7 +53,7 @@ function NewsletterModal({ isOpen, onClose }: NewsletterModalProps) {
                 />
               </div>
 
-              <div className="flex flex-col justify-center p-8 md:w-1/2 md:p-12">
+              <div className="flex flex-col justify-center p-8 md:w-1/2 md:p-12 bg-black">
                 <div className="mb-8 flex justify-center">
                   <img
                     src="/assets/images/logo.png"
@@ -78,7 +70,7 @@ function NewsletterModal({ isOpen, onClose }: NewsletterModalProps) {
                   />
                 </div>
 
-                <p className="mb-8 text-center font-raleway text-sm font-semibold leading-relaxed text-black">
+                <p className="mb-8 text-center font-raleway text-sm font-semibold leading-relaxed text-white">
                   Get 10% Off Your First Order And Be The First To Know When New
                   Collection Drop
                 </p>
@@ -89,12 +81,12 @@ function NewsletterModal({ isOpen, onClose }: NewsletterModalProps) {
                     placeholder="EMAIL"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="w-full rounded-lg border-2 border-black bg-transparent px-4 py-3 font-raleway text-sm placeholder:text-gray-500 focus:border-button-hover focus:outline-none"
+                    className="w-full rounded-lg border-2 border-gray-500 bg-transparent px-4 py-3 font-raleway text-sm placeholder:text-gray-500 focus:border-button-hover focus:outline-none"
                     required
                   />
                   <button
                     type="submit"
-                    className="w-full rounded-lg border-2 border-button-hover bg-button-hover py-3 font-raleway text-base font-semibold text-white transition-colors hover:border-black hover:bg-transparent hover:text-black"
+                    className="w-full rounded-lg border-2 border-button-hover bg-button-hover py-3 font-raleway text-base font-semibold text-white transition-colors hover:border-black hover:bg-white hover:text-black"
                   >
                     Join In Advance
                   </button>
