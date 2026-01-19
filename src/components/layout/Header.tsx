@@ -22,7 +22,7 @@ function Header() {
   return (
     <>
       <header className="relative w-full border-b border-gray-200 bg-cream">
-        <div className="bg-banner-lower py-2">
+        <div className="bg-black py-2">
           <Marquee2
             text1="Free Easy Returns within 90 days of purchase"
             text2=" Free Shipping on all order above $70"

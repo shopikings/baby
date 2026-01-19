@@ -1,6 +1,7 @@
 import { X } from 'lucide-react'
 import { useState, useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
+import { classNames } from 'utils'
 
 interface FilterSectionProps {
   filters: Record<string, string | boolean>
@@ -53,7 +54,7 @@ function FilterSection({
   //   'NUNA',
   //   'UPPABABY'
   // ]
-  const sortOptions = ['Price: Low to High', 'Price: High to Low']
+  const sortOptions = ['Price: Low to High', 'Price: High to Low', 'Sale Items First']
   const colourOptions = [
     'Red',
     'Blue',
@@ -112,7 +113,7 @@ function FilterSection({
     <div className="border-y border-gray-200 py-6">
       <div className="flex flex-wrap items-center justify-start gap-4 md:gap-6 xl:justify-between">
         {/* Sale */}
-        <label className="flex cursor-pointer items-center gap-2 bg-white px-4 py-2.5 font-raleway text-sm text-black transition-all hover:border-gray-400">
+        <label className="flex cursor-pointer items-center font-medium gap-2 bg-white px-4 py-2.5 font-raleway text-lg text-black transition-all hover:border-gray-400">
           <input
             type="checkbox"
             // ✅ Read the 'checked' state directly from the external 'filters' prop
@@ -130,7 +131,7 @@ function FilterSection({
         </label>
 
         {/* New In */}
-        <label className="flex cursor-pointer items-center gap-2 bg-white px-4 py-2.5 font-raleway text-sm text-black transition-all hover:border-gray-400">
+        <label className="flex font-medium cursor-pointer items-center gap-2 bg-white px-4 py-2.5 font-raleway text-lg text-black transition-all hover:border-gray-400">
           <input
             type="checkbox"
             // ✅ Read the 'checked' state directly from the external 'filters' prop

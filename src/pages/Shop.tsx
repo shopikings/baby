@@ -386,6 +386,20 @@ function Shop() {
         )
       }
 
+      // 🔥 SALE SORT - Show sale items first
+      if (filters.sort === 'Sale Items First') {
+        filteredProducts.sort((a: ShopifyProduct, b: ShopifyProduct) => {
+          const aOnSale = isProductOnSale(a)
+          const bOnSale = isProductOnSale(b)
+          
+          // If both are on sale or both are not on sale, maintain original order
+          if (aOnSale === bOnSale) return 0
+          
+          // Sale items come first (return -1 if a is on sale and b is not)
+          return aOnSale ? -1 : 1
+        })
+      }
+
       return { data: filteredProducts }
     }
 
