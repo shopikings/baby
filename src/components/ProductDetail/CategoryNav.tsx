@@ -128,7 +128,7 @@ function CategoryNav() {
             <a
               key={category.id}
               href={`/shop?category=${category.handle}`}
-              className="px-16 py-3 rounded-full font-raleway tracking-wide text-xs border-black border font-light transition-all bg-[#E9908E] uppercase text-white hover:bg-[#d88d9a] flex-shrink-0 inline-block whitespace-nowrap"
+              className="px-16 py-3 rounded-full font-raleway tracking-wide text-xs border-black border transition-all bg-[#E9908E] uppercase text-black font-bold hover:bg-[#d88d9a] flex-shrink-0 inline-block whitespace-nowrap"
               title={category.description || category.title}
             >
               {category.title.toUpperCase()}

@@ -33,6 +33,9 @@ interface ShopProductCardProps {
   handle?: string
   variants?: VariantInfo[]
   defaultVariant?: VariantInfo
+  isOnSale?: boolean // Add this to show sale badge
+  originalPrice?: string // Add this to show crossed-out price
+  sizes?: string[] // Add this for size options
 }
 
 interface WishlistItem {
@@ -56,11 +59,15 @@ function ShopProductCard({
   className = '',
   handle,
   variants, // Optional variant data
-  defaultVariant
+  defaultVariant,
+  isOnSale = false,
+  originalPrice,
+  sizes = []
 }: ShopProductCardProps) {
   const [currentImage, setCurrentImage] = useState(mainImage)
   const [currentPrice, setCurrentPrice] = useState(price)
   const [isTransitioning, setIsTransitioning] = useState(false)
+  const [selectedSize, setSelectedSize] = useState<string | null>(null)
   const navigate = useNavigate()
   const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist()
 
@@ -120,6 +127,11 @@ function ShopProductCard({
     }
   }
 
+  const handleSizeClick = (size: string, e: React.MouseEvent) => {
+    e.stopPropagation()
+    setSelectedSize(selectedSize === size ? null : size)
+  }
+
   return (
     <div
       className={`group cursor-pointer ${className}`}
@@ -134,6 +146,15 @@ function ShopProductCard({
               isTransitioning ? 'scale-95 opacity-0' : 'scale-100 opacity-100'
             }`}
           />
+
+          {/* Sale Badge */}
+          {isOnSale && (
+            <div className="absolute left-3 top-3 z-10">
+              <span className="rounded-full bg-red-500 px-2 py-1 text-xs font-bold text-white">
+                SALE
+              </span>
+            </div>
+          )}
 
           <div className="absolute bottom-3 right-3 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
             <button
@@ -157,15 +178,56 @@ function ShopProductCard({
             </button>
           </div>
         </div>
+
+        {/* Size Options - Directly under the image */}
+        {sizes.length > 0 ? (
+          <div className="mt-3 grid grid-cols-5 gap-1">
+            {sizes.map((size, index) => (
+              <button
+                key={index}
+                onClick={(e) => handleSizeClick(size, e)}
+                className={`border py-2 text-xs font-medium transition-all hover:border-gray-400 ${
+                  selectedSize === size
+                    ? 'border-button-hover bg-button-hover text-white'
+                    : 'border-gray-300 bg-white text-gray-700 hover:bg-gray-50'
+                }`}
+              >
+                {size}
+              </button>
+            ))}
+          </div>
+        ) : (
+          /* Add to Cart button when no sizes available */
+          <div className="mt-3 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+            <button
+              onClick={(e) => e.stopPropagation()}
+              className="w-full bg-button-hover py-2 text-xs font-medium text-white transition-all hover:bg-[#7d969a]"
+            >
+              ADD TO CART
+            </button>
+          </div>
+        )}
       </div>
 
       <div className="space-y-2">
         <h3 className="line-clamp-3 font-rubik text-xs font-normal leading-[18px] text-text-primary">
           {title}
         </h3>
-        <p className="font-raleway text-sm font-bold text-text-primary">
-          {currentPrice}
-        </p>
+        <div className="flex items-center gap-2">
+          <p className="font-raleway text-sm font-bold text-text-primary">
+            {currentPrice}
+          </p>
+          {isOnSale && originalPrice && (
+            <p className="font-raleway text-xs text-gray-500 line-through">
+              {originalPrice}
+            </p>
+          )}
+          {isOnSale && originalPrice && (
+            <span className="rounded bg-red-100 px-1 py-0.5 text-xs font-medium text-red-600">
+              SALE
+            </span>
+          )}
+        </div>
 
         <div className="flex items-center gap-0">
           {[1, 2, 3, 4, 5].map((star) => (

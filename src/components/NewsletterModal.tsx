@@ -62,12 +62,16 @@ function NewsletterModal({ isOpen, onClose }: NewsletterModalProps) {
                   />
                 </div>
 
-                <div className="mb-8 flex justify-center">
-                  <img
-                    src="/assets/images/newsletter-joinTheFun.png"
-                    alt="Maison Baby & Kids"
-                    className="h-28 w-auto"
-                  />
+                <div className="mb-8 text-center">
+                  <h2 className="font-rubik text-2xl font-bold tracking-wider text-gray-300 mb-2">
+                    JOIN THE FUN WITH
+                  </h2>
+                  <h3 className="font-rubik text-6xl font-black tracking-wider text-gray-300" style={{
+                    textShadow: '2px 2px 4px rgba(0,0,0,0.5)',
+                    filter: 'contrast(1.2)',
+                  }}>
+                    10% OFF
+                  </h3>
                 </div>
 
                 <p className="mb-8 text-center font-raleway text-sm font-semibold leading-relaxed text-white">

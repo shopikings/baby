@@ -303,7 +303,7 @@ function ProductDetail() {
           />
         </div>
       </div>
-
+<YouMayAlsoLike brandName={productData?.brand} />
       {/* REVIEWS */}
       <ProductReviews
         overallRating={productData.rating}
@@ -311,7 +311,10 @@ function ProductDetail() {
         reviews={product.reviews || []}
       />
 
-      {/* CUSTOMER TESTIMONIALS SECTION */}
+    
+
+      <OurStorySection />
+        {/* CUSTOMER TESTIMONIALS SECTION */}
       <div className="mx-4 sm:mx-6 md:mx-8 px-2 sm:px-4 py-8 md:py-12">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
           {/* Testimonial Card 1 */}
@@ -333,10 +336,8 @@ function ProductDetail() {
           </div>
         </div>
       </div>
-
-      <OurStorySection />
-      <YouMayAlsoLike brandName={productData?.brand} />
       <Services />
+      
     </div>
   )
 }
