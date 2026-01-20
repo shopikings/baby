@@ -56,7 +56,15 @@ function ProductInfo({
   }>({
     shipping: false,
     returns: false,
-    features: false
+    features: false,
+    question: false
+  })
+
+  const [questionForm, setQuestionForm] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    comment: ''
   })
 
   // Initialize with selectedVariant if available
@@ -80,6 +88,28 @@ function ProductInfo({
       ...prev,
       [section]: !prev[section]
     }))
+  }
+
+  const handleQuestionSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    // Handle form submission here
+    console.log('Question submitted:', questionForm)
+    toast.success('Question submitted successfully!')
+    
+    // Reset form
+    setQuestionForm({
+      name: '',
+      email: '',
+      phone: '',
+      comment: ''
+    })
+    
+    // Close the section
+    setExpandedSections(prev => ({ ...prev, question: false }))
+  }
+
+  const handleQuestionFormChange = (field: string, value: string) => {
+    setQuestionForm(prev => ({ ...prev, [field]: value }))
   }
 
   const handleColorSelect = (color: string) => {
@@ -367,6 +397,88 @@ function ProductInfo({
                 </span>
               </li>
             </ul>
+          </div>
+        )}
+
+        {/* Have a Question */}
+        <button
+          onClick={() => toggleSection('question')}
+          className="w-full flex items-center justify-between py-3 border-b border-black"
+        >
+          <span className="font-raleway text-xs font-normal text-black tracking-wide">
+            HAVE A QUESTION?
+          </span>
+          <svg
+            className={`w-5 h-5 transition-transform ${
+              expandedSections.question ? 'rotate-180' : ''
+            }`}
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M19 14l-7 7m0 0l-7-7m7 7V3"
+            />
+          </svg>
+        </button>
+
+        {/* Question Form Content */}
+        {expandedSections.question && (
+          <div className="py-4 px-0 border-b border-black">
+            <form onSubmit={handleQuestionSubmit} className="space-y-4">
+              <div>
+                <input
+                  type="text"
+                  placeholder="Name"
+                  value={questionForm.name}
+                  onChange={(e) => handleQuestionFormChange('name', e.target.value)}
+                  className="w-full px-4 py-3 border border-gray-300 bg-white font-raleway text-sm placeholder:text-gray-500 focus:border-gray-500 focus:outline-none"
+                  required
+                />
+              </div>
+              
+              <div>
+                <input
+                  type="email"
+                  placeholder="Email *"
+                  value={questionForm.email}
+                  onChange={(e) => handleQuestionFormChange('email', e.target.value)}
+                  className="w-full px-4 py-3 border border-gray-300 bg-white font-raleway text-sm placeholder:text-gray-500 focus:border-gray-500 focus:outline-none"
+                  required
+                />
+              </div>
+              
+              <div>
+                <input
+                  type="tel"
+                  placeholder="Phone number"
+                  value={questionForm.phone}
+                  onChange={(e) => handleQuestionFormChange('phone', e.target.value)}
+                  className="w-full px-4 py-3 border border-gray-300 bg-white font-raleway text-sm placeholder:text-gray-500 focus:border-gray-500 focus:outline-none"
+                />
+              </div>
+              
+              <div>
+                <textarea
+                  placeholder="Comment"
+                  value={questionForm.comment}
+                  onChange={(e) => handleQuestionFormChange('comment', e.target.value)}
+                  rows={4}
+                  className="w-full px-4 py-3 border border-gray-300 bg-white font-raleway text-sm placeholder:text-gray-500 focus:border-gray-500 focus:outline-none resize-vertical"
+                  required
+                />
+              </div>
+              
+              <button
+                type="submit"
+                className="bg-button-hover text-white px-8 py-3 font-raleway text-sm font-medium hover:bg-[#7d969a] transition-colors"
+              >
+                Send
+              </button>
+            </form>
           </div>
         )}
 

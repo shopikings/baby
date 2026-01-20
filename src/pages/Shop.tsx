@@ -56,6 +56,9 @@ interface ShopProductCardProps {
   category?: string
   variants?: VariantInfo[]
   defaultVariant?: VariantInfo
+  isOnSale?: boolean // Add this
+  originalPrice?: string // Add this
+  sizes?: string[] // Add this
 }
 
 function Shop() {
@@ -121,6 +124,21 @@ function Shop() {
     const displayVariant = firstAvailableVariant || shopifyProduct.variants[0]
     const price = displayVariant ? `$${displayVariant.price}` : '$0'
 
+    // Check if product is on sale and get original price
+    const productIsOnSale = isProductOnSale(shopifyProduct)
+    let originalPrice = undefined
+    
+    if (productIsOnSale) {
+      if (displayVariant?.compareAtPrice && displayVariant.compareAtPrice > displayVariant.price) {
+        // Use actual compareAtPrice if available and higher than current price
+        originalPrice = `$${displayVariant.compareAtPrice}`
+      } else {
+        // Fallback: estimate original price as 25% higher than current price for sale items
+        const estimatedOriginalPrice = Math.round(displayVariant.price * 1.25)
+        originalPrice = `$${estimatedOriginalPrice}`
+      }
+    }
+
     // For variantImages array: show variant-specific images first, then product images
     // This ensures thumbnails represent actual variants
     const variantImageUrls = variantImages.map((img) => img.url)
@@ -142,6 +160,42 @@ function Shop() {
         v.image?.url || productImages[0]?.url || '/assets/images/product1.png',
       title: v.title
     }))
+
+    // Extract unique sizes from variant titles
+    const sizes = Array.from(
+      new Set(
+        shopifyProduct.variants
+          .map((variant) => {
+            // Try to extract size from variant title
+            // Common patterns: "Size / Color", "Color / Size", or just "Size"
+            const title = variant.title.toLowerCase()
+            
+            // Look for common size patterns
+            const sizePatterns = ['xs', 'sm', 's', 'm', 'l', 'xl', 'xxl', '2xl', '3xl', 
+                                 'small', 'medium', 'large', 'x-large', 'xx-large',
+                                 '0-3m', '3-6m', '6-12m', '12-18m', '18-24m', '2t', '3t', '4t']
+            
+            for (const pattern of sizePatterns) {
+              if (title.includes(pattern)) {
+                return pattern.toUpperCase()
+              }
+            }
+            
+            // If no standard size found, check if variant title looks like a size
+            const parts = variant.title.split(' / ')
+            for (const part of parts) {
+              const trimmed = part.trim()
+              // If it's short and alphanumeric, might be a size
+              if (trimmed.length <= 4 && /^[a-zA-Z0-9-]+$/.test(trimmed)) {
+                return trimmed.toUpperCase()
+              }
+            }
+            
+            return null
+          })
+          .filter(Boolean)
+      )
+    ).slice(0, 5) // Limit to 5 sizes max
 
     const defaultVariantProp: VariantInfo = {
       id: defaultVariant.id,
@@ -169,7 +223,10 @@ function Shop() {
       brand: shopifyProduct.vendor,
       category: shopifyProduct.metafields?.category,
       variants: mappedVariants,
-      defaultVariant: defaultVariantProp
+      defaultVariant: defaultVariantProp,
+      isOnSale: productIsOnSale, // Add sale status
+      originalPrice: originalPrice, // Add original price if on sale
+      sizes: sizes // Add size options
     }
   }
 
@@ -386,18 +443,9 @@ function Shop() {
         )
       }
 
-      // 🔥 SALE SORT - Show sale items first
-      if (filters.sort === 'Sale Items First') {
-        filteredProducts.sort((a: ShopifyProduct, b: ShopifyProduct) => {
-          const aOnSale = isProductOnSale(a)
-          const bOnSale = isProductOnSale(b)
-          
-          // If both are on sale or both are not on sale, maintain original order
-          if (aOnSale === bOnSale) return 0
-          
-          // Sale items come first (return -1 if a is on sale and b is not)
-          return aOnSale ? -1 : 1
-        })
+      // 🔥 SALE ITEMS ONLY - Filter to show only sale items
+      if (filters.sort === 'Sale Items Only') {
+        filteredProducts = filteredProducts.filter(isProductOnSale)
       }
 
       return { data: filteredProducts }
@@ -461,7 +509,8 @@ function Shop() {
       setPageLoading(true)
       const nextPage = currentPage + 1
 
-      const response = await fetchProductsFromAPI(nextPage)
+      // Pass current filters to maintain sorting when loading more
+      const response = await fetchProductsFromAPI(nextPage, filters)
 
       const newProducts = response.data.map(mapShopifyToCardProps)
 
@@ -473,7 +522,7 @@ function Shop() {
     } finally {
       setPageLoading(false)
     }
-  }, [currentPage, hasNextPage, pageLoading])
+  }, [currentPage, hasNextPage, pageLoading, filters]) // Add filters to dependencies
 
   // Add this function to handle filter changes
   const handleFilterChange = (newFilters: Record<string, string | boolean>) => {

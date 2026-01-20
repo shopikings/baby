@@ -54,7 +54,7 @@ function FilterSection({
   //   'NUNA',
   //   'UPPABABY'
   // ]
-  const sortOptions = ['Price: Low to High', 'Price: High to Low', 'Sale Items First']
+  const sortOptions = ['Price: Low to High', 'Price: High to Low', 'Sale Items Only']
   const colourOptions = [
     'Red',
     'Blue',
