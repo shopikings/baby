@@ -193,7 +193,7 @@ function Shop() {
             
             return null
           })
-          .filter(Boolean)
+          .filter((size): size is string => size !== null) // Type guard to filter out nulls
       )
     ).slice(0, 5) // Limit to 5 sizes max
 
