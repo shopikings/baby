@@ -18,6 +18,15 @@ function ProductDetail() {
   const [error, setError] = useState<string | null>(null)
   const [selectedColor, setSelectedColor] = useState<string>('')
   const [selectedVariant, setSelectedVariant] = useState<any>(null)
+  const [selectedSize, setSelectedSize] = useState<string>('')
+
+  const findVariantByColorAndSize = (color: string, size: string) => {
+    return product.variants.find((v: any) => {
+      if (!v.title.includes('/')) return false
+      const [vColor, vSize] = v.title.split('/').map((s: any) => s.trim())
+      return vColor === color && vSize === size
+    })
+  }
 
   // Function to transform Shopify API response to your component's expected format
   const transformShopifyProduct = (shopifyProduct: any) => {
@@ -28,36 +37,30 @@ function ProductDetail() {
       new Set(shopifyProduct.images?.map((i: any) => i.url) || [])
     )
 
-    let sizesList: string[] = []
-    let colorsList: { name: string; hex: string }[] = []
+    let colorsSet = new Set<string>()
+    let sizesSet = new Set<string>()
     let hasMultipleVariants = shopifyProduct.variants?.length > 1
     let hasColorVariants = false
     let hasSizeVariants = false
 
-    // Analyze variants to determine what type of options exist
     shopifyProduct.variants?.forEach((v: any) => {
-      v.selectedOptions?.forEach((opt: any) => {
-        // SIZES
-        if (opt.name.toLowerCase().includes('size')) {
-          hasSizeVariants = true
-          if (!sizesList.includes(opt.value)) {
-            sizesList.push(opt.value)
-          }
-        }
+      // if (!v.available) return
 
-        // COLORS
-        if (opt.name.toLowerCase().includes('color')) {
-          hasColorVariants = true
-          const colorName = opt.value
-          if (!colorsList.find((c) => c.name === colorName)) {
-            colorsList.push({
-              name: colorName,
-              hex: '#CCCCCC' // You might want to get actual color hex from metafields
-            })
-          }
-        }
-      })
+      if (v.title.includes('/')) {
+        const [color, size] = v.title.split('/').map((s: any) => s.trim())
+        colorsSet.add(color)
+        sizesSet.add(size)
+      } else {
+        colorsSet.add(v.title)
+        sizesSet.add('Default')
+      }
     })
+
+    let colorsList = Array.from(colorsSet).map((c) => ({
+      name: c,
+      hex: '#CCCCCC'
+    }))
+    let sizesList = Array.from(sizesSet)
 
     // For products with variants but no explicit color/size options
     if (hasMultipleVariants && !hasColorVariants && !hasSizeVariants) {
@@ -182,7 +185,18 @@ function ProductDetail() {
 
         // Set initial selected variant
         if (transformedProduct?.defaultVariant) {
-          setSelectedVariant(transformedProduct.defaultVariant)
+          const variant = transformedProduct.defaultVariant
+          setSelectedVariant(variant)
+
+          // Split color/size from title
+          if (variant.title.includes('/')) {
+            const [color, size] = variant.title.split('/').map((s: any) => s.trim())
+            setSelectedColor(color)
+            setSelectedSize(size)
+          } else {
+            setSelectedColor(variant.title)
+            setSelectedSize('Default')
+          }
         }
       } catch (err) {
         console.error('Failed to load product:', err)
@@ -219,31 +233,52 @@ function ProductDetail() {
       </div>
     )
 
+  console.log(product.variant)
+
   const handleColorChange = (color: string) => {
-    console.log('ProductDetail - onColorChange called with:', color)
     setSelectedColor(color)
 
-    // Find variant that matches the selected color
-    if (product?.variants) {
-      const matchingVariant = product.variants.find((v: any) => {
-        // Check variant title
-        if (v.title === color) return true
+    // Find first available variant for selected color
+    const availableVariants = product.variants.filter(
+      (v: any) => v.available && v.title.includes(color)
+    )
 
-        // Check selectedOptions
-        if (v.selectedOptions) {
-          return v.selectedOptions.some(
-            (opt: any) =>
-              (opt.name.toLowerCase().includes('color') ||
-                opt.name.toLowerCase().includes('option')) &&
-              opt.value === color
-          )
-        }
+    let variant = availableVariants.find((v: any) => {
+      const [, size] = v.title.split('/').map((s: any) => s.trim())
+      return size === selectedSize
+    })
 
-        return false
-      })
+    if (!variant) variant = availableVariants[0] // fallback to first available color variant
 
-      if (matchingVariant) {
-        setSelectedVariant(matchingVariant)
+    if (variant) {
+      setSelectedVariant(variant)
+      if (variant.title.includes('/')) {
+        const [, size] = variant.title.split('/').map((s: any) => s.trim())
+        setSelectedSize(size)
+      }
+    }
+  }
+
+  const handleSizeChange = (size: string) => {
+    setSelectedSize(size)
+
+    // Find first available variant for selected size
+    const availableVariants = product.variants.filter(
+      (v: any) => v.available && v.title.includes(size)
+    )
+
+    let variant = availableVariants.find((v: any) => {
+      const [color] = v.title.split('/').map((s: any) => s.trim())
+      return color === selectedColor
+    })
+
+    if (!variant) variant = availableVariants[0] // fallback to first available size variant
+
+    if (variant) {
+      setSelectedVariant(variant)
+      if (variant.title.includes('/')) {
+        const [color] = variant.title.split('/').map((s: any) => s.trim())
+        setSelectedColor(color)
       }
     }
   }
@@ -298,7 +333,9 @@ function ProductDetail() {
         <div className="lg:w-[42%] pt-4 md:pt-5">
           <ProductInfo
             {...productData}
+            // selectedSize={selectedSize}
             onColorChange={handleColorChange}
+            // onSizeChange={handleSizeChange}
             onVariantChange={(variant) => setSelectedVariant(variant)}
           />
         </div>

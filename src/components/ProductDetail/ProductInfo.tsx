@@ -7,6 +7,7 @@ import email from '../../assets/email.svg'
 import ColorDropdown from './ColorDropdown'
 import QuantityDropdown from './QuantityDropdown'
 import SizeChartModal from './SizeChartModal'
+import SizeDropdown from './SizeDropdown'
 
 interface Color {
   name: string
@@ -47,8 +48,22 @@ function ProductInfo({
   onVariantChange
 }: ProductInfoProps) {
   const { addToCart } = useCart()
-  const [selectedColor, setSelectedColor] = useState(colors[0]?.name || '')
-  const [selectedSize, setSelectedSize] = useState(sizes[0] || '')
+  const [selectedColor, setSelectedColor] = useState(
+    selectedVariant
+      ? selectedVariant.title.includes('/')
+        ? selectedVariant.title.split('/')[0].trim()
+        : selectedVariant.title
+      : colors[0]?.name || ''
+  )
+
+  const [selectedSize, setSelectedSize] = useState(
+    selectedVariant
+      ? selectedVariant.title.includes('/')
+        ? selectedVariant.title.split('/')[1].trim()
+        : 'Default'
+      : sizes[0] || 'Default'
+  )
+
   const [quantity, setQuantity] = useState(1)
   const [showSizeChart, setShowSizeChart] = useState(false)
   const [expandedSections, setExpandedSections] = useState<{
@@ -69,19 +84,25 @@ function ProductInfo({
 
   // Initialize with selectedVariant if available
   useEffect(() => {
-    if (selectedVariant) {
-      // Extract color from variant
-      const colorOption = selectedVariant.selectedOptions?.find((opt: any) =>
-        opt.name.toLowerCase().includes('color')
-      )
-      if (
-        colorOption?.value &&
-        colors.some((c) => c.name === colorOption.value)
-      ) {
-        setSelectedColor(colorOption.value)
-      }
+    if (!selectedColor || !selectedSize) return
+
+    const variant = variants.find(
+      (v: any) =>
+        v.selectedOptions?.every((opt: any) => {
+          if (opt.name.toLowerCase().includes('color')) {
+            return opt.value === selectedColor
+          }
+          if (opt.name.toLowerCase().includes('size')) {
+            return opt.value === selectedSize
+          }
+          return true
+        })
+    )
+
+    if (variant && onVariantChange) {
+      onVariantChange(variant)
     }
-  }, [selectedVariant, colors])
+  }, [selectedColor, selectedSize, variants])
 
   const toggleSection = (section: string) => {
     setExpandedSections((prev) => ({
@@ -141,6 +162,10 @@ function ProductInfo({
     onColorChange?.(color)
   }
 
+  const handleSizeSelect = (size: string) => {
+    setSelectedSize(size)
+  }
+
   const handleAddToCart = () => {
     if (!selectedVariant?.id) {
       toast.error('Please select a variant')
@@ -166,7 +191,18 @@ function ProductInfo({
 
   // Calculate display price
   const displayPrice = typeof price === 'number' ? price : price
-  const isAvailable = selectedVariant?.available !== false && available
+  // const isAvailable = selectedVariant?.available !== false && available
+
+  // Find the variant that matches the current selected color and size
+  const matchingVariant =
+    variants.find((v: any) => {
+      if (!v.title.includes('/')) return false
+      const [vColor, vSize] = v.title.split('/').map((s: any) => s.trim())
+      return vColor === selectedColor && vSize === selectedSize
+    }) || selectedVariant
+
+  // Set availability based on whether a matching variant exists AND is available
+  const isAvailable = matchingVariant?.available === true
 
   return (
     <div className="space-y-4 md:space-y-5">
@@ -199,46 +235,35 @@ function ProductInfo({
         </p>
       )}
 
+      {/* Colors */}
+      {colors.length > 0 &&
+        colors.some(
+          (c) =>
+            c.name &&
+            c.name.toLowerCase() !== 'default' &&
+            c.name.toLowerCase() !== 'default title'
+        ) && (
+          <div>
+            <h3 className="text-xs mb-2">COLOR</h3>
+            <ColorDropdown
+              colors={colors}
+              selectedColor={selectedColor}
+              onColorChange={handleColorSelect}
+            />
+          </div>
+        )}
+
       {/* Sizes - Only show if there are size variants */}
       {sizes.length > 0 && sizes[0] !== 'Default' && (
         <div>
-          <h3 className="font-raleway text-xs font-normal text-black mb-3 tracking-wide">
-            SIZE
-          </h3>
-          <div className="flex gap-2 flex-wrap">
-            {sizes.map((size) => (
-              <button
-                key={size}
-                onClick={() => setSelectedSize(size)}
-                className={`px-3 md:px-4 py-2 border rounded-lg text-xs md:text-sm font-light transition-all ${
-                  selectedSize === size
-                    ? 'border-gray-800 bg-[#d8d7d3]'
-                    : 'border-gray-600 bg-[#EFECDA] hover:border-gray-900'
-                }`}
-              >
-                {size}
-              </button>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* Colors */}
-      {colors.length > 0 ? (
-        <div className="mb-3">
-          <h3 className="font-raleway text-xs font-normal text-black mb-3 tracking-wide">
-            Variants:{' '}
-            <span className="font-bold text-black">
-              {selectedColor || 'Select'}
-            </span>
-          </h3>
-          <ColorDropdown
-            colors={colors}
-            selectedColor={selectedColor}
-            onColorChange={handleColorSelect}
+          <h3 className="text-xs mb-2">SIZE</h3>
+          <SizeDropdown
+            sizes={sizes}
+            selectedSize={selectedSize}
+            onSizeChange={handleSizeSelect}
           />
         </div>
-      ) : null}
+      )}
 
       {/* Quantity */}
       <div className="flex items-end gap-4">

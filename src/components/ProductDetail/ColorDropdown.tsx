@@ -33,6 +33,18 @@ function ColorDropdown({
     return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [])
 
+  // Clean colors array
+  const cleanColors = colors
+    .map((c) => c.name.split('/')[0].trim()) // take only the part before /
+    .filter(
+      (c, index, arr) =>
+        c &&
+        c.toLowerCase() !== 'default' &&
+        c.toLowerCase() !== 'default title' &&
+        arr.indexOf(c) === index
+    ) // remove duplicates and placeholders
+    .map((c) => ({ name: c, hex: '#CCCCCC' })) // convert back to object for dropdown
+
   const handleColorClick = (color: Color) => {
     console.log('ColorDropdown - color clicked:', color.name)
     onColorChange(color.name)
@@ -65,7 +77,7 @@ function ColorDropdown({
       {isOpen && (
         <div className="absolute top-full left-0 mt-1 bg-[#EFECDA] border border-gray-600 rounded shadow-lg z-50 w-48">
           <div className="max-h-64 overflow-y-auto">
-            {colors.map((color) => (
+            {cleanColors.map((color) => (
               <button
                 key={color.name}
                 onClick={() => {
