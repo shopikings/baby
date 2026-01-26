@@ -1,7 +1,6 @@
 import { X } from 'lucide-react'
 import { useState, useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
-import { classNames } from 'utils'
 
 interface FilterSectionProps {
   filters: Record<string, string | boolean>
@@ -9,6 +8,7 @@ interface FilterSectionProps {
   hideCategory?: boolean
   hideBrand?: boolean
   brandOptions?: string[]
+  hideGender?: boolean
 }
 
 function FilterSection({
@@ -16,7 +16,8 @@ function FilterSection({
   onFilterChange,
   hideCategory = false,
   hideBrand = false,
-  brandOptions = []
+  brandOptions = [],
+  hideGender
 }: FilterSectionProps) {
   const location = useLocation()
   const [showMoreFilters, setShowMoreFilters] = useState(false)
@@ -54,7 +55,11 @@ function FilterSection({
   //   'NUNA',
   //   'UPPABABY'
   // ]
-  const sortOptions = ['Price: Low to High', 'Price: High to Low', 'Sale Items Only']
+  const sortOptions = [
+    'Price: Low to High',
+    'Price: High to Low',
+    'Sale Items Only'
+  ]
   const colourOptions = [
     'Red',
     'Blue',
@@ -151,47 +156,49 @@ function FilterSection({
         {/* --- Dropdowns --- */}
         <div className="flex flex-wrap items-center gap-2">
           {/* Gender */}
-          <div className="relative">
-            <button
-              onClick={() => toggleDropdown('gender')}
-              className="group relative flex min-w-[120px] items-center justify-between gap-2 overflow-hidden rounded-md border border-[#949494] bg-white px-4 py-2.5 font-raleway text-sm text-black transition-all hover:border-gray-400"
-            >
-              <div className="absolute left-0 top-0 h-0.5 w-full scale-x-0 bg-button-hover transition-transform duration-300 group-hover:scale-x-100" />
-              {/* ✅ Use the helper to display current filter value from props */}
-              <span>{getDropdownDisplay('gender', 'Gender')}</span>
-              <svg
-                className={`size-4 transition-transform ${
-                  openDropdown === 'gender' ? 'rotate-180' : ''
-                }`}
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
+          {!hideGender && (
+            <div className="relative">
+              <button
+                onClick={() => toggleDropdown('gender')}
+                className="group relative flex min-w-[120px] items-center justify-between gap-2 overflow-hidden rounded-md border border-[#949494] bg-white px-4 py-2.5 font-raleway text-sm text-black transition-all hover:border-gray-400"
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M19 9l-7 7-7-7"
-                />
-              </svg>
-            </button>
-            {openDropdown === 'gender' && (
-              <div className="absolute left-0 top-full z-10 mt-2 min-w-[120px] rounded-lg border border-gray-300 bg-white shadow-lg">
-                {genderOptions.map((option) => (
-                  <button
-                    key={option}
-                    onClick={() => handleDropdownChange('gender', option)}
-                    className={`block w-full px-4 py-2 text-left font-raleway text-sm text-black first:rounded-t-lg last:rounded-b-lg hover:bg-gray-50 ${
-                      // ✅ Highlight selected option
-                      filters.gender === option ? 'bg-gray-200 font-bold' : ''
-                    }`}
-                  >
-                    {option}
-                  </button>
-                ))}
-              </div>
-            )}
-          </div>
+                <div className="absolute left-0 top-0 h-0.5 w-full scale-x-0 bg-button-hover transition-transform duration-300 group-hover:scale-x-100" />
+                {/* ✅ Use the helper to display current filter value from props */}
+                <span>{getDropdownDisplay('gender', 'Gender')}</span>
+                <svg
+                  className={`size-4 transition-transform ${
+                    openDropdown === 'gender' ? 'rotate-180' : ''
+                  }`}
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M19 9l-7 7-7-7"
+                  />
+                </svg>
+              </button>
+              {openDropdown === 'gender' && (
+                <div className="absolute left-0 top-full z-10 mt-2 min-w-[120px] rounded-lg border border-gray-300 bg-white shadow-lg">
+                  {genderOptions.map((option) => (
+                    <button
+                      key={option}
+                      onClick={() => handleDropdownChange('gender', option)}
+                      className={`block w-full px-4 py-2 text-left font-raleway text-sm text-black first:rounded-t-lg last:rounded-b-lg hover:bg-gray-50 ${
+                        // ✅ Highlight selected option
+                        filters.gender === option ? 'bg-gray-200 font-bold' : ''
+                      }`}
+                    >
+                      {option}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
 
           {/* The rest of the dropdowns (Size, Category, Brand, Sort, Colour, etc.)
             should follow the same pattern as Gender:

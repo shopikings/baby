@@ -180,7 +180,7 @@ function ShopProductCard({
         </div>
 
         {/* Size Options - Directly under the image */}
-        {sizes.length > 0 ? (
+        {sizes.length > 0 && (
           <div className="mt-3 grid grid-cols-5 gap-1">
             {sizes.map((size, index) => (
               <button
@@ -195,16 +195,6 @@ function ShopProductCard({
                 {size}
               </button>
             ))}
-          </div>
-        ) : (
-          /* Add to Cart button when no sizes available */
-          <div className="mt-3 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-            <button
-              onClick={(e) => e.stopPropagation()}
-              className="w-full bg-button-hover py-2 text-xs font-medium text-white transition-all hover:bg-[#7d969a]"
-            >
-              ADD TO CART
-            </button>
           </div>
         )}
       </div>

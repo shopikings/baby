@@ -116,7 +116,7 @@ function ProductInfo({
     // Handle form submission here
     console.log('Question submitted:', questionForm)
     toast.success('Question submitted successfully!')
-    
+
     // Reset form
     setQuestionForm({
       name: '',
@@ -124,13 +124,13 @@ function ProductInfo({
       phone: '',
       comment: ''
     })
-    
+
     // Close the section
-    setExpandedSections(prev => ({ ...prev, question: false }))
+    setExpandedSections((prev) => ({ ...prev, question: false }))
   }
 
   const handleQuestionFormChange = (field: string, value: string) => {
-    setQuestionForm(prev => ({ ...prev, [field]: value }))
+    setQuestionForm((prev) => ({ ...prev, [field]: value }))
   }
 
   const handleColorSelect = (color: string) => {
@@ -459,44 +459,52 @@ function ProductInfo({
                   type="text"
                   placeholder="Name"
                   value={questionForm.name}
-                  onChange={(e) => handleQuestionFormChange('name', e.target.value)}
+                  onChange={(e) =>
+                    handleQuestionFormChange('name', e.target.value)
+                  }
                   className="w-full px-4 py-3 border border-gray-300 bg-white font-raleway text-sm placeholder:text-gray-500 focus:border-gray-500 focus:outline-none"
                   required
                 />
               </div>
-              
+
               <div>
                 <input
                   type="email"
                   placeholder="Email *"
                   value={questionForm.email}
-                  onChange={(e) => handleQuestionFormChange('email', e.target.value)}
+                  onChange={(e) =>
+                    handleQuestionFormChange('email', e.target.value)
+                  }
                   className="w-full px-4 py-3 border border-gray-300 bg-white font-raleway text-sm placeholder:text-gray-500 focus:border-gray-500 focus:outline-none"
                   required
                 />
               </div>
-              
+
               <div>
                 <input
                   type="tel"
                   placeholder="Phone number"
                   value={questionForm.phone}
-                  onChange={(e) => handleQuestionFormChange('phone', e.target.value)}
+                  onChange={(e) =>
+                    handleQuestionFormChange('phone', e.target.value)
+                  }
                   className="w-full px-4 py-3 border border-gray-300 bg-white font-raleway text-sm placeholder:text-gray-500 focus:border-gray-500 focus:outline-none"
                 />
               </div>
-              
+
               <div>
                 <textarea
                   placeholder="Comment"
                   value={questionForm.comment}
-                  onChange={(e) => handleQuestionFormChange('comment', e.target.value)}
+                  onChange={(e) =>
+                    handleQuestionFormChange('comment', e.target.value)
+                  }
                   rows={4}
                   className="w-full px-4 py-3 border border-gray-300 bg-white font-raleway text-sm placeholder:text-gray-500 focus:border-gray-500 focus:outline-none resize-vertical"
                   required
                 />
               </div>
-              
+
               <button
                 type="submit"
                 className="bg-button-hover text-white px-8 py-3 font-raleway text-sm font-medium hover:bg-[#7d969a] transition-colors"

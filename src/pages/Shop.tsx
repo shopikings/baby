@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useMemo } from 'react'
-import { useParams, useSearchParams } from 'react-router-dom'
+import { useSearchParams } from 'react-router-dom'
 import FilterSection from 'components/FilterSection'
 import ShopProductCard from 'components/ShopProductCard'
 import CategoryNav from 'components/ProductDetail/CategoryNav'
@@ -59,13 +59,13 @@ interface ShopProductCardProps {
   isOnSale?: boolean // Add this
   originalPrice?: string // Add this
   sizes?: string[] // Add this
+  productType?: string | null
 }
 
 function Shop() {
   const [filters, setFilters] = useState<Record<string, string | boolean>>({})
   const [loading, setLoading] = useState(true)
   const [searchParams] = useSearchParams()
-
   const brand = searchParams.get('brand')
   const category = searchParams.get('category')
   const urlTag = searchParams.get('tag')
@@ -76,8 +76,29 @@ function Shop() {
   const [pageLoading, setPageLoading] = useState<boolean>(false)
 
   const isBrandPage = Boolean(brand)
+  const isGear = category === 'gear' ? true : false
+  const [activeTab, setActiveTab] = useState<string>('all')
 
   const [totalProducts, setTotalProducts] = useState()
+
+  // Function to get unique product types from products
+  const getUniqueProductTypes = (
+    products: ShopProductCardProps[]
+  ): string[] => {
+    const types = products
+      .map((p) => p.productType)
+      .filter((type): type is string => type !== null && type !== '')
+      .filter((type, index, self) => self.indexOf(type) === index) // Get unique values
+      .sort((a, b) => a.localeCompare(b)) // Sort alphabetically
+
+    return types
+  }
+
+  // Get unique product types
+  const productTypes = useMemo(() => {
+    const types = getUniqueProductTypes(products)
+    return ['all', ...types] // Add 'all' as the first option
+  }, [products])
 
   // Transform Shopify product to ShopProductCardProps format
   const mapShopifyToCardProps = (
@@ -127,16 +148,20 @@ function Shop() {
     // Check if product is on sale and get original price
     const productIsOnSale = isProductOnSale(shopifyProduct)
     let originalPrice = undefined
-    
+
     if (productIsOnSale) {
-      if (displayVariant?.compareAtPrice && displayVariant.compareAtPrice > displayVariant.price) {
+      if (
+        displayVariant?.compareAtPrice &&
+        displayVariant.compareAtPrice > displayVariant.price
+      ) {
         // Use actual compareAtPrice if available and higher than current price
         originalPrice = `$${displayVariant.compareAtPrice}`
-      } else {
-        // Fallback: estimate original price as 25% higher than current price for sale items
-        const estimatedOriginalPrice = Math.round(displayVariant.price * 1.25)
-        originalPrice = `$${estimatedOriginalPrice}`
       }
+      // else {
+      //   // Fallback: estimate original price as 25% higher than current price for sale items
+      //   const estimatedOriginalPrice = Math.round(displayVariant.price * 1.25)
+      //   originalPrice = `$${estimatedOriginalPrice}`
+      // }
     }
 
     // For variantImages array: show variant-specific images first, then product images
@@ -169,18 +194,40 @@ function Shop() {
             // Try to extract size from variant title
             // Common patterns: "Size / Color", "Color / Size", or just "Size"
             const title = variant.title.toLowerCase()
-            
+
             // Look for common size patterns
-            const sizePatterns = ['xs', 'sm', 's', 'm', 'l', 'xl', 'xxl', '2xl', '3xl', 
-                                 'small', 'medium', 'large', 'x-large', 'xx-large',
-                                 '0-3m', '3-6m', '6-12m', '12-18m', '18-24m', '2t', '3t', '4t']
-            
+            const sizePatterns = [
+              'xs',
+              'sm',
+              's',
+              'm',
+              'l',
+              'xl',
+              'xxl',
+              '2xl',
+              '3xl',
+              'small',
+              'medium',
+              'large',
+              'x-large',
+              'xx-large',
+              '0-3m',
+              '3-6m',
+              '6-12m',
+              '12-18m',
+              '18-24m',
+              '2t',
+              '3t',
+              '4t',
+              'newborn'
+            ]
+
             for (const pattern of sizePatterns) {
               if (title.includes(pattern)) {
                 return pattern.toUpperCase()
               }
             }
-            
+
             // If no standard size found, check if variant title looks like a size
             const parts = variant.title.split(' / ')
             for (const part of parts) {
@@ -190,7 +237,7 @@ function Shop() {
                 return trimmed.toUpperCase()
               }
             }
-            
+
             return null
           })
           .filter((size): size is string => size !== null) // Type guard to filter out nulls
@@ -226,9 +273,18 @@ function Shop() {
       defaultVariant: defaultVariantProp,
       isOnSale: productIsOnSale, // Add sale status
       originalPrice: originalPrice, // Add original price if on sale
-      sizes: sizes // Add size options
+      sizes: sizes, // Add size options
+      productType: shopifyProduct.productType
     }
   }
+
+  // Filter products by active tab
+  const filteredProducts = useMemo(() => {
+    if (activeTab === 'all') {
+      return products
+    }
+    return products.filter((product) => product.productType === activeTab)
+  }, [products, activeTab])
 
   // Add this helper function to check if a product is on sale
   const isProductOnSale = (product: ShopifyProduct): boolean => {
@@ -481,7 +537,7 @@ function Shop() {
         // console.log('API Response data:', response.data)
 
         const mappedProducts = response.data.map(mapShopifyToCardProps)
-        // console.log('Mapped products:', mappedProducts)
+        console.log('Mapped products:', mappedProducts)
 
         setProducts(mappedProducts)
 
@@ -571,11 +627,13 @@ function Shop() {
     )
   }
 
+  console.log(filteredProducts)
+
   return (
     <div className="relative bg-white">
       <CategoryNav />
 
-      <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+      <div className="px-4 py-8 sm:px-6 lg:px-8">
         <div className="mb-6">
           <h1 className="text-center font-rubik text-xl font-bold uppercase text-text-primary">
             {getHeading()}
@@ -588,52 +646,76 @@ function Shop() {
           )}
         </div>
 
-        <FilterSection
-          filters={filters}
-          onFilterChange={handleFilterChange}
-          hideCategory={isBrandPage}
-          hideBrand={isBrandPage}
-          brandOptions={brandOptions}
-        />
-
-        {products.length === 0 ? (
-          <div className="py-12 text-center">
-            <p className="font-raleway text-lg text-gray-600">
-              No products found
-            </p>
-          </div>
-        ) : (
-          <>
-            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4">
-              {products.map((product) => (
-                <ShopProductCard
-                  key={product.id}
-                  {...product}
-                  defaultVariant={product.defaultVariant}
-                  className="scale-90"
-                />
+        {/* Product Type Tabs */}
+        {productTypes.length > 1 && isGear && (
+          <div className="mb-6 border-b border-gray-200 pb-4">
+            <div className="flex gap-2 overflow-x-auto whitespace-nowrap scrollbar-hide px-1 pb-4">
+              {productTypes.map((type) => (
+                <button
+                  key={type}
+                  onClick={() => setActiveTab(type)}
+                  className={`flex-shrink-0 px-4 py-2 font-raleway border rounded text-sm font-medium uppercase transition-colors ${
+                    activeTab === type
+                      ? 'border-2 border-button-hover text-button-hover font-semibold'
+                      : 'text-gray-600 hover:text-button-hover'
+                  }`}
+                >
+                  {type === 'all' ? 'All Products' : type}
+                </button>
               ))}
             </div>
-
-            <div className="mt-8 flex justify-center">
-              <button
-                onClick={loadMore}
-                disabled={!hasNextPage || pageLoading}
-                className={`rounded-none px-8 py-3 font-raleway text-sm font-medium uppercase text-white transition-colors ${
-                  !hasNextPage
-                    ? 'bg-gray-400 cursor-not-allowed'
-                    : 'bg-button-hover hover:bg-[#7d969a]'
-                }`}
-              >
-                {pageLoading
-                  ? 'Loading...'
-                  : hasNextPage
-                    ? 'Load More'
-                    : 'No more products'}
-              </button>
-            </div>
-          </>
+          </div>
         )}
+
+        <div className="max-w-7xl mx-auto">
+          <FilterSection
+            filters={filters}
+            onFilterChange={handleFilterChange}
+            hideCategory={isBrandPage}
+            hideBrand={isBrandPage}
+            brandOptions={brandOptions}
+            hideGender={isGear}
+          />
+
+          {filteredProducts.length === 0 ? (
+            <div className="py-12 text-center">
+              <p className="font-raleway text-lg text-gray-600">
+                No products found
+              </p>
+            </div>
+          ) : (
+            <>
+              <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4">
+                {filteredProducts.map((product) => (
+                  <ShopProductCard
+                    key={product.id}
+                    {...product}
+                    defaultVariant={product.defaultVariant}
+                    className="scale-90"
+                  />
+                ))}
+              </div>
+
+              <div className="mt-8 flex justify-center">
+                <button
+                  onClick={loadMore}
+                  disabled={!hasNextPage || pageLoading}
+                  className={`rounded-none px-8 py-3 font-raleway text-sm font-medium uppercase text-white transition-colors ${
+                    !hasNextPage
+                      ? 'bg-gray-400 cursor-not-allowed'
+                      : 'bg-button-hover hover:bg-[#7d969a]'
+                  }`}
+                >
+                  {pageLoading
+                    ? 'Loading...'
+                    : hasNextPage
+                      ? 'Load More'
+                      : 'No more products'}
+                </button>
+              </div>
+            </>
+          )}
+        </div>
       </div>
     </div>
   )

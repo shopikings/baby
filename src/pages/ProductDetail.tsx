@@ -20,14 +20,6 @@ function ProductDetail() {
   const [selectedVariant, setSelectedVariant] = useState<any>(null)
   const [selectedSize, setSelectedSize] = useState<string>('')
 
-  const findVariantByColorAndSize = (color: string, size: string) => {
-    return product.variants.find((v: any) => {
-      if (!v.title.includes('/')) return false
-      const [vColor, vSize] = v.title.split('/').map((s: any) => s.trim())
-      return vColor === color && vSize === size
-    })
-  }
-
   // Function to transform Shopify API response to your component's expected format
   const transformShopifyProduct = (shopifyProduct: any) => {
     if (!shopifyProduct) return null
@@ -190,7 +182,9 @@ function ProductDetail() {
 
           // Split color/size from title
           if (variant.title.includes('/')) {
-            const [color, size] = variant.title.split('/').map((s: any) => s.trim())
+            const [color, size] = variant.title
+              .split('/')
+              .map((s: any) => s.trim())
             setSelectedColor(color)
             setSelectedSize(size)
           } else {
@@ -233,8 +227,6 @@ function ProductDetail() {
       </div>
     )
 
-  console.log(product.variant)
-
   const handleColorChange = (color: string) => {
     setSelectedColor(color)
 
@@ -259,30 +251,6 @@ function ProductDetail() {
     }
   }
 
-  const handleSizeChange = (size: string) => {
-    setSelectedSize(size)
-
-    // Find first available variant for selected size
-    const availableVariants = product.variants.filter(
-      (v: any) => v.available && v.title.includes(size)
-    )
-
-    let variant = availableVariants.find((v: any) => {
-      const [color] = v.title.split('/').map((s: any) => s.trim())
-      return color === selectedColor
-    })
-
-    if (!variant) variant = availableVariants[0] // fallback to first available size variant
-
-    if (variant) {
-      setSelectedVariant(variant)
-      if (variant.title.includes('/')) {
-        const [color] = variant.title.split('/').map((s: any) => s.trim())
-        setSelectedColor(color)
-      }
-    }
-  }
-
   const productData = {
     name: product?.title || '',
     rating: product?.reviews
@@ -292,7 +260,7 @@ function ProductDetail() {
     reviewCount: product?.reviews ? product.reviews.length : 0,
     price: selectedVariant?.price || product?.price || 0,
     originalPrice:
-      Number(selectedVariant?.compareAtPrice || product?.price || 0) + 10,
+      Number(selectedVariant?.compareAtPrice || product?.price || 0) + 100,
     colors: product?.colorsList || [],
     sizes: product?.sizesList || ['Default'],
     variantId: selectedVariant?.id,
@@ -340,7 +308,7 @@ function ProductDetail() {
           />
         </div>
       </div>
-<YouMayAlsoLike brandName={productData?.brand} />
+      <YouMayAlsoLike brandName={productData?.brand} />
       {/* REVIEWS */}
       <ProductReviews
         overallRating={productData.rating}
@@ -348,10 +316,8 @@ function ProductDetail() {
         reviews={product.reviews || []}
       />
 
-    
-
       <OurStorySection />
-        {/* CUSTOMER TESTIMONIALS SECTION */}
+      {/* CUSTOMER TESTIMONIALS SECTION */}
       <div className="mx-4 sm:mx-6 md:mx-8 px-2 sm:px-4 py-8 md:py-12">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
           {/* Testimonial Card 1 */}
@@ -374,7 +340,6 @@ function ProductDetail() {
         </div>
       </div>
       <Services />
-      
     </div>
   )
 }
