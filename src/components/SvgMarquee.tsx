@@ -8,7 +8,9 @@ function SvgMarquee() {
     { name: 'baby talk', src: '/assets/images/partners/baby-talk.png' },
     { name: 'Glamour', src: '/assets/images/partners/fit-pregenc.png' },
     { name: 'Vogue', src: '/assets/images/partners/MArtha.png' },
-    { name: 'Vogue', src: '/assets/images/partners/paren.png' }
+    { name: 'paren', src: '/assets/images/partners/paren.png' },
+    { name: 'warnshaw', src: '/assets/images/partners/warnshaw.png' }
+    // { name: 'earnshaw', src: '/assets/images/partners/earnshaw.svg' }
   ]
 
   const duplicatedSvgs = Array(8).fill(svgs).flat()
