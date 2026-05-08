@@ -2,11 +2,11 @@ import { Link } from 'react-router-dom'
 
 function Footer() {
   return (
-    <footer className="bg-footer-bg font-raleway text-cream">
+    <footer className="bg-footer-bg font-raleway">
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 gap-8 md:grid-cols-4">
           <div>
-            <h3 className="mb-4 text-xs font-[500] uppercase">Our Mission</h3>
+            <h3 className="mb-4 text-xs font-semibold uppercase">Our Mission</h3>
             <p className="text-base leading-relaxed">
               Thoughtful kidswear that empowers individuality, supports small
               makers, and creates a more sustainable future.
@@ -96,7 +96,7 @@ function Footer() {
               <input
                 type="email"
                 placeholder="Your email"
-                className="w-full rounded border border-cream bg-transparent px-4 py-2 pr-10 text-base font-medium text-cream placeholder:text-cream/70 focus:outline-none focus:ring-2 focus:ring-cream"
+                className="w-full rounded border border-black bg-transparent px-4 py-2 pr-10 text-base font-medium placeholder:text-black/70 focus:outline-none"
               />
               <button className="absolute right-2 top-1/2 -translate-y-1/2">
                 <img
@@ -125,7 +125,7 @@ function Footer() {
                 href="https://www.instagram.com/maisonbabyandkids/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="transition-opacity hover:opacity-80"
+                className="transition-opacity hover:opacity-80 invert"
               >
                 <img
                   src="/assets/icons/instagram.svg"
@@ -137,7 +137,7 @@ function Footer() {
                 href="https://www.facebook.com/MaisonBabyandKids/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="transition-opacity hover:opacity-80"
+                className="transition-opacity hover:opacity-80 invert"
               >
                 <img
                   src="/assets/icons/facebook.svg"

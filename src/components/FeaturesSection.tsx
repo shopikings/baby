@@ -23,7 +23,7 @@ function FeaturesSection() {
   ]
 
   return (
-    <section className="bg-cream py-12">
+    <section className="py-12">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
           {features.map((feature, index) => (
@@ -35,7 +35,7 @@ function FeaturesSection() {
                   className="size-16 object-contain"
                 />
               </div>
-              <h3 className="mb-1 font-raleway text-base font-medium text-button-hover">
+              <h3 className="mb-1 font-raleway text-base font-medium">
                 {feature.title}
               </h3>
               <p className="font-raleway text-sm text-text-primary">

@@ -8,8 +8,8 @@ function StickyDiscountTag() {
   return (
     <div className="fixed right-0 top-[40%] z-50 -translate-y-1/2">
       <div className="relative">
-        <div className="flex h-48 w-12 flex-col items-center justify-center rounded-l-md bg-button-hover text-cream shadow-lg">
-          <div className="rotate-90 whitespace-nowrap font-rubik text-lg font-bold tracking-wider">
+        <div className="flex h-48 w-12 flex-col items-center justify-center rounded-l-md bg-[#f7d6d0] shadow-lg">
+          <div className="rotate-90 whitespace-nowrap font-rubik text-lg font-semibold tracking-wider">
             GET 10% OFF
           </div>
         </div>

@@ -18,7 +18,7 @@ function AboutInfoBanner() {
   ]
 
   return (
-    <section className="bg-black py-8 sm:py-12">
+    <section className="bg-banner-lower py-8 sm:py-12">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col divide-y divide-white/20 sm:grid sm:grid-cols-3 sm:divide-x sm:divide-y-0">
           {features.map((feature, index) => (
@@ -30,13 +30,13 @@ function AboutInfoBanner() {
                 <img
                   src={feature.icon}
                   alt={feature.title}
-                  className="size-5 sm:size-6 lg:size-7"
+                  className="size-5 sm:size-6 lg:size-7 invert"
                 />
               </div>
-              <h3 className="mb-2 font-rubik text-base font-semibold text-white sm:text-lg lg:text-xl">
+              <h3 className="mb-2 font-rubik text-base sm:text-lg lg:text-xl">
                 {feature.title}
               </h3>
-              <p className="font-raleway text-xs text-white/70 sm:text-sm">
+              <p className="font-raleway text-xs text-black/80 sm:text-sm">
                 {feature.description}
               </p>
             </div>

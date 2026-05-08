@@ -96,7 +96,7 @@ function Marquee2({
     >
       <div
         ref={textRef}
-        className="inline-block font-raleway text-xs font-light uppercase will-change-transform text-white"
+        className="inline-block font-raleway text-xs uppercase will-change-transform"
         style={{ transform: 'translateX(0px)' }}
       >
         {clickableText

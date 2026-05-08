@@ -8,10 +8,10 @@ export default {
       colors: {
         cream: '#FFFFFF',
         'text-primary': '#444B59',
-        'footer-bg': '#E68B8F',
+        'footer-bg': '#f7d6d0',
         'banner-upper': '#B3B1A4',
-        'banner-lower': '#91B2B4',
-        'button-hover': '#E9908E'
+        'banner-lower': '#d4e9fa',
+        'button-hover': '#f7d6d0'
       },
       fontFamily: {
         inter: ['Inter', 'sans-serif'],

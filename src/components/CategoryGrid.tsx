@@ -42,7 +42,7 @@ function CategoryGrid() {
   ]
 
   return (
-    <section className="bg-cream py-8 sm:py-12 lg:py-16 xl:py-20">
+    <section className="py-8 sm:py-12 lg:py-16 xl:py-20">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col gap-2 sm:gap-3 md:h-96 md:flex-row md:gap-2 lg:h-[500px] lg:gap-3 xl:h-[600px] xl:gap-4">
           {categories.map((category, index) => (
@@ -116,7 +116,7 @@ function CategoryGrid() {
                     }`}
                   >
                     <button
-                      className=" cursor-pointer rounded-full bg-button-hover px-3 py-1.5 text-xs font-medium text-white  sm:px-4 sm:py-2 sm:text-sm md:px-6 md:py-3 md:text-base"
+                      className=" cursor-pointer rounded-full bg-button-hover px-3 py-1.5 text-xs font-medium text-black sm:px-4 sm:py-2 sm:text-sm md:px-6 md:py-3 md:text-base"
                       onClick={(e) => {
                         e.stopPropagation()
                         navigate(

@@ -12,11 +12,7 @@ const renderAnswerWithLinks = (answer: string) => {
   return parts.map((part, index) => {
     if (emailRegex.test(part)) {
       return (
-        <a
-          key={index}
-          href={`mailto:${part}`}
-          className="text-button-hover underline hover:text-banner-lower"
-        >
+        <a key={index} href={`mailto:${part}`} className="text-black underline">
           {part}
         </a>
       )
@@ -205,10 +201,10 @@ function FAQ() {
   const activeData = categories.find((cat) => cat.id === activeCategory)
 
   return (
-    <div className="min-h-screen bg-[#EFE8DC] py-12 sm:py-16">
+    <div className="min-h-screen bg-white py-12 sm:py-16">
       <div className="mx-auto max-w-3xl px-6 sm:px-8">
         <div className="text-center">
-          <h1 className="font-rubik text-2xl font-bold uppercase tracking-wide text-button-hover md:text-4xl">
+          <h1 className="font-rubik text-2xl font-bold uppercase tracking-wide text-text-primary md:text-4xl">
             FAQ
           </h1>
         </div>
@@ -220,7 +216,7 @@ function FAQ() {
               onClick={() => setActiveCategory(category.id)}
               className={`rounded px-4 py-2 font-raleway text-sm font-semibold transition-colors ${
                 activeCategory === category.id
-                  ? 'bg-button-hover text-white'
+                  ? 'bg-button-hover'
                   : 'bg-white text-gray-700 hover:bg-gray-100'
               }`}
             >
@@ -236,7 +232,7 @@ function FAQ() {
                 onClick={() => toggleQuestion(index)}
                 className="flex w-full items-center justify-between py-4 text-left"
               >
-                <span className="font-raleway text-sm font-semibold text-button-hover md:text-base">
+                <span className="font-raleway text-sm font-semibold text-text-primary md:text-base">
                   {item.question}
                 </span>
                 <span className="ml-4 text-xl font-bold text-gray-600 transition-opacity duration-300">

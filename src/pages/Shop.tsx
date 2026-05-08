@@ -700,7 +700,7 @@ function Shop() {
                 <button
                   onClick={loadMore}
                   disabled={!hasNextPage || pageLoading}
-                  className={`rounded-none px-8 py-3 font-raleway text-sm font-medium uppercase text-white transition-colors ${
+                  className={`rounded-none px-8 py-3 font-raleway text-sm font-medium uppercase transition-colors ${
                     !hasNextPage
                       ? 'bg-gray-400 cursor-not-allowed'
                       : 'bg-button-hover hover:bg-[#7d969a]'

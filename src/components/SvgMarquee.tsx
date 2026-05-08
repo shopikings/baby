@@ -16,7 +16,7 @@ function SvgMarquee() {
   const duplicatedSvgs = Array(8).fill(svgs).flat()
 
   return (
-    <section style={{ backgroundColor: '#E9908E' }} className="py-6">
+    <section style={{ backgroundColor: '#f7d6d0' }} className="py-6">
       <div className="overflow-hidden">
         <div className="flex animate-scroll items-center gap-12">
           {duplicatedSvgs.map((svg, index) => (

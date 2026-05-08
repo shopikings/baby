@@ -38,7 +38,7 @@ function NewsletterModal({ isOpen, onClose }: NewsletterModalProps) {
               onClick={onClose}
               className="absolute right-4 top-4 z-10 flex size-8 cursor-pointer items-center justify-center"
             >
-<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-x-icon lucide-x text-white"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-x-icon lucide-x"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
             </div>
 
             <div className="flex flex-col md:flex-row">
@@ -53,7 +53,7 @@ function NewsletterModal({ isOpen, onClose }: NewsletterModalProps) {
                 />
               </div>
 
-              <div className="flex flex-col justify-center p-8 md:w-1/2 md:p-12 bg-black">
+              <div className="flex flex-col justify-center p-8 md:w-1/2 md:p-12 bg-banner-lower">
                 <div className="mb-8 flex justify-center">
                   <img
                     src="/assets/images/logo.png"
@@ -63,10 +63,10 @@ function NewsletterModal({ isOpen, onClose }: NewsletterModalProps) {
                 </div>
 
                 <div className="mb-8 text-center">
-                  <h2 className="font-rubik text-2xl font-bold tracking-wider text-gray-300 mb-2">
+                  <h2 className="font-rubik text-2xl font-bold tracking-wider text-gray-800 mb-2">
                     JOIN THE FUN WITH
                   </h2>
-                  <h3 className="font-rubik text-6xl font-black tracking-wider text-gray-300" style={{
+                  <h3 className="font-rubik text-6xl font-black tracking-wider text-gray-700" style={{
                     textShadow: '2px 2px 4px rgba(0,0,0,0.5)',
                     filter: 'contrast(1.2)',
                   }}>
@@ -74,7 +74,7 @@ function NewsletterModal({ isOpen, onClose }: NewsletterModalProps) {
                   </h3>
                 </div>
 
-                <p className="mb-8 text-center font-raleway text-sm font-semibold leading-relaxed text-white">
+                <p className="mb-8 text-center font-raleway text-sm font-semibold leading-relaxed text-black">
                   Get 10% Off Your First Order And Be The First To Know When New
                   Collection Drop
                 </p>
@@ -90,7 +90,7 @@ function NewsletterModal({ isOpen, onClose }: NewsletterModalProps) {
                   />
                   <button
                     type="submit"
-                    className="w-full rounded-lg border-2 border-button-hover bg-button-hover py-3 font-raleway text-base font-semibold text-white transition-colors hover:border-black hover:bg-white hover:text-black"
+                    className="w-full rounded-lg border-2 border-button-hover bg-button-hover py-3 font-raleway text-base font-semibold transition-colors hover:border-black hover:bg-white hover:text-black"
                   >
                     Join In Advance
                   </button>

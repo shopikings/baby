@@ -184,8 +184,8 @@ function NewCollectionGrid() {
               onClick={() => setSelectedLetter(null)}
               className={`rounded-lg border px-3 font-raleway py-1 text-xs transition-colors sm:px-3 sm:text-sm ${
                 selectedLetter === null
-                  ? 'bg-[#E9908E] text-white'
-                  : 'bg-[#E9908E] text-white  hover:bg-[#E9908E]/95'
+                  ? 'bg-button-hover'
+                  : 'bg-button-hover hover:bg-button-hover/95'
               }`}
             >
               All
@@ -225,7 +225,7 @@ function NewCollectionGrid() {
                 onClick={() => setSelectedLetter(letter)}
                 className={`rounded-lg border px-2 py-1 text-xs transition-colors font-raleway sm:px-3 sm:text-sm ${
                   selectedLetter === letter
-                    ? 'border-[#E9908E] bg-[#E9908E] text-white'
+                    ? 'border-button-hover bg-button-hover'
                     : 'border-gray-300 bg-white text-text-primary hover:border-text-primary hover:bg-gray-50'
                 }`}
               >
@@ -242,11 +242,11 @@ function NewCollectionGrid() {
               return (
                 <div
                   key={brand.id}
-                  className="group cursor-pointer border border-black font-raleway hover:bg-[#E9908E] hover:text-white shadow-lg p-5 rounded-lg h-full min-h-[120px] flex items-center justify-center"
+                  className="group cursor-pointer border border-black font-raleway hover:bg-button-hover hover:text-black shadow-lg p-5 rounded-lg h-full min-h-[120px] flex items-center justify-center"
                   onClick={() => handleCardClick(brand)}
                 >
                   <div className="space-y-2 text-center">
-                    <h3 className="font-raleway uppercase text-lg font-medium leading-[18px] text-black sm:text-lg sm:leading-[22px] group-hover:text-white">
+                    <h3 className="font-raleway uppercase text-lg font-medium leading-[18px] text-black sm:text-lg sm:leading-[22px] group-hover:text-black">
                       {brand.name}
                     </h3>
                   </div>

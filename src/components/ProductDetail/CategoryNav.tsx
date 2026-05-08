@@ -79,7 +79,7 @@ function CategoryNav() {
 
   if (loading) {
     return (
-      <div className="bg-cream border-b border-gray-200">
+      <div className="border-b border-gray-200">
         <div className="overflow-x-auto px-8 py-6">
           <div className="flex gap-4 animate-pulse">
             {[...Array(10)].map((_, index) => (
@@ -97,7 +97,7 @@ function CategoryNav() {
 
   if (error) {
     return (
-      <div className="bg-cream border-b border-gray-200">
+      <div className="border-b border-gray-200">
         <div className="text-center py-6 text-red-600">
           Failed to load categories. Please try again later.
         </div>
@@ -107,7 +107,7 @@ function CategoryNav() {
 
   if (categories.length === 0) {
     return (
-      <div className="bg-cream border-b border-gray-200">
+      <div className="border-b border-gray-200">
         <div className="text-center py-6 text-gray-500">
           No categories available.
         </div>
@@ -116,7 +116,7 @@ function CategoryNav() {
   }
 
   return (
-    <div className="bg-cream border-b border-gray-200">
+    <div className="border-b border-gray-200">
       {/* Scrollable Container */}
       <div
         ref={scrollContainerRef}
@@ -128,7 +128,7 @@ function CategoryNav() {
             <a
               key={category.id}
               href={`/shop?category=${category.handle}`}
-              className="px-16 py-3 rounded-full font-raleway tracking-wide text-xs border-black border transition-all bg-[#E9908E] uppercase text-black font-bold hover:bg-[#d88d9a] flex-shrink-0 inline-block whitespace-nowrap"
+              className="px-16 py-3 rounded-full font-raleway tracking-wide text-xs border-black border transition-all bg-[#f7d6d0] uppercase text-black font-bold hover:bg-[#d88d9a] flex-shrink-0 inline-block whitespace-nowrap"
               title={category.description || category.title}
             >
               {category.title.toUpperCase()}
@@ -145,7 +145,7 @@ function CategoryNav() {
           background: #f5f5f5;
         }
         div::-webkit-scrollbar-thumb {
-          background: #E89FAC;
+          background: #f7d6d0;
           border-radius: 4px;
         }
         div::-webkit-scrollbar-thumb:hover {
