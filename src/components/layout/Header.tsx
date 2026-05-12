@@ -7,6 +7,8 @@ import HeaderActions from '../HeaderActions'
 import CartDrawer from '../CartDrawer'
 import SearchModal from '../SearchModal'
 import Marquee2 from 'components/Marquee2'
+import { Search } from 'lucide-react'
+import NavMenu from 'components/NavMenu'
 
 function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
@@ -30,7 +32,7 @@ function Header() {
           />
         </div>
 
-        <div className="mx-auto flex max-w-7xl items-center px-4 py-4 sm:px-6 lg:px-8 justify-between gap-4">
+        <div className="mx-auto flex items-center px-4 py-4 sm:px-6 lg:px-8 justify-between gap-4">
           {/* Left - Mobile Menu Button */}
           <button
             onClick={() => setIsMobileMenuOpen(true)}
@@ -52,8 +54,19 @@ function Header() {
           </button>
 
           {/* Left - Navigation (Desktop only) */}
-          <div className="hidden lg:block">
-            <Navigation onCollectionSelect={handleCollectionSelect} />
+          <div
+            onClick={() => setIsSearchOpen(true)}
+            className="hidden flex-shrink-0 lg:flex items-center gap-2 border border-gray-300 rounded-full px-3 py-1 bg-white"
+          >
+            {/* <Navigation onCollectionSelect={handleCollectionSelect} /> */}
+            <input
+              placeholder="search..."
+              className="uppercase outline-none bg-transparent text-sm w-40"
+            />
+            <Search
+              className="size-5 md:size-6 text-gray-600 cursor-pointer"
+              strokeWidth={1.5}
+            />
           </div>
 
           {/* Center - Logo */}
@@ -61,15 +74,21 @@ function Header() {
             <img
               src="/assets/images/logo.png"
               alt="Logo"
-              className="h-10 w-auto"
+              className="h-11 w-auto"
             />
           </Link>
 
           {/* Right - Header Actions */}
           <div className="flex-shrink-0">
-            <HeaderActions onCartClick={() => setIsCartOpen(true)} onSearchClick={() => setIsSearchOpen(true)} />
+            <HeaderActions
+              onCartClick={() => setIsCartOpen(true)}
+              onSearchClick={() => setIsSearchOpen(true)}
+            />
           </div>
         </div>
+
+        {/* <Navigation onCollectionSelect={handleCollectionSelect} /> */}
+        <NavMenu />
       </header>
 
       <MobileDrawer
@@ -77,7 +96,10 @@ function Header() {
         onClose={() => setIsMobileMenuOpen(false)}
       />
       <CartDrawer isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
-      <SearchModal isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
+      <SearchModal
+        isOpen={isSearchOpen}
+        onClose={() => setIsSearchOpen(false)}
+      />
     </>
   )
 }

@@ -96,7 +96,7 @@ function SearchModal({ isOpen, onClose }: SearchModalProps) {
 
       {/* Side Panel */}
       <div
-        className="fixed right-0 top-0 z-50 h-[60%] w-full rounded-b-lg max-w-md bg-cream shadow-2xl flex flex-col transition-transform duration-300 ease-in-out"
+        className="fixed left-0 top-0 z-50 h-[60%] w-full rounded-b-lg max-w-md bg-cream shadow-2xl flex flex-col transition-transform duration-300 ease-in-out"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Search Header */}
