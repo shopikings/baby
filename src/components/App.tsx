@@ -44,7 +44,7 @@ function App() {
             <Route path="/collection" element={<Collection />} />
             <Route path="/faq" element={<FAQ />} />
 
-            {/* <Route path="/product-new/:handle" element={<ProductDetailNew />} /> */}
+            <Route path="/product-new/:handle" element={<ProductDetailNew />} />
           </Routes>
           <Footer />
           <Toaster
