@@ -5,7 +5,7 @@ import ProductInfo from '../components/ProductDetail/ProductInfo'
 import ProductReviews from '../components/ProductReviews'
 import YouMayAlsoLike from '../components/YouMayAlsoLike'
 import Marquee from 'components/Marquee'
-import CategoryNav from 'components/ProductDetail/CategoryNav'
+// import CategoryNav from 'components/ProductDetail/CategoryNav'
 import Services from 'components/Services'
 import OurStorySection from 'components/OurStorySection'
 import test1 from '../assets/test1.png'
@@ -279,7 +279,7 @@ function ProductDetail() {
 
   return (
     <div className="bg-cream">
-      <CategoryNav />
+      {/* <CategoryNav /> */}
       <div className="bg-banner-lower py-1 md:py-2 mt-2 md:mt-3">
         <Marquee
           text="10% off on your first order when you sign up to newsletter."

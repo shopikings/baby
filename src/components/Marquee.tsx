@@ -11,7 +11,7 @@ interface MarqueeProps {
 function Marquee({
   text,
   className = '',
-  speed = 50,
+  speed = 25,
   clickableText,
   onClickableClick
 }: MarqueeProps) {

@@ -132,6 +132,8 @@ function ShopProductCard({
     setSelectedSize(selectedSize === size ? null : size)
   }
 
+  // console.log(sizes)
+
   return (
     <div
       className={`group cursor-pointer ${className}`}
@@ -181,12 +183,12 @@ function ShopProductCard({
 
         {/* Size Options - Directly under the image */}
         {sizes.length > 0 && (
-          <div className="mt-3 grid grid-cols-5 gap-1">
+          <div className="mt-3 flex flex-wrap gap-1">
             {sizes.map((size, index) => (
               <button
                 key={index}
                 onClick={(e) => handleSizeClick(size, e)}
-                className={`border py-2 text-xs font-medium transition-all hover:border-gray-400 ${
+                className={`border py-2 px-1 text-xs whitespace-nowrap font-medium transition-all hover:border-gray-400 ${
                   selectedSize === size
                     ? 'border-button-hover bg-button-hover text-white'
                     : 'border-gray-300 bg-white text-gray-700 hover:bg-gray-50'
@@ -200,7 +202,7 @@ function ShopProductCard({
       </div>
 
       <div className="space-y-2">
-        <h3 className="line-clamp-3 font-rubik text-xs font-normal leading-[18px] text-text-primary">
+        <h3 className="line-clamp-3 font-rubik text-sm font-normal leading-[18px] text-text-primary">
           {title}
         </h3>
         <div className="flex items-center gap-2">

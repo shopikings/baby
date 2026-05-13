@@ -28,7 +28,7 @@ export default function SizeDropdown({
     <div className="relative w-48" ref={ref}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full border border-gray-600 bg-[#EFECDA] rounded px-4 py-2 font-raleway text-sm font-normal text-text-primary focus:outline-none focus:border-gray-800 flex items-center justify-between gap-2"
+        className="w-full border border-gray-600 bg-white rounded px-4 py-2 font-raleway text-sm font-normal text-text-primary focus:outline-none focus:border-gray-800 flex items-center justify-between gap-2"
       >
         <span>{selectedSize || 'Select size'}</span>
         <svg
@@ -49,7 +49,7 @@ export default function SizeDropdown({
       </button>
 
       {isOpen && (
-        <div className="absolute top-full left-0 mt-1 bg-[#EFECDA] border border-gray-600 rounded shadow-lg z-50 w-48">
+        <div className="absolute top-full left-0 mt-1 bg-white border border-gray-600 rounded shadow-lg z-50 w-48">
           {sizes.map((size) => (
             <button
               key={size}

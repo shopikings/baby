@@ -36,8 +36,14 @@ const navItems: NavItem[] = [
     label: 'Brands',
     dropdown: [
       { label: 'Jellycat', href: '/shop?brand=jellycat' },
-      { label: 'Kyte Baby', href: '/shop?brand=kyte-baby' },
+      { label: 'RYLEE + CRU', href: '/shop?brand=rylee%20%2B%20cru' },
+      { label: 'BAREFOOT DREAMS', href: '/shop?brand=barefoot%20dreams' },
       { label: 'Nuna', href: '/shop?brand=nuna' },
+      { label: 'KYTE BABY', href: '/shop?brand=kyte%20baby' },
+      { label: 'MAGNETIC ME', href: '/shop?brand=magnetic%20me' },
+      { label: 'QUINCY MAE', href: '/shop?brand=quincy%20mae' },
+      { label: 'ENEWTON', href: '/shop?brand=enewton' },
+      { label: 'UPPABABY', href: '/shop?brand=uppababy' },
       { label: 'View All', href: '/collection' }
     ]
   },
@@ -53,12 +59,9 @@ const navItems: NavItem[] = [
     label: 'About',
     dropdown: [
       { label: 'About Us', href: '/about' },
-      { label: 'FAQs & Help', href: '/faq' }
+      { label: 'FAQs & Help', href: '/faq' },
+      { label: 'Contact Us', href: '/contact' }
     ]
-  },
-  {
-    label: 'Contact',
-    href: '/contact'
   }
 ]
 

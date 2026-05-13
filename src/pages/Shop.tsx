@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback, useMemo } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import FilterSection from 'components/FilterSection'
 import ShopProductCard from 'components/ShopProductCard'
-import CategoryNav from 'components/ProductDetail/CategoryNav'
+// import CategoryNav from 'components/ProductDetail/CategoryNav'
 
 interface VariantInfo {
   id: string
@@ -191,11 +191,10 @@ function Shop() {
       new Set(
         shopifyProduct.variants
           .map((variant) => {
-            // Try to extract size from variant title
-            // Common patterns: "Size / Color", "Color / Size", or just "Size"
-            const title = variant.title.toLowerCase()
+            // Normalise and split the title into parts
+            const parts = variant.title.toLowerCase().split(' / ')
 
-            // Look for common size patterns
+            // Common size patterns (all lowercase for case‑insensitive matching)
             const sizePatterns = [
               'xs',
               'sm',
@@ -219,28 +218,32 @@ function Shop() {
               '2t',
               '3t',
               '4t',
-              'newborn'
+              'newborn',
+              '6 month',
+              '12 month',
+              'preemie'
             ]
 
-            for (const pattern of sizePatterns) {
-              if (title.includes(pattern)) {
-                return pattern.toUpperCase()
-              }
-            }
-
-            // If no standard size found, check if variant title looks like a size
-            const parts = variant.title.split(' / ')
+            // Check each part against the pattern list
             for (const part of parts) {
               const trimmed = part.trim()
-              // If it's short and alphanumeric, might be a size
-              if (trimmed.length <= 4 && /^[a-zA-Z0-9-]+$/.test(trimmed)) {
+              // Skip known non‑size words
+              if (['with', 'for'].includes(trimmed)) continue
+
+              // 1) Does the part exactly match a known size pattern?
+              if (sizePatterns.includes(trimmed)) {
+                return trimmed.toUpperCase()
+              }
+
+              // 2) Heuristic fallback: short alphanumeric token (e.g., 'Preemie', '6-9m')
+              if (trimmed.length <= 7 && /^[a-z0-9-]+$/.test(trimmed)) {
                 return trimmed.toUpperCase()
               }
             }
 
             return null
           })
-          .filter((size): size is string => size !== null) // Type guard to filter out nulls
+          .filter((size): size is string => size !== null)
       )
     ).slice(0, 5) // Limit to 5 sizes max
 
@@ -537,7 +540,7 @@ function Shop() {
         // console.log('API Response data:', response.data)
 
         const mappedProducts = response.data.map(mapShopifyToCardProps)
-        console.log('Mapped products:', mappedProducts)
+        // console.log('Mapped products:', mappedProducts)
 
         setProducts(mappedProducts)
 
@@ -627,11 +630,11 @@ function Shop() {
     )
   }
 
-  console.log(filteredProducts)
+  console.log(products)
 
   return (
     <div className="relative bg-white">
-      <CategoryNav />
+      {/* <CategoryNav /> */}
 
       <div className="px-4 py-8 sm:px-6 lg:px-8">
         <div className="mb-6">
@@ -656,7 +659,7 @@ function Shop() {
                   onClick={() => setActiveTab(type)}
                   className={`flex-shrink-0 px-4 py-2 font-raleway border rounded text-sm font-medium uppercase transition-colors ${
                     activeTab === type
-                      ? 'border-2 border-button-hover text-button-hover font-semibold'
+                      ? 'border-2 border-button-hover text-black font-semibold'
                       : 'text-gray-600 hover:text-button-hover'
                   }`}
                 >

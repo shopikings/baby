@@ -54,7 +54,7 @@ function ColorDropdown({
     <div className="relative w-48" ref={dropdownRef}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full border border-gray-600 bg-[#EFECDA] rounded px-4 py-2 font-raleway text-sm font-normal text-text-primary focus:outline-none focus:border-gray-800 flex items-center justify-between gap-2"
+        className="w-full border border-gray-600 rounded bg-white px-4 py-2 font-raleway text-sm font-normal text-text-primary focus:outline-none focus:border-gray-800 flex items-center justify-between gap-2"
       >
         <span className="truncate">{selectedColor || 'Select a color'}</span>
         <svg
@@ -75,7 +75,7 @@ function ColorDropdown({
       </button>
 
       {isOpen && (
-        <div className="absolute top-full left-0 mt-1 bg-[#EFECDA] border border-gray-600 rounded shadow-lg z-50 w-48">
+        <div className="absolute top-full left-0 mt-1 bg-white border border-gray-600 rounded shadow-lg z-50 w-48">
           <div className="max-h-64 overflow-y-auto">
             {cleanColors.map((color) => (
               <button

@@ -48,7 +48,7 @@ function Home() {
         <StickyDiscountTag />
       </div>
 
-      <CategoryNav />
+      {/* <CategoryNav /> */}
       <Banner />
       <FeaturesSection />
 

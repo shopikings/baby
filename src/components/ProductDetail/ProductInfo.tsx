@@ -280,7 +280,7 @@ function ProductInfo({
         {sizes.length > 0 && sizes[0] !== 'Default' && (
           <button
             onClick={() => setShowSizeChart(true)}
-            className="text-xs font-raleway text-[#E9908E] border border-[#E9908E] px-4 py-2 rounded hover:bg-[#E9908E] hover:text-white transition-colors whitespace-nowrap h-fit"
+            className="text-xs font-raleway text-text-primary font-semibold border border-[#E9908E] px-4 py-2 rounded hover:bg-[#E9908E] hover:text-white transition-colors whitespace-nowrap h-fit"
           >
             SIZE GUIDE
           </button>

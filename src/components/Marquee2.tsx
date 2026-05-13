@@ -30,7 +30,7 @@ function Marquee2({
   text2,
   text,
   className = '',
-  speed = 50,
+  speed = 30,
   clickableText,
   onClickableClick
 }: MarqueeProps) {
