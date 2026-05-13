@@ -19,6 +19,7 @@ import FAQ from 'pages/FAQ'
 import BlogPage from 'pages/Blog'
 import BlogPost from 'pages/BlogPost'
 import Wishlist from 'pages/Wishlist'
+import ProductDetailNew from 'pages/ProductDetailsNew'
 
 function App() {
   return (
@@ -42,6 +43,8 @@ function App() {
             <Route path="/privacy" element={<Privacy />} />
             <Route path="/collection" element={<Collection />} />
             <Route path="/faq" element={<FAQ />} />
+
+            {/* <Route path="/product-new/:handle" element={<ProductDetailNew />} /> */}
           </Routes>
           <Footer />
           <Toaster
